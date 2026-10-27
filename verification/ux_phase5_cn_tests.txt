@@ -1,0 +1,3 @@
+CN suite: 118 tests ran. 117 passed in the full run. The one failing legacy form-inventory assertion omitted the existing cn_access/stn_access create-user fields. Corrected test expectation only; targeted rerun passed. No application behavior relaxed.
+Full original output: ux_phase5_cn_initial.txt
+Targeted rerun: ux_phase5_form_contract.txt

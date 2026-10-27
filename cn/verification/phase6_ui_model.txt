@@ -1,0 +1,1 @@
+PASS: shell/selectors/CSRF, source panels, canonical party reopening without cache, retained stale-draft details and replacement link, and permission-checked canonical summary print. DOM model; Windows rendering pending.

@@ -1,0 +1,66 @@
+Combined local application: http://127.0.0.1:46899/portal
+Independent test data only. No live migration or deployment.
+▲ Next.js 16.3.3 (Turbopack)
+- Local:         http://127.0.0.1:51571
+- Network:       http://127.0.0.1:51571
+✓ Ready in 377ms
+✓ Running next.config.ts took 37ms
+
+ GET /api/health 200 in 743ms (next.js: 88ms, proxy.ts: 213ms, application-code: 441ms)
+ GET /api/portal-stn/link-check?id=000000000000000000000001 200 in 110ms (next.js: 63ms, proxy.ts: 6ms, application-code: 42ms)
+ GET /api/portal-stn/link-check?id=ffffffffffffffffffffffff 200 in 22ms (next.js: 3ms, proxy.ts: 4ms, application-code: 15ms)
+ GET /api/portal-stn/link-check?id=000000000000000000000001 200 in 29ms (next.js: 6ms, proxy.ts: 5ms, application-code: 18ms)
+ POST /api/admin/cleanup 403 in 76ms (next.js: 51ms, proxy.ts: 6ms, application-code: 19ms)
+ POST /api/admin/credentials 403 in 80ms (next.js: 57ms, proxy.ts: 4ms, application-code: 19ms)
+ POST /api/member-auth 409 in 54ms (next.js: 45ms, proxy.ts: 4ms, application-code: 5ms)
+ GET /api/member/seed-browse 403 in 57ms (next.js: 45ms, proxy.ts: 4ms, application-code: 8ms)
+ GET /api/portal-stn/link-check?id=000000000000000000000001 200 in 20ms (next.js: 3ms, proxy.ts: 4ms, application-code: 14ms)
+ GET /api/member/seed-requests 200 in 99ms (next.js: 58ms, proxy.ts: 5ms, application-code: 35ms)
+ GET /api/portal-stn/link-check?id=000000000000000000000001 200 in 36ms (next.js: 3ms, proxy.ts: 4ms, application-code: 29ms)
+ POST /api/member/seed-requests 201 in 46ms (next.js: 2ms, proxy.ts: 4ms, application-code: 40ms)
+ GET /api/member/seed-browse 200 in 25ms (next.js: 2ms, proxy.ts: 4ms, application-code: 19ms)
+ GET /api/member/seed-browse 200 in 20ms (next.js: 3ms, proxy.ts: 3ms, application-code: 14ms)
+ POST /api/member/seed-quotes/3c8b8b61-2139-44bb-a16e-6cc2c05d0805 403 in 899ms (next.js: 861ms, proxy.ts: 5ms, application-code: 33ms)
+ POST /api/member/seed-quotes/3c8b8b61-2139-44bb-a16e-6cc2c05d0805 201 in 42ms (next.js: 15ms, proxy.ts: 4ms, application-code: 23ms)
+ PATCH /api/member/seed-quotes/3c8b8b61-2139-44bb-a16e-6cc2c05d0805/buyer 200 in 836ms (next.js: 779ms, proxy.ts: 4ms, application-code: 53ms)
+ GET /api/member/seed-quotes/3c8b8b61-2139-44bb-a16e-6cc2c05d0805 200 in 45ms (next.js: 13ms, proxy.ts: 6ms, application-code: 26ms)
+ PATCH /api/member/seed-requests/3c8b8b61-2139-44bb-a16e-6cc2c05d0805 200 in 902ms (next.js: 854ms, proxy.ts: 4ms, application-code: 44ms)
+ GET /api/member/seed-quote-history 200 in 102ms (next.js: 60ms, proxy.ts: 4ms, application-code: 38ms)
+ POST /api/reports 201 in 156ms (next.js: 78ms, proxy.ts: 3ms, application-code: 75ms)
+ POST /api/report-review 200 in 104ms (next.js: 57ms, proxy.ts: 3ms, application-code: 43ms)
+ POST /api/seller-search 200 in 96ms (next.js: 48ms, proxy.ts: 3ms, application-code: 44ms)
+ GET /api/portal-stn/storage 200 in 102ms (next.js: 49ms, proxy.ts: 4ms, application-code: 50ms)
+ GET /api/portal-stn/storage 403 in 10ms (next.js: 3ms, proxy.ts: 3ms, application-code: 4ms)
+ GET /api/portal-stn/storage 200 in 92ms (next.js: 4ms, proxy.ts: 7ms, application-code: 81ms)
+ GET /member 200 in 3.4s (next.js: 2.8s, proxy.ts: 7ms, application-code: 561ms)
+ GET /_next/hmr?id=mCUh5z52FmlO_zIXY0zPM 404 in 513ms (next.js: 365ms, proxy.ts: 8ms, application-code: 140ms)
+ GET /api/portal-stn/storage 200 in 206ms (next.js: 3ms, proxy.ts: 4ms, application-code: 199ms)
+ GET /api/portal-stn/storage 200 in 85ms (next.js: 7ms, proxy.ts: 13ms, application-code: 65ms)
+ GET /api/member/seed-browse 403 in 18ms (next.js: 3ms, proxy.ts: 4ms, application-code: 11ms)
+ GET /api/member/seed-requests 403 in 16ms (next.js: 2ms, proxy.ts: 3ms, application-code: 11ms)
+ GET /api/member/seed-quote-history 403 in 16ms (next.js: 2ms, proxy.ts: 4ms, application-code: 9ms)
+ GET /api/notifications 403 in 235ms (next.js: 221ms, proxy.ts: 3ms, application-code: 11ms)
+ GET /api/portal-stn/storage 403 in 15ms (next.js: 3ms, proxy.ts: 3ms, application-code: 9ms)
+ POST /api/reports 403 in 15ms (next.js: 3ms, proxy.ts: 3ms, application-code: 9ms)
+ POST /api/seller-search 403 in 29ms (next.js: 4ms, proxy.ts: 4ms, application-code: 21ms)
+ POST /api/profile-change 403 in 143ms (next.js: 126ms, proxy.ts: 6ms, application-code: 12ms)
+ POST /api/account-deletion 403 in 174ms (next.js: 159ms, proxy.ts: 3ms, application-code: 11ms)
+ POST /api/pilot-issues 403 in 164ms (next.js: 143ms, proxy.ts: 3ms, application-code: 17ms)
+ GET /api/member/seed-browse 403 in 42ms (next.js: 3ms, proxy.ts: 8ms, application-code: 32ms)
+ GET /api/member/seed-browse 200 in 28ms (next.js: 3ms, proxy.ts: 7ms, application-code: 18ms)
+[?25h
+Combined local application: http://127.0.0.1:46899/portal
+Independent test data only. No live migration or deployment.
+▲ Next.js 16.3.3 (Turbopack)
+- Local:         http://127.0.0.1:51571
+- Network:       http://127.0.0.1:51571
+✓ Ready in 431ms
+✓ Running next.config.ts took 96ms
+
+ GET /api/health 200 in 530ms (next.js: 81ms, proxy.ts: 223ms, application-code: 227ms)
+ GET /api/member/seed-quote-history 200 in 106ms (next.js: 48ms, proxy.ts: 5ms, application-code: 53ms)
+ GET /api/member/seed-browse 403 in 65ms (next.js: 48ms, proxy.ts: 4ms, application-code: 13ms)
+ GET /api/member/seed-browse 403 in 16ms (next.js: 3ms, proxy.ts: 4ms, application-code: 9ms)
+ GET /api/member/seed-browse 200 in 27ms (next.js: 3ms, proxy.ts: 4ms, application-code: 20ms)
+ GET /api/member/seed-browse 403 in 10ms (next.js: 2ms, proxy.ts: 4ms, application-code: 4ms)
+[?25h

@@ -1,0 +1,6 @@
+PASS classic /member accepted search layout, contrast >=4.5, valid/empty/error/stale search, 16 results, one content scroller at 5 viewport/zoom-equivalent sizes
+PASS classic /member/sellers accepted search layout, contrast >=4.5, valid/empty/error/stale search, 16 results, one content scroller at 5 viewport/zoom-equivalent sizes
+PASS classic disabled search and administrator preview remain non-interactive
+PASS studio /member accepted search layout, contrast >=4.5, valid/empty/error/stale search, 16 results, one content scroller at 5 viewport/zoom-equivalent sizes
+PASS studio /member/sellers accepted search layout, contrast >=4.5, valid/empty/error/stale search, 16 results, one content scroller at 5 viewport/zoom-equivalent sizes
+PASS studio disabled search and administrator preview remain non-interactive

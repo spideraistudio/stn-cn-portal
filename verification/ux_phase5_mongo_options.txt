@@ -1,0 +1,11 @@
+✔ Windows command excludes unsupported Unix options and retains diagnostics setting (1.472049ms)
+✔ Linux command retains its required sandbox socket configuration (0.123223ms)
+✔ macOS retains the Unix socket configuration (0.201979ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7.009806

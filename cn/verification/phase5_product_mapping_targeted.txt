@@ -1,0 +1,10 @@
+test_existing_unmapped_statement_reuse_revision_and_independent_backup (test_product_mapping_http.ProductMappingHTTPTests.test_existing_unmapped_statement_reuse_revision_and_independent_backup) ... ok
+test_new_product_atomic_permission_checks_and_empty_financial_benefits (test_product_mapping_http.ProductMappingHTTPTests.test_new_product_atomic_permission_checks_and_empty_financial_benefits) ... ok
+test_recognised_preview_no_write_and_exact_source_preservation (test_product_mapping_http.ProductMappingHTTPTests.test_recognised_preview_no_write_and_exact_source_preservation) ... ok
+test_saved_name_reuse_conflict_and_workbook_isolation (test_product_mapping_http.ProductMappingHTTPTests.test_saved_name_reuse_conflict_and_workbook_isolation) ... ok
+test_source_calculator_cannot_diverge_from_saved_mapping (test_product_mapping_http.ProductMappingHTTPTests.test_source_calculator_cannot_diverge_from_saved_mapping) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 10.228s
+
+OK

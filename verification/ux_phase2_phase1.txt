@@ -1,0 +1,7 @@
+test_first_workbook_atomic_owned_and_validated (__main__.UXPhase1.test_first_workbook_atomic_owned_and_validated) ... ok
+test_settings_navigation_and_legacy_workspace_redirect (__main__.UXPhase1.test_settings_navigation_and_legacy_workspace_redirect) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 4.203s
+
+OK

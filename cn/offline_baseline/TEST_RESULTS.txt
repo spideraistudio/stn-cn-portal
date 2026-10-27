@@ -1,0 +1,629 @@
+UPDATE35.2 - CURSOR-FOCUSED DIAGRAM ZOOM
+21 October 2026. Cumulative from Update35.1. Windows acceptance pending.
+
+CHANGE
+In Payment Allocation, point at a card or diagram area and turn the mouse wheel.
+Navy Studio now keeps the point under the cursor in place while zooming instead
+of always zooming around the payment hub. The hub remains fixed in diagram
+coordinates, but can move on screen as the view zooms towards another card.
+Classic Emerald retains its existing cursor-focused scroll zoom.
+Fit diagram restores the complete centred view. Reset layout also resets the
+zoom focus. Dragging, collision checks, lock and saved card positions remain.
+Zoom changes only the camera; it does not move individual saved cards.
+
+INSTALL ON YOUR EXISTING WINDOWS CALCULATOR
+1. Close the calculator AND its console window.
+2. Extract this ENTIRE ZIP.
+3. Run Update_CN.bat and select app.py in your existing working calculator folder.
+4. Reopen with your normal launcher. Use Ctrl+F5 if old controls are cached.
+The cumulative updater creates a safety backup and updates program files only.
+Do not replace or remove your existing data folder. No earlier update is needed.
+
+CHECK ON WINDOWS
+Open Payment Allocation in Navy Studio. Point at an off-centre crop/product
+card, wheel up then down: the point under the cursor should stay in place.
+Try a second card, then Fit diagram. Check drag, lock and saved layout reload.
+Switch to Classic Emerald and check wheel zoom and background panning.
+Update35.1 remains included: Preview -> review -> Allocate usable saves;
+Close/Cancel saves nothing. User Windows acceptance of both updates is pending.
+
+PRESERVATION
+Only static/studio.js, static/app.js (toolbar wording) and static/index.html
+(asset refresh) changed at runtime from Update35.1. All Python/backend modules,
+financial rules, receipt dates, separate CN rounding, frozen history, settings,
+allocations, both interfaces and saved layout storage are unchanged. No database
+migration. No online/mobile/accounts/storage-cleanup changes are included.
+
+VERIFICATION THIS UPDATE
+PASS: production Studio zoom/layout geometry harness: cursor anchors in all four
+quadrants and centre, repeated zoom in/out, min/max clamps, Fit reset, redraw,
+unchanged card coordinates/saved layout, Classic delegation. This is a simulated
+geometry test, not a native browser or Windows test.
+PASS: eight existing UI/API suites using an isolated temporary database.
+PASS: thirteen updater backup/preservation/rollback tests.
+PASS: two stable-control regression tests; JavaScript syntax checks.
+PASS: only the three listed runtime files changed; source/program parity.
+Full financial tests were not repeated because no financial module changed.
+Historical Update35.1/35 test evidence remains below/in verification files.
+A native Chromium download failed in this environment, so new native visual
+verification was unavailable. Windows/WebView2/user acceptance remains pending.
+
+
+--- HISTORICAL EVIDENCE ---
+
+UPDATE35.1 — ALLOCATION PREVIEW FEEDBACK
+21 October 2026. Cumulative from Update35. Windows acceptance pending.
+
+User screenshot: CD segment was not selected (Choose segment), amount offered
+was Rs500,000, and receipt availability was Rs100,000. Preview correctly could
+not allocate, but errors were sent to a page toast underneath the modal top
+layer, so the dialog appeared unresponsive. Close correctly cancelled.
+
+FIXES
+Messages while a dialog is open now appear persistently INSIDE that dialog.
+CD preview validates segment, receipt and positive amount; availability uses
+the existing exact allocation limit check. Messages retain entered fields and
+explain how to correct them. No allocation is saved on an invalid preview.
+The preview button shows Preparing preview while processing, then re-enables
+on errors. Successful preview explicitly says Review figures, then Allocate
+usable to save. Cancel or Close saves no allocation. Navy action-bar contrast
+is corrected and browser asset versions refreshed.
+
+USE
+1. Select a sold crop/segment/scheme from the dropdown.
+2. Choose the receipt. Enter an amount within that receipt's remaining balance.
+3. Preview allocation. Review usable funding, excess, date/rate and CN.
+4. Click Allocate usable to save. For another segment, use another reviewed split.
+The receipt's original date selects its configured CD rate; no date promotion.
+
+VERIFICATION
+Native Chromium reproduces missing segment and excessive amount, confirms each
+message is visible inside the dialog, retains the input and offers no apply
+button on invalid preview. Corrected inputs preview/apply successfully. The
+complete Update35 release/segment/ABS workflow passes in both interfaces with
+unchanged ledger dates, cancellation safety and no JavaScript errors.
+Eight existing UI/API suites and thirteen updater checks passed for this fix.
+Update35's 332 Python and five native suite results remain historical evidence;
+no financial/backend module changed, so financial tests were not repeated.
+Runtime parity/preservation and ZIP integrity verified. Windows acceptance pending.
+
+PRESERVATION
+Only static/app.js, static/payment-workbench.js, static/style.css and
+static/index.html changed at runtime. All backend rules/modules, saved data,
+settings, original dates, allocations, both themes and card controls retained.
+No database migration. Cumulative backup-first updater included.
+
+INSTALL
+Close calculator AND its console. Extract whole ZIP. Run Update_CN.bat and
+select app.py in your existing working calculator folder. Reopen normally;
+Ctrl+F5 if needed. Existing saved data and settings are retained.
+
+
+--- UPDATE35 HISTORY ---
+
+UPDATE35 — CROP/SEGMENT ALLOCATION AND UNUSED CD RELEASE
+21 October 2026. Cumulative from Update34.1. Windows acceptance pending.
+
+HOW TO USE
+Select a receipt in Payment entries & allocations. Click the Maize (or other
+crop) card below ABS or CD, or use the prominent Allocate by crop / segment
+buttons in the payment workbench. Multiple sold schemes require your choice;
+SingleCross, DoubleCross and other schemes are never silently merged.
+
+CD SEGMENT PREVIEW
+Enter an amount to offer. Preview shows original receipt date, actual CD rate,
+amount used, amount to save, excess left available and resulting CN. Products
+covered by the segment and their existing displayed CD attribution are listed.
+Apply allocates only the usable funding; excess stays with the same receipt
+for another crop/segment or documented Settlement. CD continues to pool across
+all eligible products of that segment. It is not duplicated per product and no
+new product-wise CD limit is introduced. Product CN attribution remains the
+engine's existing distribution of the separately rounded segment benefit.
+If this receipt already funds CD in the same segment, its last processed split
+is topped up; the same capacity is not funded twice via a new sorted row ID.
+New rows follow the existing original-date processing rules; manual CD order
+is respected with new rows appended after existing manual priorities. An earlier
+receipt can affect a later receipt's unused amount; the preview warns about it.
+A zero-rate receipt is shown explicitly and never promoted to a better slab.
+
+UNUSED CD IS VISIBLE
+Direct CD rows show allocated, actually used, unused, applicable rate and CN.
+The receipt list also flags unused CD still assigned. Release unused opens a
+preview and returns the releasable amount to the SAME receipt. Other splits,
+receipt dates, ledger entries and rounded benefit entitlements are preserved.
+Cancel applies nothing. A fraction of a paisa can remain assigned; retaining
+up to the next paisa for ordinary rupee allocations preserves full entitlement.
+Rows with no used funding are removed when release is confirmed. Reallocation
+is a separate explicit choice; it does not move money automatically.
+
+ABS PRODUCT DISTRIBUTION
+Clicking the ABS crop or segment opens the existing reviewed automatic ABS
+split. It uses regular net sold, packing, token rates and remaining product
+capacity, with existing Cash quantities and ABS splits respected. The table
+shows each product's requirement, proposed split and excess. Excess ABS keeps
+its confirmed routing to that segment's FIRST CD slab. It is not treated as
+unused direct CD or released by the new CD action.
+When the offered ABS amount exceeds token requirements, an optional Preview
+token requirement only button recalculates at the required token amount. Apply
+that preview to leave the rest available for another explicit destination.
+
+TESTED USER EXAMPLE (SYNTHETIC, REFERENCE SETTINGS)
+Ranbanka 200 packets, 32D12 8 packets, Legend 15 packets at 4 kg = 892 kg.
+At reference token Rs50/kg, total remaining ABS requirement is Rs44,600:
+Ranbanka Rs40,000, 32D12 Rs1,600, Legend Rs3,000, assuming no returns/Cash/prior ABS.
+An offered Rs100,000 ABS preview shows Rs55,400 excess; token-only preview leaves
+that amount available instead. A May Rs100,000 CD receipt uses the existing
+12% reference window against the combined eligible SingleCross balance; all
+three products are shown, money counted once. Actual workbook rates prevail.
+
+PRESERVATION / SECURITY
+engine.py, store.py, settings.py, abs_distribution.py, cash_quantity.py,
+importers, printing, existing themes/layout controls and financial rules are
+unchanged from Update34.1. New server preview/apply reads the saved authoritative
+draft, checks revision and settings/selection fingerprint, local authentication
+and project/workbook scope. Frozen/deleted work cannot be modified. The updater
+is backup-first; saved data/settings and all earlier features are preserved.
+No database migration, date reconstruction or automatic cross-scheme transfer.
+Both interfaces retain independent card-body dragging, fixed hub, collision
+prevention, lock, reset, zoom and saved layouts. Inline editor contrast improved.
+
+VERIFICATION
+332 Python tests passed, including 13 new allocation/HTTP cases covering one-
+packet caps, three-product pooling, readonly previews, release preservation,
+old dues, original dates/zero rates, top-ups, stale/frozen/invalid inputs and scope.
+Eight existing UI/API suites passed. Five native Chromium suites passed:
+new crop/segment/release workflow, Update34 payment/Cash workflow, Studio drag,
+regular Cash controls and Update33 workflow attention. Final new workflow rerun
+includes both themes and final inline-editor styling; screenshots reviewed.
+Thirteen updater backup/preservation/rollback checks passed. Runtime preservation,
+source/program parity and ZIP integrity verified. Windows/WebView2 execution
+and user acceptance of this update remain pending.
+
+INSTALL
+Close calculator and server console. Extract the whole ZIP. Run Update_CN.bat
+and select app.py in your EXISTING working calculator folder. Reopen normally;
+Ctrl+F5 if needed. For a fresh copy read source/START_HERE.txt. This ZIP contains
+programs and tests, not your private saved work. Do not replace your data folder.
+
+CONTINUE
+Implementation complete. Read this handoff, STABLE_BUTTON_FIX.md and TEST_RESULTS.
+Continue cumulatively from Update35 and preserve all confirmed rules and data.
+
+
+--- UPDATE34.1 AND EARLIER HISTORY ---
+
+UPDATE34.1 — DRAG CARDS FROM ANYWHERE
+21 October 2026. Cumulative from Update34.
+
+Fix: Update34 required the small Move handle. Cards now drag from their body,
+text, icon or Move handle. Hold the left mouse button, move, then release.
+A stationary click still opens allocation controls. Layout must be unlocked;
+click Unlock layout if shown. The payment centre stays fixed, cards stop before
+overlapping, and Save layout retains positions. Both interfaces are supported.
+The handle is larger and browser assets have refreshed version identifiers.
+No financial, storage or settings rules changed. Existing saved layouts remain.
+
+Verification: native Chromium payment/drag and Studio compatibility suites;
+whole-card movement, one card at a time, fixed hub, collision, click allocation,
+lock, save/reload and financial preservation checked. Windows acceptance pending.
+All Update34 test evidence remains historical in verification files.
+
+Apply: close calculator and console; extract whole ZIP; run Update_CN.bat;
+select app.py in the existing calculator folder; reopen; Ctrl+F5 if needed.
+Next queued phase remains Maize small-product allocation usability.
+
+--- UPDATE34 HISTORY ---
+UPDATE34 — PAYMENT WORKBENCH AND INDEPENDENT CARD CONTROLS
+21 October 2026. Cumulative from Update33. Windows acceptance pending.
+
+PAYMENT WORKFLOW
+Calculate CN -> Payment Allocation now starts with a receipt-wise workbench.
+Select a payment to see its original date, available amount, assigned amount,
+remaining amount and all its allocation splits together. Add allocation, Edit
+and Remove are accessible beside the selected payment. Graph destinations
+funded by that payment are highlighted; the graph still shows the whole party.
+Assigned funding and benefit actually used are distinct figures.
+The selected receipt is retained when adding allocations. An ineligible ABS
+receipt is blocked rather than silently replaced by another receipt. Adding Cash
+funding from a second receipt does not silently edit the first receipt's funding.
+Existing automatic ABS distribution and reviewed Cash quantity workflows remain.
+
+CLEAR AND START AGAIN
+Remove one row, clear the selected payment, or clear all party allocations.
+A read-only preview shows affected rows, released amounts and before/after CN.
+Cancel changes nothing. Apply checks the saved revision and preview fingerprint.
+Cash quantity and its funding are linked by scheme/product. Removing such a row
+clears the entire linked Cash group, including funding from other receipts;
+those additional rows are explicitly listed before confirmation. Released money
+returns to unallocated, not automatically to ABS or another scheme. Original
+ledger entries, receipt dates, opening dues and balances are retained. Frozen
+and deleted records are protected. Normal save revision/audit behavior remains.
+
+CARD CONTROLS — BOTH INTERFACES
+Drag the visible Move handle to move one card independently. Clicking the card
+still selects allocation controls. Cards cannot overlap; the payment hub stays
+fixed. Lock/Unlock layout, Reset and Save layout are available. Positions and
+lock state are saved separately for Classic and Navy. Existing Navy layout keys
+are retained. Classic background pan/zoom and Navy hub-centred zoom remain.
+
+PRESERVATION
+No changes to engine.py, store.py, settings.py, cash_quantity.py or
+abs_distribution.py. All previous financial rules, PDF fixes, compact individual
+and workbook printing, project isolation, cleanup, guarded deletion, workflow
+attention, both themes, saved work and settings remain. No database migration.
+The cumulative updater makes a backup and replaces program files only.
+
+VERIFICATION
+319 Python tests passed, including allocation clearing, API scope/authentication,
+Cash group release, stale/frozen guards, ledger preservation and UI preferences.
+Eight existing UI/API suites passed. Four native Chromium suites cover payment
+workbench, Cash controls, Studio controls and Update33 workflow compatibility.
+Final payment/Studio rerun covers both themes after Classic pan preservation.
+Twelve updater preservation, backup and rollback tests passed. Source/program
+parity and unchanged calculation modules checked. Internal screenshots reviewed.
+Windows launch/WebView2 and user acceptance of Update34 remain pending.
+
+INSTALL ON EXISTING CALCULATOR
+Close the calculator and its server console. Extract the entire ZIP, run
+Update_CN.bat and select app.py in your EXISTING working calculator folder.
+Reopen with your usual launcher; Ctrl+F5 if the browser has cached old controls.
+Do not replace your data folder. For a fresh installation, use source/START_HERE.txt.
+
+NEXT PHASE — MAIZE SMALL-PRODUCT ALLOCATION (NOT CHANGED HERE)
+User scenario: Ranbanka 500 packets, 32D12 8 packets, Legend 2 packets.
+Review how to show usable funding and unused allocation at scheme level so small
+products do not require guesswork. Existing automatic ABS distribution already
+splits across eligible products by remaining token capacity; CD already pools
+by scheme. Confirm actual workbook rules/rates and quantity exclusions before
+changing any financial behavior. Never duplicate a payment across products.
+
+RESUME
+Update34 implementation and automated checks complete. Continue cumulatively;
+read this handoff, STABLE_BUTTON_FIX.md and TEST_RESULTS.txt. Preserve confirmed
+rules, both interfaces, saved settings and data. Windows acceptance pending.
+
+
+--- HISTORICAL UPDATE33 AND EARLIER NOTES ---
+
+UPDATE33 — WORKFLOW, CASH SHORTCUTS & WORKBOOK ATTENTION
+20 October 2026. Cumulative from Update32. Windows acceptance pending.
+
+SCOPE: User selected comparison recommendations 3, 4 and 5 only.
+No new calculation explanations, zero-benefit narrative, revision comparison,
+PDF diagnostics or alternative payment table are introduced in this update.
+
+1. STEP STATUS AND NEXT ACTION
+The existing five steps now show status: needs attention, complete, checks
+passed, ready to review/finish, blocked or awaiting issue. These are derived
+from the existing engine checks and saved status, not an employee approval.
+A Next Action banner opens the relevant existing correction workflow.
+Finalised/issued records route to Review & Finish and remain frozen.
+
+2. REGULAR + CASH CONTROLS
+Selected scheme cards in Select Party / Check Benefits now show whether Cash
+is configured, with Configure Cash option / Edit Cash settings. This opens the
+existing scheme builder directly at Benefits with Cash controls in view.
+The scope notice explains that saving edits the workbook's scheme for its
+active drafts. Completed calculations retain frozen settings. After saving
+from this shortcut, return to the party's Check Benefits step.
+Party allocation controls now say Allocate Cash quantity / Edit Cash quantity
+and payment, and Remove party Cash allocation. All existing reviewed preview,
+apply and removal behavior remains. No stock or payment is auto-allocated.
+Cash removal still releases funding to unallocated; it does not move it to ABS.
+
+3. WORKBOOK ATTENTION
+Dashboard -> Work needing attention loads a read-only saved-work snapshot.
+Filters: All, Product mapping, Ledger/party review, Payment allocation,
+Calculation blocked, Ready to finish, Awaiting issue, Issued.
+Open takes the employee to the current calculation's first relevant correction
+or final review. One latest populated version per party/location/season is
+shown, matching workbook print selection. Older versions remain in History.
+Refresh attention list updates the snapshot. Stale responses after project or
+workbook navigation are discarded. Deleted parties/other workbooks excluded.
+Import history is separately expandable: failed and review attempts are shown
+with their existing messages and Bulk Import/review links. Historical failures
+may remain after successful retries; they are not counted as blocked parties.
+No record, audit, setting, finalisation or issue writes occur during scanning.
+No ledger balances or revised CN amounts are aggregated in the attention list.
+
+PRESERVATION
+Runtime changes only: static/app.js, static/scheme-options.js, static/style.css.
+All Python modules, financial rules, settings defaults, PDF fixes, print logic,
+workbook/project storage, launchers, theme/layout modules and both UI choices
+remain. No database migrations, new financial fields or default-rate changes.
+Updater is unchanged and backup-first. All saved data/settings are retained.
+
+VERIFICATION
+Eight existing UI/API suites passed, covering imports, workflow, allocations,
+ABS, Cash, frozen histories, reporting, sharing, isolation and deletion.
+Seven workbook snapshot/HTTP tests passed (read-only, frozen, deleted scope,
+revision selection, missing results, stale selection and authentication).
+Native Chromium: five synthetic parties, attention filters/deep links, unchanged
+backup after refresh, Cash shortcut add/save/return without automatic allocations,
+frozen CN Rs2000 retained, five badges, both themes and stable hover at 1366px.
+No browser JS errors. Attention panel rendered and visually inspected.
+Eleven updater preservation/backup/rollback checks passed.
+Runtime module byte preservation and source/program parity verified.
+Full Python financial suite was not rerun for these presentation-only changes;
+Update32's 311-test result remains historical evidence, not a new Update33 run.
+Windows/WebView2 execution and user acceptance remain pending.
+
+INSTALL / CHECK
+Close the calculator and its server console. Extract this whole ZIP, run
+Update_CN.bat and select app.py from the EXISTING working calculator folder.
+Reopen using your normal launcher; Ctrl+F5 if the browser shows cached UI.
+Check Dashboard attention filters/Open; five-step next action; Check Benefits
+Cash configuration and party allocation; one saved completed party unchanged.
+
+RESUME
+Implementation, targeted regression, native browser checks and packaging complete.
+Continue cumulatively from Update33. Preserve all previous rules/features/data,
+Classic Emerald and Navy Studio, saved layouts, and Update32 workbook printing.
+
+--- HISTORICAL UPDATE32 AND EARLIER ---
+
+UPDATE32 — APPLIED-BENEFIT PRINT + WORKBOOK PRINTING
+19 October 2026. Cumulative from Update31. All earlier financial rules, UI choices,
+Cash controls and PDF header fixes retained. Windows acceptance pending.
+
+INDIVIDUAL DETAILED WORKING
+Review & Finish -> Print Detailed Working now contains:
+* Compact product totals and only non-zero product benefit breakdowns.
+* Only payable/applied benefit CNs, or previously issued/revised CN adjustments
+  that must remain visible even when current entitlement is zero.
+* Applied quantity/extra/net tier only, actual ABS product rows, used CD payment
+  periods, Cash deduction/funding working, and qualifying return bonus working.
+* Progressive quantities list only used bands, including the established highest
+  rate continuation. No complete configured slab lists or recursive per-field
+  configuration dumps for these current benefit formats.
+* Actual precise CN, separate rounding, previous issue, proposed new amount,
+  narration, totals and balance remain. Requested adjustments show only when
+  present and stay display-only. Zero-CN products remain visible in product totals.
+The supplied example has three products and one Rs30 Quantity CN: 12kg x Rs2.50.
+An A4 Chromium layout reconstruction using those figures fits ONE page, down from
+four. Two pages is a target for ordinary parties, not a hard clipping limit.
+Large party reports naturally continue if required to preserve all applied work.
+Normal Print Summary remains available with its existing content.
+
+WORKBOOK PRINT
+Workbooks -> each active workbook (also Existing calculations) has:
+* Print Workbook Summary: one party-wise table with period, status, ledger,
+  full CN entitlement, new CN and balance. No total of ledger balances across
+  periods, to avoid counting the same balance repeatedly.
+* Print All Parties' Detailed Working: the workbook index plus a fresh page for
+  each selected party's compact applied working.
+A selector allows all/some parties and one saved version per party+location+season.
+Latest populated ledger is initially selected, so a newer empty draft does not
+hide an imported ledger. Revisions are not added together. Different seasons
+remain explicit. Deleted parties and other workbooks/projects are excluded.
+Current open draft is saved first, like individual printing. Preview/rendering
+then uses a read-only SQLite snapshot of saved records and settings. A changed
+workbook invalidates the selection fingerprint. Completed results stay frozen
+and are never recalculated; unavailable historical results are reported explicitly.
+Draft/incomplete calculations are marked provisional. The print operation does
+not finalise or issue CNs. Missing/error results are not silently shown as zero.
+Use the print dialog -> Save as PDF to share. No messaging or online upload occurs.
+
+VERIFICATION
+311 Python tests passed (including actual Update31 PDF regression, six workbook
+print snapshot/version/deletion/frozen tests and one authenticated/scope HTTP test).
+Eight existing UI/API smoke suites passed with the print expectation updated.
+Applied-print JS tests passed: zero omission, reversals, progressive used bands,
+CD used rows, fixed Net CN, escaping and financial objects unchanged.
+Native Chromium tests passed for the individual report and workbook selection,
+all/none, two-party Summary Rs6000, combined Detail Rs2000 + Rs4000, correct
+working, page boundaries and restoration of the active party globals.
+A4 PDFs rendered and inspected. Individual example: one page. Two-party combined
+working: index + one page per party (three pages). White print background and
+readable text; no clipping. No private input PDFs or browser images bundled.
+Eleven updater backup/rollback checks passed. Source/program parity checked.
+The calculation engine and financial stores are byte-identical to Update31.
+
+CONTINUATION
+1 Individual compact applied working: COMPLETE.
+2 Workbook Summary / all-party Detail + selection: COMPLETE.
+3 Regression, browser/PDF verification and packaging: COMPLETE.
+Next: user Windows acceptance. Continue cumulatively from Update32. Preserve
+both UI options, saved positions/preferences/data/settings and all financial rules.
+Read LATEST_HANDOFF.md, STABLE_BUTTON_FIX.md, TEST_RESULTS.txt and PHASE_PROGRESS.md.
+
+--- HISTORICAL UPDATE31 AND EARLIER NOTES ---
+
+UPDATE31 — TALLY CONTINUATION-HEADER PDF FIX
+19 October 2026. Cumulative from Update30. Update29 was accepted on Windows;
+Update30/new Update31 user acceptance remains pending.
+
+CAUSE
+The supplied two-page Tally ledger prints a full Ledger: party name on page 1,
+but Ledger: party name : report-period Page N on its continuation. The old
+first-page matcher captured the continuation suffix as part of a second party
+name and split one ledger into two documents. This led to a missing closing
+balance and/or a misleading combined-ledger/Bulk Import route.
+
+FIX
+Recognise the explicit Ledger: name : date-to-date [Page N] continuation form
+before the full first-page header. Join same-party continuation pages. Actual
+different parties and repeated full first-page headers retain their boundaries.
+No broad fuzzy matching, amount inference, OCR or party merging introduced.
+All Update30 changes (Regular + Cash controls and reviewed removal), both UIs,
+card layouts, saved preferences, data and settings are retained.
+The only runtime change from Update30 is tally_detailed.py header detection.
+
+SUPPLIED PDF VERIFICATION
+One complete party; 2 pages, 12 distinct vouchers, reconciled closing Rs602385.
+Opening credit Rs552875; sales Rs2088000; receipt Rs100000 on 13 July 2026;
+sales return Rs820840; four freight/expense Journal CNs totalling Rs11900.
+Freight journals remain posted expense CNs; they are not material returns or
+additional receipts. Bill references/carry totals are not counted as receipts.
+Stock net: 32D55 1700 packets / 6800kg; 32D12 84 packets / 336kg; Ranbanka
+60 packets / 240kg; 14D88 86 packets / 129kg; Redgram 114kg; Res.Angur 262kg;
+Green Gram 11 packets / 22kg. Product matches depend on the actual workbook's
+catalogue; unknown catalogue products still require explicit mapping.
+Original dates, voucher amounts, source snapshots and saved-source re-read agree.
+Both /api/import and /api/reparse checked using the actual supplied PDF; single
+import returns one complete party, not the combined-ledger route. Preview/import
+parsing alone does not create saved party records.
+
+TESTS
+304 Python tests passed, with CN_REGRESSION_PDF set to the supplied file. Includes
+three header/boundary tests and an actual-PDF money/stock/reparse regression.
+Existing 49-party / 69-page detailed PDF and other formats pass regression.
+All eight existing UI/API smoke suites passed. Eleven updater backup/rollback
+checks passed. Native UI unchanged, so new browser-layout checks were unnecessary.
+The new private source PDF is not bundled. Its regression test is optional and
+uses CN_REGRESSION_PDF when provided. Generic header tests are always included.
+This fixes this explicit header family; other unsupported PDFs need inspection.
+
+USE
+Close calculator/server, extract ZIP, run Update_CN.bat, select app.py in the
+existing working calculator folder, reopen normally. Reimport the original PDF
+into the intended party/workbook and review the import preview before accepting.
+If a previous attempt created an incomplete draft, inspect its existing entries
+before accepting a reimport; never delete saved party work just to fix this issue.
+No need to split/convert the PDF. Saved calculations are not silently rewritten.
+
+RESUME
+All implementation/testing/packaging phases complete. Windows acceptance pending.
+Continue cumulatively from Update31, preserving all financial rules and existing
+features. Read LATEST_HANDOFF.md, STABLE_BUTTON_FIX.md, TEST_RESULTS.txt and
+PHASE_PROGRESS.md before future changes. The source and verification logs are
+included in this package.
+
+--- HISTORICAL UPDATE30 AND EARLIER NOTES ---
+
+UPDATE30 — DOUBLECROSS REGULAR + CASH CONTROLS
+19 October 2026. Cumulative from Update29, accepted by the user on Windows.
+
+SCOPE
+The user confirmed the two DoubleCross schemes mean Regular + Cash (32D55),
+not two alternative saved regular setups being applied to the same stock.
+The existing financial engine already supports Regular + Cash. No new maths,
+default rates, product mappings or automatic stock/payment conversions introduced.
+
+NEW CONTROLS
+Calculate a party -> Check Benefits -> Regular + Cash schemes:
+* Add Cash Scheme / Edit Cash Scheme opens the existing payment-and-quantity
+  preview. Choose the quantity, original payment and amount explicitly, preview,
+  then Apply reviewed split. Regular quantity is the remaining net stock.
+* Remove Cash Scheme previews the changed CN total and quantity before removal.
+  Cancel changes nothing. Confirm removes only that product's Cash split and
+  its Cash funding rows together. Funding returns to unallocated payment and
+  must be assigned explicitly before finalisation. ABS/CD rows are retained.
+* Payment diagram's Cash removal link uses the same reviewed removal flow.
+* Settings -> My Schemes -> Edit Rates & Slabs -> Benefits or Rates now includes
+  Add Cash Scheme / Remove Cash Scheme, original payment dates, advance/payment
+  rate, Cash CN rate, unit, and eligible products. Save Scheme commits settings.
+  Use party removal to remove a Cash booking; removing Cash from Settings changes
+  availability and may flag existing draft bookings for review. Frozen history
+  retains its saved settings. Rates and slabs preview now also lists Cash.
+Works in both Classic Emerald and Navy Studio.
+
+VERIFIED SCENARIO — 32D55
+Illustration using the existing configured DoubleCross reference, no returns,
+no old dues, 10,000 kg supplied at Rs140/kg = Rs14,00,000 invoice.
+Original receipts: 20 March Rs5,80,000; 10 May Rs20,000 (total Rs6,00,000).
+User explicitly books 3,000 kg Cash using Rs3,00,000 of March receipt.
+Cash payment rate Rs100/kg; Cash CN Rs40/kg -> Rs1,20,000 Cash CN.
+Remaining 7,000 kg regular: highest quantity slab Rs20/kg -> Rs1,40,000 CN.
+Rs2,80,000 remaining March receipt explicitly allocated to regular ABS:
+token Rs40/kg covers 7,000 kg; ABS benefit Rs10/kg -> Rs70,000 CN.
+Rs20,000 May payment explicitly allocated to regular CD at 12% -> Rs2,400 CN.
+Total CN Rs3,32,400; ledger outstanding Rs8,00,000 -> final Rs4,67,600.
+No overlapping quantities or reuse of money. Actual saved workbook rates govern.
+If only Cash is funded, regular ABS is zero; remaining net stock can still earn
+configured quantity benefits. No Cash quantity ever receives regular benefits.
+
+REMOVAL / SAFEGUARDS
+The scenario's Cash removal releases Rs3,00,000 once, retains regular funding,
+restores 10,000 kg regular quantity and recalculates CN to Rs2,72,400. Unallocated
+money blocks finalisation until reviewed. Preview never writes. Apply checks
+record revision, settings version, draft/frozen status, auth and workbook scope.
+Original receipt snapshots and ledger entries are retained.
+
+VALIDATION
+299 tests passed in full Python run, including five new scenario/removal tests.
+One additional HTTP test passed: token, workbook scope, preview/apply and asset.
+Eight existing UI/API smoke suites passed. Eleven updater rollback tests passed.
+Native Chromium: both interfaces, add/edit/preview/apply, cancel removal,
+confirm removal, funding release, ledger preservation, Cash settings add/remove/
+edit/save. Update29 native browser coverage repeated for all eight routes,
+five calculation steps, draggable cards, fixed hub, persistence and collisions.
+Windows Update30 acceptance remains pending. Update29 already accepted.
+
+CONTINUATION
+All implementation phases complete; next action is Windows acceptance.
+Retain both UIs, saved themes/layouts/data/settings and all confirmed financial
+rules. Continue cumulatively from Update30. Read this file, LATEST_HANDOFF.md,
+STABLE_BUTTON_FIX.md, TEST_RESULTS.txt and PHASE_PROGRESS.md.
+
+--- HISTORICAL UPDATE29 AND EARLIER NOTES ---
+
+UPDATE29 — OPTIONAL NAVY STUDIO — 19 October 2026
+
+Cumulative from accepted Update28.1. Classic Emerald is still the default.
+Choose Interface -> Navy Studio in the top bar. Switch back whenever you want.
+The new appearance covers Dashboard, Workbooks, Parties, Ledger Audit, Year Link,
+Reports, Settings, History, calculation steps, forms and dialogs.
+
+PAYMENT STUDIO
+Available Payment remains fixed in the centre. Drag each scheme, crop or product
+card separately with the mouse, like moving a folder. Dragging empty space does
+not move the group. Cards stop at other cards, including the central payment hub.
+Clicking still opens the existing allocation editor. Dragging changes no amounts.
+Arrow keys move the focused card; Shift+Arrow uses a larger step.
+Use the mouse wheel to zoom and Fit diagram to show all cards.
+Click Save layout after arranging cards. Reset layout restores the default;
+click Save layout afterwards if you want to keep the reset. Save the calculation
+first if it has not been saved yet. Layouts are separate by project, workbook and
+calculation. Appearance is saved on this PC and survives changing server ports.
+Classic retains its original graph, zoom and background panning.
+
+FINANCIAL PRESERVATION
+Financial engine, stores, settings defaults, PDF readers, application workflow JS,
+Cash quantity logic, ABS distribution, NRV, project sharing, cleanup and deletion
+modules remain byte-identical to Update28.1. No database migration is introduced.
+Appearance files ui-theme.json and ui-layouts.json are kept beside the relevant
+project database, separate from financial settings. They are not included in
+financial JSON/.cnwork exports; an in-place update preserves them and data backup
+copies made by the updater include files under data/. Never silently evicts layouts.
+
+TESTING
+293 Python tests passed in the full run (includes initial 3 appearance tests).
+Final appearance changes passed 4 targeted tests, including >40 saved parties.
+All 8 existing UI/API regression suites passed. All 11 updater backup/rollback
+checks passed. Native Chromium 153 browser tests passed for the eight main pages,
+all five calculation steps, six Settings sections, stationary hover, independent
+card drag, non-overlap, repeated collision attempts, unchanged financial record,
+fixed hub during zoom, saved layout after reload, Classic/Studio switching,
+product inspector, print selector hiding and 1366px viewport. No page JS errors.
+Financial-module byte comparison and program/source package parity are verified.
+Windows-specific installer, WebView2 appearance and physical printing require
+checking on your PC; these were not executed in this Linux test environment.
+Update28.1 button stability was already accepted by the user on Windows.
+
+PHASE STATUS / RESUME
+1 Baseline and persistent UI selector: COMPLETE.
+2 Whole-app Navy styling and offline illustrations: COMPLETE.
+3 Independent draggable cards and saved layouts: COMPLETE.
+4 Automated/browser verification and cumulative packaging: COMPLETE.
+Next: user Windows acceptance. Do not rebuild from older updates. Continue from
+this source; read PHASE_PROGRESS.md, LATEST_HANDOFF.md, STABLE_BUTTON_FIX.md and
+TEST_RESULTS.txt. Preserve both themes, financial rules, saved work and settings.
+
+## Historical Update28.1 and earlier notes
+
+UPDATE28.1: two stationary-control regression tests and targeted allocation/calendar UI/API suites passed. See STABLE_BUTTON_FIX.md. Full cumulative regression evidence below is from Update28 before this CSS-only correction.
+
+CUMULATIVE UPDATE28 — OFFLINE SHARING / STORAGE VERIFICATION (2026-10-17)
+
+PASS: 288 Python regression tests (77.267 seconds), including portable project isolation, corrupt/unsupported inputs, repeated imports, exact frozen snapshots, per-project API/report/backup isolation, cleanup selection and stale previews, typed permanent deletion, preserved issued safeguards, frozen history preservation and transactional rollback.
+PASS: All 8 existing and new UI/API suites against an isolated temporary data path. These use a Node simulated DOM plus the real HTTP API, not a native browser. Additional final rerun of the shared-project controls is logged separately.
+PASS: 11 updater tests, including failed update rollback of both new modules and preservation of received-project databases and original data/launchers.
+PASS: Python compilation, JavaScript syntax, source/runtime equality and original Windows launcher bytes.
+
+Financial engine/store/importer/settings/workbooks/Year Link/reporting/ledger audit and NRV modules are byte-identical to the prior held allocation/NRV update. Project scoping is added in app.py and the UI; sharing and maintenance are new modules.
+
+No live user database or PC cache was used or deleted. No third-party file delivery occurred.
+Pending: Windows/native executable rebuild and visual click-through, actual browser zoom/layout/print checks, and real-user data acceptance. Automated checks do not certify those items.
+
+User requested files HELD. Do not deliver this archive until asked.

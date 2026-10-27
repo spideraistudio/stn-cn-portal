@@ -1,0 +1,51 @@
+ALL CROP CN CALCULATOR - FRESH COMPLETE UPDATE35.2
+21 October 2026
+
+All earlier updates are included. No update chain is needed.
+Button hover/click stability accepted by the user on Windows on 17 October 2026.
+Optional Navy Studio is added; the financial engine and settings defaults are unchanged.
+For your existing working calculator, use the separate cumulative updater instead.
+Read UPDATE35_2_README.txt for crop/segment allocation and unused CD release.
+
+INSTALL
+1. Extract the ENTIRE ZIP to a NEW permanent folder, separate from your old calculator.
+2. Double-click Install_CN.bat. Python 3.10+ is required; first setup needs internet.
+3. Double-click Start_Calculator.bat. After setup, calculations and PDF reading run offline.
+Keep the calculator console open while using it. Close it after closing the calculator.
+No administrator access or hosting is required. This is a complete Python-based package,
+not a compiled Windows EXE installer. It includes the existing optional Windows build kit.
+
+CONTINUE YOUR EXISTING WORK
+This download contains the program, not the saved work on your PC.
+Before switching, open your OLD calculator and export a fresh full backup from
+Settings -> Backup & Restore. Keep that backup outside both calculator folders.
+Close the old calculator AND its running console/server.
+Open this NEW copy -> Settings -> Backup & Restore -> choose the backup ->
+review the preview -> confirm restore. Do not reimport all PDFs or rebuild your schemes.
+Check your workbooks, settings, parties, allocations and completed totals before continuing.
+Keep the old folder and backup until you have verified the fresh copy.
+
+RECEIVED / SEPARATE SHARED PROJECTS
+Full Backup & Restore covers the selected project. If you have received separate projects,
+export each one via Settings -> Share & Open Work in the old app and open each .cnwork
+file in this new copy. They remain isolated from My Work. Do not merge them via restore.
+Temporary browser selections and window preferences are separate from saved financial data.
+
+OPTIONAL OWN WINDOW
+After Install_CN.bat succeeds, run Setup_Desktop.bat once (internet required), then
+Start_Desktop.bat. Windows WebView2 Runtime is required. Close browser-mode servers first.
+The regular browser launcher remains available. Native window/build checks are still
+subject to the pending acceptance limits documented in TEST_RESULTS.txt.
+
+WHAT IS INCLUDED
+Payment allocation graphics with wheel zoom/pan, integrated Cash quantity allocation,
+posted-CN/NRV checks, isolated .cnwork sharing, storage cleanup, guarded permanent deletion,
+all existing schemes/calculation rules, PDF import, workbooks, reports and year linking.
+
+Preserved: original receipt dates, allocation caps, separate CN rounding, independent
+packing groups, frozen completed history and issue/revision safeguards.
+No private database, user backup, virtual environment or compiled EXE is bundled.
+
+DEVELOPMENT CONTINUATION
+Read LATEST_HANDOFF.md, STABLE_BUTTON_FIX.md and TEST_RESULTS.txt.
+Latest notes override historical pending statuses in older sections.

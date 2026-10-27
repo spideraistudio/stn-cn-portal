@@ -1,0 +1,26 @@
+PASS: all 140 preserved Update35.2 files match.
+PASS package source, Windows launchers, preserved baseline, fresh test evidence and complete handoff.
+PASS 950 original archive files retained; 930 byte-identical before release documentation changes; 20 intentional changes.
+PASS all original API, lib, db, financial baseline, case-number/rate-fix source and non-public CN files unchanged.
+Intentional changed inherited files:
+PACKAGE_INFO.json
+PHASE_HANDOFF.md
+START_HERE_WINDOWS.md
+START_HERE_WINDOWS.txt
+TEST_RESULTS.md
+UPDATE_INFO.json
+WINDOWS_ACCEPTANCE.md
+app/globals.css
+app/home/route.ts
+app/join/loading.tsx
+app/join/page.tsx
+app/login/page.tsx
+cn/backend/cn_web/portal_static/portal.css
+cn/backend/cn_web/portal_static/portal.html
+cn/backend/cn_web/portal_static/portal.js
+components/credential-form.tsx
+components/join-form.tsx
+components/landing-page.tsx
+components/legal-footer.tsx
+integration/full_stack_test.py
+PASS both ZIPs use complete cumulative source and original Windows setup scripts; no installed dependencies, builds, credentials, user databases, private inputs or browser screenshots included.

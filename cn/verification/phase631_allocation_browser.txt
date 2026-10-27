@@ -1,0 +1,3 @@
+PASS: real PDF with opening credit → actual Allocate available opening credit button → actual Settlement/amount controls → Save → five tabs → Parties/reopen; sources and allocations retained.
+PASS: dated source forgery is rejected; corrected draft retries through ordinary navigation without a permanently failed save queue.
+PASS: real server restart retains opening-credit allocation. Only the deliberate forgery failed; no browser errors.

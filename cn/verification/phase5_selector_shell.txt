@@ -1,0 +1,1 @@
+PASS: original shell and menus, user/workbook selection, authenticated Save transport, CSRF, layout-key transport, import/audit/year panel routing and settings rendering. No native browser used.

@@ -1,0 +1,26 @@
+'use client';
+import {useEffect,useState} from 'react';
+import {CNStorageAllowance} from './cn-storage-allowance';
+const names=['view_workspace','edit_schemes','import_statements','edit_ledger','allocate_payments','finalise','issue_cn','export_print','delete_records','permanent_delete'];
+type State={user:{role:string;permissions:string[];user_quota_bytes:number};users:Array<{id:string;username:string;role:string}>};
+export function UnifiedAccountForm({memberId}:{memberId?:string|number}){
+ const [message,setMessage]=useState(''),[busy,setBusy]=useState(false),[state,setState]=useState<State|null>(null);
+ useEffect(()=>{fetch('/api/portal/state').then(r=>{if(!r.ok)throw Error('Unable to load permissions');return r.json()}).then(setState).catch(()=>setMessage('Unable to load permissions'))},[]);
+ async function submit(e:React.FormEvent<HTMLFormElement>){e.preventDefault();const form=e.currentTarget;const f=new FormData(form);setBusy(true);setMessage('');try{
+ const me=await fetch('/api/me').then(r=>r.json());
+ const body={username:f.get('username'),temporary_password:f.get('password'),permissions:f.getAll('permission'),cn:f.get('cn')==='on',stn:f.get('stn')==='on',quota_bytes:Number(f.get('quota'))*1048576,...(memberId?{member_id:String(memberId),max_users:Number(f.get('max_users')),user_quota_bytes:Number(f.get('user_quota'))*1048576,plan:f.get('plan'),starts_at:f.get('start')?new Date(String(f.get('start'))).getTime()/1000:null,ends_at:f.get('end')?new Date(String(f.get('end'))).getTime()/1000:null}:{parent_admin:f.get('parent_admin')||undefined})};
+ const r=await fetch(memberId?'/api/portal-stn/approve':'/api/portal/provision',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':me.csrf_token},body:JSON.stringify(body)});const d=await r.json();if(!r.ok)throw Error(d.error||'Save failed');
+ setMessage(memberId?'Approved. The individual login, company and permissions are ready. Share the entered temporary password privately.':'User created with selected module access. Share the entered temporary password privately.');
+ window.dispatchEvent(new Event('portal-users-changed'));
+ form.querySelector<HTMLInputElement>('[name=password]')!.value='';
+ }catch(error){setMessage(error instanceof Error?error.message:'Request failed')}finally{setBusy(false)}}
+ const input='block w-full min-w-0 rounded border p-2 text-slate-900 bg-white';
+ return <section className="min-w-0 rounded-xl border bg-white p-3 text-slate-900 sm:p-5"><h2 className="font-semibold text-blue-900">{memberId?'Approve & create account':'Create staff user — login & permissions'}</h2>{<form onSubmit={submit} className="mt-4 grid min-w-0 grid-cols-1 gap-4 text-sm sm:grid-cols-2 [&>label]:min-w-0">
+ <p className="sm:col-span-2">{memberId?'Approve this exact signup request and create its company administrator in one action.':'Create an individual user within the company admin’s granted limits.'}</p>
+ <label>Username<input className={input} name="username" required autoComplete="off"/></label><label>Temporary password<input className={input} name="password" type="password" minLength={12} maxLength={128} required autoComplete="new-password"/></label>
+ <fieldset className="flex min-w-0 flex-wrap gap-x-6 gap-y-2 sm:col-span-2"><legend>Application access</legend><label><input name="cn" type="checkbox" defaultChecked/> CN Calculator</label><label><input name="stn" type="checkbox" defaultChecked={!!memberId}/> Seller Trust Network</label></fieldset>
+ <fieldset className="grid min-w-0 grid-cols-1 gap-2 sm:col-span-2 sm:grid-cols-2"><legend>CN permissions</legend>{names.map(n=><label key={n}><input type="checkbox" name="permission" value={n} defaultChecked={n!=='permanent_delete'} disabled={!state||state.user.role!=='superadmin'&&!state.user.permissions.includes(n)}/> {n.replaceAll('_',' ')}</label>)}</fieldset>
+ {state&&<CNStorageAllowance className={input} maximum={state.user.role==='superadmin'?undefined:Math.floor(state.user.user_quota_bytes/1048576)} defaultValue={memberId?1024:state.user.role==='superadmin'?250:Math.min(250,Math.floor(state.user.user_quota_bytes/1048576))}/>}
+ {memberId?<><label>Maximum staff users<input className={input} type="number" name="max_users" defaultValue={5} min="0" required/></label><label>Per-user allowance ceiling (MiB)<input className={input} type="number" name="user_quota" defaultValue={250} min="1" required/></label><label>Subscription / plan<input className={input} name="plan" defaultValue="Both"/></label><label>Start (optional)<input className={input} type="datetime-local" name="start"/></label><label>Expiry (optional)<input className={input} type="datetime-local" name="end"/></label></>:state?.user.role==='superadmin'&&<label>Managing company admin<select className={input} name="parent_admin" required><option value="">Choose company admin</option>{state.users.filter(u=>u.role==='admin').map(u=><option key={u.id} value={u.id}>{u.username}</option>)}</select></label>}
+ <button disabled={busy||!state} className="sticky bottom-0 rounded bg-blue-900 p-3 text-white shadow-sm disabled:opacity-60 sm:col-span-2">{busy?'Saving…':memberId?'Approve & create account':'Create user & grant access'}</button></form>}{message&&<p role="status" className="mt-3 whitespace-pre-wrap">{message}</p>}</section>
+}

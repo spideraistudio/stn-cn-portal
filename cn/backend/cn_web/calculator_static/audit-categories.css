@@ -1,0 +1,10 @@
+/* Theme-neutral disclosure layout; existing Emerald/Navy colours are retained. */
+.audit-party>summary,.audit-reviewed>summary{cursor:pointer;overflow-wrap:anywhere;line-height:1.6}
+.audit-category summary:focus-visible,.audit-party summary:focus-visible,.audit-reviewed summary:focus-visible,.audit-auxiliary summary:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+.audit-reviewed{margin-top:18px;padding:14px;border:1px solid currentColor;border-radius:12px}
+.audit-party{min-width:0;margin:12px 0!important}
+.audit-category-grid>details>summary{position:relative}
+@media(max-width:800px){.audit-category-grid{grid-template-columns:minmax(0,1fr)}.audit-party{padding:12px!important}}
+
+#billing-audit-panel .billing-source-option{display:flex;align-items:center;gap:10px;margin:14px 0}
+#billing-audit-panel #billing-include-saved{width:auto;margin:0;flex:none}

@@ -1,0 +1,25 @@
+PASS: all prior search-layout release members retained.
+PASS: no protected baseline/financial-engine file changed; all 140 hashes match.
+PASS: actual source PDF, parsed private data, screenshots, credentials, databases, dependencies and build caches excluded.
+Changed previous members:
+PACKAGE_INFO.json
+PHASE_HANDOFF.md
+START_HERE_WINDOWS.md
+START_HERE_WINDOWS.txt
+TEST_RESULTS.md
+UPDATE_INFO.json
+app/api/admin/export/route.ts
+app/api/report-edit/route.ts
+app/api/reports/route.ts
+cn/backend/cn_web/billing_audit.py
+cn/tests/test_billing_rate_fix.py
+components/admin-reports-panel.tsx
+components/member-reports-panel.tsx
+components/report-cards.tsx
+components/report-form.tsx
+components/seller-search.tsx
+db/schema.ts
+integration/browser_combined.cjs
+integration/full_stack_test.py
+lib/report-store.ts
+lib/report-validation.ts

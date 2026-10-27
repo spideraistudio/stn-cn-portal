@@ -1,0 +1,11 @@
+test_cross_workbook_duplicate_and_frozen_backup_validation (test_finish_http.FinishHTTPTests.test_cross_workbook_duplicate_and_frozen_backup_validation) ... ok
+test_finish_frozen_history_separate_rounding_and_revision (test_finish_http.FinishHTTPTests.test_finish_frozen_history_separate_rounding_and_revision) ... ok
+test_party_details_saved_pdf_draft_restart_and_stale_review (test_finish_http.FinishHTTPTests.test_party_details_saved_pdf_draft_restart_and_stale_review) ... ok
+test_permissions_direct_bypasses_revocation_and_csrf (test_finish_http.FinishHTTPTests.test_permissions_direct_bypasses_revocation_and_csrf) ... ok
+test_reports_csv_print_canonical_data_and_requested_only (test_finish_http.FinishHTTPTests.test_reports_csv_print_canonical_data_and_requested_only) ... ok
+test_source_late_kharif_freeze_and_changed_source_history (test_finish_http.FinishHTTPTests.test_source_late_kharif_freeze_and_changed_source_history) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 13.696s
+
+OK

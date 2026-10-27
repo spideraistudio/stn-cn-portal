@@ -1,0 +1,21 @@
+test_automatic_return_rules_match_existing_ledger_audit (test_billing_rate_fix.BillingRateFix.test_automatic_return_rules_match_existing_ledger_audit) ... ok
+test_clear_unchecked_reasons (test_billing_rate_fix.BillingRateFix.test_clear_unchecked_reasons) ... ok
+test_many_matches_and_one_difference_counts (test_billing_rate_fix.BillingRateFix.test_many_matches_and_one_difference_counts) ... ok
+test_missing_sale_overlap_and_stale_review (test_billing_rate_fix.BillingRateFix.test_missing_sale_overlap_and_stale_review) ... ok
+test_saved_all_state_rate_reproduces_and_corrects_missing_comparison (test_billing_rate_fix.BillingRateFix.test_saved_all_state_rate_reproduces_and_corrects_missing_comparison) ... ok
+test_seasons_original_wrong_sale_return_and_no_mutation (test_billing_rate_fix.BillingRateFix.test_seasons_original_wrong_sale_return_and_no_mutation) ... ok
+test_split_no_offset_and_overreturn (test_billing_rate_fix.BillingRateFix.test_split_no_offset_and_overreturn) ... ok
+test_units_cross_year_and_return_rate_not_current_approved (test_billing_rate_fix.BillingRateFix.test_units_cross_year_and_return_rate_not_current_approved) ... ok
+test_units_prior_returns_and_dedup (test_billing_rate_fix.BillingRateFix.test_units_prior_returns_and_dedup) ... ok
+test_all_rate_save_rerun_reclassifies_owned_pdf_and_invalidates_review (test_billing_rate_fix.BillingRateFixHTTP.test_all_rate_save_rerun_reclassifies_owned_pdf_and_invalidates_review) ... ok
+test_roundtrip_rates_matches_reviews_isolation_permissions (test_billing_rate_fix.BillingRateFixHTTP.test_roundtrip_rates_matches_reviews_isolation_permissions) ... ok
+test_missing_sale_overlap_and_stale_review (test_billing_audit.BillingTests.test_missing_sale_overlap_and_stale_review) ... ok
+test_seasons_original_wrong_sale_return_and_no_mutation (test_billing_audit.BillingTests.test_seasons_original_wrong_sale_return_and_no_mutation) ... ok
+test_split_no_offset_and_overreturn (test_billing_audit.BillingTests.test_split_no_offset_and_overreturn) ... ok
+test_units_prior_returns_and_dedup (test_billing_audit.BillingTests.test_units_prior_returns_and_dedup) ... ok
+test_roundtrip_rates_matches_reviews_isolation_permissions (test_billing_http.BillingHTTP.test_roundtrip_rates_matches_reviews_isolation_permissions) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 6.882s
+
+OK

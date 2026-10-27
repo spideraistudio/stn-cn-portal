@@ -1,0 +1,4 @@
+PASS rendered import/review/save/reload and both themes: tally-balance-columns-v1
+PASS rendered import/review/save/reload and both themes: account-item-detail-v1
+PASS rendered import/review/save/reload and both themes: account-compact-v1
+PASS no page errors; Windows acceptance remains pending.

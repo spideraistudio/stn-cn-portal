@@ -1,0 +1,4 @@
+PASS: every supplied Phase 6.3.2 file retained; changes restricted to storage/account integration, release markers, release docs and the health-marker test. All engine and original UI renderer/assets unchanged.
+PASS: ZIP CRC/extraction, all 140 baseline hashes, JS syntax, Python compilation, quoted CRLF Windows launcher and extracted-server startup/health/assets on isolated Linux data.
+PASS: storage boundary/atomic restore and contention tests; threaded concurrent HTTP uploads; permissions/CSRF; cumulative HTTP/security and 332 offline regressions (one skip); fresh Linux Chromium CD, opening-credit, original-screen and storage UI flows. See individual reports for exact results.
+Windows executable/batch execution and user workflow acceptance remain pending. Only Phase 2 has overall Windows acceptance; mapping and latest CD-card checks passed specifically. No hosting/mobile/deployment.

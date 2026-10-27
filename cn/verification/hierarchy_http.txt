@@ -1,0 +1,12 @@
+test_defaults_own_scope_no_peer_root_or_ledger_access (test_hierarchy_http.HierarchyTests.test_defaults_own_scope_no_peer_root_or_ledger_access) ... ok
+test_delegated_rights_limits_and_live_revocation (test_hierarchy_http.HierarchyTests.test_delegated_rights_limits_and_live_revocation) ... ok
+test_disabled_admin_children_revoked_and_reassignment_superadmin_only (test_hierarchy_http.HierarchyTests.test_disabled_admin_children_revoked_and_reassignment_superadmin_only) ... ok
+test_five_user_limit_concurrent_admin_changes (test_hierarchy_http.HierarchyTests.test_five_user_limit_concurrent_admin_changes) ... ok
+test_legacy_migration_and_recovery_backup (test_hierarchy_http.HierarchyTests.test_legacy_migration_and_recovery_backup) ... ok
+test_navy_default_per_login_preserves_classic_selection_within_session (test_hierarchy_http.HierarchyTests.test_navy_default_per_login_preserves_classic_selection_within_session) ... ok
+test_reset_user_admin_sessions_and_data_retained (test_hierarchy_http.HierarchyTests.test_reset_user_admin_sessions_and_data_retained) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 22.398s
+
+OK

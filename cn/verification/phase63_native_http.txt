@@ -1,0 +1,12 @@
+test_audit_and_year_link_use_canonical_owned_files (test_native_interface_http.NativeInterfaceTests.test_audit_and_year_link_use_canonical_owned_files) ... ok
+test_inline_mapping_atomic_permissions_and_saved_reuse (test_native_interface_http.NativeInterfaceTests.test_inline_mapping_atomic_permissions_and_saved_reuse) ... ok
+test_native_ownership_revocation_csrf_and_original_dates (test_native_interface_http.NativeInterfaceTests.test_native_ownership_revocation_csrf_and_original_dates) ... ok
+test_original_backup_and_independent_project_transfer (test_native_interface_http.NativeInterfaceTests.test_original_backup_and_independent_project_transfer) ... ok
+test_replacement_refresh_and_source_ipt_preserve_allocations (test_native_interface_http.NativeInterfaceTests.test_replacement_refresh_and_source_ipt_preserve_allocations) ... ok
+test_single_repeat_bulk_and_existing_saved_source_directory (test_native_interface_http.NativeInterfaceTests.test_single_repeat_bulk_and_existing_saved_source_directory) ... ok
+test_unconfirmed_period_import_is_draft_only (test_native_interface_http.NativeInterfaceTests.test_unconfirmed_period_import_is_draft_only) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 14.552s
+
+OK

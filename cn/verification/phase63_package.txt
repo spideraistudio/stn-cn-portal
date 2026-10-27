@@ -1,0 +1,4 @@
+PASS: every previous-release member retained; intended native transport/bootstrap/server integration, account links, test and release-document modifications only.
+PASS: ZIP CRC/extraction and source byte equivalence; all 140 preserved baseline files; JS/Python compilation; quoted Windows launcher target and CRLF; no alternate source-panel script in calculator HTML.
+PASS: extracted server starts and serves login, calculator and native transport using isolated temporary data.
+Real Linux Chromium: exact offline renderer comparisons and full import/reopen/restart/bulk/audit/year-link flows passed. Cumulative web: 76 passed; final native boundary suite: 7 passed. Offline engine: 332 run, one skipped. Windows acceptance remains pending. No Phase 7 work/deployment.

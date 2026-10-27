@@ -1,0 +1,19 @@
+{
+  "backend/cn_web/data_store.py": "9ceaa001cc20b3a235a2f9366407acd6c76d7546f4b0112d2d25fd8574756357",
+  "backend/cn_web/__init__.py": "53ac8b160705f8bc7bddf31abbad08a3e8e1558c223631f96b1f1de215b80259",
+  "backend/cn_web/wsgi.py": "ac035b9e7f66e9aa87c25ed586dd77e70f0f7cfb9d636193cdd92b1443586b1f",
+  "backend/cn_web/workspaces.py": "6d377ae2ae945d9bb31b00ec88f5f2e6a6ffc0ed83082f2e3d384103377bfbbe",
+  "backend/cn_web/http_app.py": "f0894ab93f31c1e2ea5643b375af157a08cf938eb44f84a21873a0f17e27f0df",
+  "backend/cn_web/cli.py": "5dd56ba892431bfc496f10b2f7222b7f03b0ccac8c8cbcfef6033dccdbd52b04",
+  "backend/cn_web/retention.py": "996f8e9e931772fe6772bf5de75d65272cb7b33a50ab15b0bd16cf9abdb327ee",
+  "backend/cn_web/security.py": "11b1798e60cacbcb8a5b44f12697052c8abfd4da52282eb4855673462f06cf74",
+  "backend/cn_web/accounts.py": "c3895ff3aead67e7c83e595b61214673d0eca1d86df7edb56b5c41dc75c92f73",
+  "backend/cn_web/static/index.html": "c9933287f27720fc451d256dbff31cdfa86b9c7ad7def445d750c994491bb574",
+  "backend/cn_web/static/account.js": "4f26c8643ad6708fc86bd154f688cbc5a31ee1b7fc62593b81e78e4536380a24",
+  "backend/cn_web/static/account.css": "3d7ba4a1a221f4435e1dc391e0cdc71280f0aa7ec19f5d0405730ff8622f675f",
+  "backend/cn_web/static/workspace.js": "ecb951c0e2e35180e4aa77446379e110dd8825d04d217528c374234265051bc8",
+  "backend/cn_web/static/workspace.html": "d2ca2c1ca85bfeeaeafae800b85865a8667210d164878e704ce5044ec91d7872",
+  "tests/test_accounts_http.py": "e749543cc9385fc2fa0a0d656fc5300f9722a137c03db2783d82ff86fe945d16",
+  "tests/test_foundation.py": "efe1f913d88ac302cd89481a740ba0de3ef4863c71f9b1a718914b019dec46a0",
+  "tests/test_workspaces_http.py": "7b731cab0719caaebee4c4df57629507fdde2380eaccde0bcbf8b88b9529edcb"
+}

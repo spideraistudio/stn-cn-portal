@@ -1,0 +1,10 @@
+test_missing_sale_overlap_and_stale_review (test_billing_audit.BillingTests.test_missing_sale_overlap_and_stale_review) ... ok
+test_seasons_original_wrong_sale_return_and_no_mutation (test_billing_audit.BillingTests.test_seasons_original_wrong_sale_return_and_no_mutation) ... ok
+test_split_no_offset_and_overreturn (test_billing_audit.BillingTests.test_split_no_offset_and_overreturn) ... ok
+test_units_prior_returns_and_dedup (test_billing_audit.BillingTests.test_units_prior_returns_and_dedup) ... ok
+test_roundtrip_rates_matches_reviews_isolation_permissions (test_billing_http.BillingHTTP.test_roundtrip_rates_matches_reviews_isolation_permissions) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 3.233s
+
+OK

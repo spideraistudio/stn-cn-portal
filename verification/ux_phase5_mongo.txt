@@ -1,0 +1,5 @@
+Downloading MongoDB "7.0.24": 0% (0mb / 81.8mb)
+Downloading MongoDB "7.0.24": 100% (81.8mb / 81.8mb)
+Downloading MongoDB "7.0.24": 100% (0mb / 0mb)
+Downloading MongoDB "7.0.24": 100% (0mb / 0mb)
+MongoDB ready on 127.0.0.1:27017. Disposable test data.

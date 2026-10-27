@@ -1,0 +1,9 @@
+Continue combined STN + All Crop CN usability work from STN_CN_UX_Phase2_Source_Handoff.zip (complete cumulative source).
+Read PHASE2_ADMIN_HANDOFF.md, PHASE1_WORKFLOW_HANDOFF.md, UX_PHASE_PLAN.md, PHASE_HANDOFF.md and TEST_RESULTS.md first.
+Start Phase 3 only:
+1. Reproduce and fix the reported billing-rate variation/mismatch issue. Trace saved packing/rates, statement evidence, scheme rates and audit findings before changing behavior. Preserve original-bill comparisons for returns; do not silently rewrite statement evidence or the protected financial engine.
+2. Offer recorded/saved states in the relevant state chooser, with explicit entry for a new state; avoid spelling duplicates while preserving existing stored state data and ownership boundaries.
+3. Make save/recheck behavior clear so a saved correction is reflected in the audit without ambiguity.
+Preserve Phase 1 shared Account & Settings/direct CN dashboard and first-workbook flow, plus Phase 2 visible scoped password resets and contained signup approval dialog. Preserve private per-person CN ownership, saved work, original receipt dates, separate rounding, frozen history, both themes/layouts, STN approval/category permissions and separate storage accounting/ceilings.
+No deployment, live migration or original Meet-Dev changes. Windows acceptance remains pending.
+Provide a cumulative SOURCE HANDOFF ZIP and NEW_CHAT_PHASE4.txt. Final installation ZIP only after all five UX phases.

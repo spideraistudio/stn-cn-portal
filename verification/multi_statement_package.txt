@@ -1,0 +1,15 @@
+Cumulative base: STN_CN_Public_Visitor_Registration_Source_Handoff.zip
+PASS: all 964 base entries retained.
+PASS: STN, public visitor/registration/login, routes, quotas and protected financial baseline unchanged.
+Changed existing files:
+PHASE_HANDOFF.md
+START_HERE_WINDOWS.md
+START_HERE_WINDOWS.txt
+TEST_RESULTS.md
+cn/backend/cn_web/calculator_service.py
+cn/backend/cn_web/calculator_static/app.js
+cn/backend/cn_web/ledger_service.py
+cn/backend/cn_web/native_interface.py
+cn/backend/cn_web/product_mapping.py
+PASS: packaging allowlist excludes private sample PDFs, extracted text, screenshots, databases, credentials, caches and node_modules.
+ZIP CRC and member SHA256 checks are enforced by the packaging script before delivery.

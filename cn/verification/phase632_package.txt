@@ -1,0 +1,5 @@
+PASS: every Phase 6.3.1 member retained; only intended web display/asset, test, launcher and release-document changes. No financial service/engine modifications.
+PASS: ZIP CRC/extraction, byte equivalence, all 140 preserved baseline hashes, JS/Python compilation and quoted CRLF Windows launcher.
+PASS: extracted server starts and serves calculator/new assets using isolated temporary data.
+PASS: 12 calculator and 10 native HTTP tests; exact display attribution model; real Chromium CD crop preview/apply, product-card sums/highlights/fit in both themes, no display mutation, reopen/restart and capped excess; original-screen and opening-credit browser regressions; baseline/zoom checks.
+Targeted CD-card flow uses normal motion; broad legacy journey uses reduced motion after headless click-stability timeouts. Windows acceptance remains pending. Phase 7 is on hold. No public deployment.

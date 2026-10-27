@@ -1,0 +1,7 @@
+Combined local application: http://127.0.0.1:44599/portal
+Independent test data only. No live migration or deployment.
+▲ Next.js 16.3.3
+- Local:         http://127.0.0.1:44563
+- Network:       http://127.0.0.1:44563
+✓ Ready in 89ms
+✓ Running next.config.ts took 27ms

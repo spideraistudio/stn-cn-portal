@@ -1,0 +1,29 @@
+test_admin_protection_and_audit_contains_no_secrets (__main__.PortalTests.test_admin_protection_and_audit_contains_no_secrets) ... ok
+test_bootstrap_is_operator_only_and_one_time (__main__.PortalTests.test_bootstrap_is_operator_only_and_one_time) ... ok
+test_company_admin_private_ownership_limits_linking (__main__.PortalTests.test_company_admin_private_ownership_limits_linking) ... ok
+test_company_revision_and_scoped_session_revocation (__main__.PortalTests.test_company_revision_and_scoped_session_revocation) ... ok
+test_concurrent_duplicate_user_creation_is_atomic (__main__.PortalTests.test_concurrent_duplicate_user_creation_is_atomic) ... ok
+test_disable_revokes_every_session_and_reenable_does_not_restore (__main__.PortalTests.test_disable_revokes_every_session_and_reenable_does_not_restore) ... ok
+test_explicit_reassignment_clears_previous_company_stn_link (__main__.PortalTests.test_explicit_reassignment_clears_previous_company_stn_link) ... ok
+test_guest_and_forged_identity_headers_denied (__main__.PortalTests.test_guest_and_forged_identity_headers_denied) ... ok
+test_health_and_pc_console_have_no_credentials (__main__.PortalTests.test_health_and_pc_console_have_no_credentials) ... ok
+test_idle_and_absolute_expiry (__main__.PortalTests.test_idle_and_absolute_expiry) ... ok
+test_independent_workspaces_even_with_forged_selection_headers (__main__.PortalTests.test_independent_workspaces_even_with_forged_selection_headers) ... ok
+test_logout_one_and_logout_all (__main__.PortalTests.test_logout_one_and_logout_all) ... ok
+test_malformed_json_oversize_host_and_missing_routes (__main__.PortalTests.test_malformed_json_oversize_host_and_missing_routes) ... ok
+test_new_user_must_change_password_and_old_session_is_revoked (__main__.PortalTests.test_new_user_must_change_password_and_old_session_is_revoked) ... ok
+test_origin_csrf_content_type_and_mass_assignment_guards (__main__.PortalTests.test_origin_csrf_content_type_and_mass_assignment_guards) ... ok
+test_password_policy_invalid_names_and_duplicate_accounts (__main__.PortalTests.test_password_policy_invalid_names_and_duplicate_accounts) ... ok
+test_permissions_enforced_without_session_reissue (__main__.PortalTests.test_permissions_enforced_without_session_reissue) ... ok
+test_previous_local_link_schema_preserves_identity_on_upgrade (__main__.PortalTests.test_previous_local_link_schema_preserves_identity_on_upgrade) ... ok
+test_private_introspection_and_csrf (__main__.PortalTests.test_private_introspection_and_csrf) ... ok
+test_regular_user_cannot_manage_users_or_read_audit (__main__.PortalTests.test_regular_user_cannot_manage_users_or_read_audit) ... ok
+test_reset_revokes_sessions_and_forces_new_password (__main__.PortalTests.test_reset_revokes_sessions_and_forces_new_password) ... ok
+test_revocation_entitlements_expiry_and_no_revival (__main__.PortalTests.test_revocation_entitlements_expiry_and_no_revival) ... ok
+test_session_cookie_and_hash_storage_and_rotation (__main__.PortalTests.test_session_cookie_and_hash_storage_and_rotation) ... ok
+test_unknown_credentials_generic_and_rate_limited_persistently (__main__.PortalTests.test_unknown_credentials_generic_and_rate_limited_persistently) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 32.564s
+
+OK

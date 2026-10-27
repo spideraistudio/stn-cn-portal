@@ -1,0 +1,10 @@
+{
+  "update": "Public visitor website, company registration and shared login UI; complete cumulative update",
+  "date": "2026-10-26",
+  "windows_acceptance": "pending for new public UI",
+  "source_integrity": "verified intact cumulative source",
+  "actual_reported_pdf_reproduced": true,
+  "public_deployment": false,
+  "actual_pdf_verification_scope": "Amreli printed-rate precision bug with test catalogue; saved user workbook settings unavailable",
+  "previous_case_rate_windows_acceptance": "user confirmed working"
+}

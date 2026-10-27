@@ -1,0 +1,1 @@
+PASS: production Studio cursor anchor in four quadrants and centre, repeated zoom in/out, scale limits, Fit reset, redraw, unchanged card coordinates/saved layouts, Classic delegation. Geometry harness; Windows/native browser pending.

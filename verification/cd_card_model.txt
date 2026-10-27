@@ -1,0 +1,1 @@
+PASS: exact CD card attribution, cent remainders, fractional/large amounts, zero/negative eligibility, direct/other-scheme exclusion and no mutations.

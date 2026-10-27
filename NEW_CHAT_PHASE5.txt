@@ -1,0 +1,9 @@
+Continue combined STN + All Crop CN usability work from STN_CN_UX_Phase4_Source_Handoff.zip (complete cumulative SOURCE).
+Read PHASE4_AUDIT_HANDOFF.md, PHASE3_BILLING_HANDOFF.md, PHASE2_ADMIN_HANDOFF.md, PHASE1_WORKFLOW_HANDOFF.md, UX_PHASE_PLAN.md, PHASE_HANDOFF.md and TEST_RESULTS.md first.
+Start Phase 5 only:
+1. Make portal, STN and CN visual styling consistent with the accepted Classic Emerald / Navy Studio themes, preserving the existing CN workflow, layouts, diagrams and controls.
+2. Run the complete combined workflow regression, including real browser checks where available. Verify Phase 4 category-first audit, counts, expanded evidence, collapsed reviewed items, review/reopen and export; Phase 3 rate/unit/state and save/recheck behavior; Phase 1/2 shared settings, first workbook, scoped resets and contained approval dialog.
+3. Provide the cumulative final installation ZIP, source handoff and clear Windows setup/acceptance instructions. Do not claim Windows acceptance before user testing.
+Preserve private per-person CN ownership, saved work, original receipt dates, separate rounding, frozen history, both themes/layouts, STN approval/category permissions and separate storage accounting/ceilings. Keep original-bill return comparisons and the protected financial engine unchanged. Collapsed findings must remain included in exports.
+The actual affected Phase 3 billing PDF was not supplied; synthetic reproduction does not certify that unseen case. Phase 4 browser/visual checks were not run because no Chromium executable was installed; include them in this final regression.
+No deployment, live migration or original Meet-Dev changes. Windows acceptance remains pending. Do not perform account/data migration or overwrite real user data.

@@ -1,0 +1,4 @@
+PASS: cumulative package retains every member of the previous release; only the two intended web UI scripts and four release documents changed.
+PASS: ZIP CRC/extraction and byte-for-byte source equivalence; all 140 baseline files; calculator JS syntax; Windows launcher target and CRLF line endings.
+PASS: extracted server starts and serves health/login using temporary data.
+Native Linux Chromium result: verification/phase6_import_flow_browser.txt. Windows acceptance remains pending. No Phase 7 work, cleanup or deployment.

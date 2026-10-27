@@ -1,0 +1,15 @@
+test_naive_dates_and_invalid_age_rejected (test_foundation.RetentionTests.test_naive_dates_and_invalid_age_rejected) ... ok
+test_only_old_unlinked_inactive_temp_items_qualify (test_foundation.RetentionTests.test_only_old_unlinked_inactive_temp_items_qualify) ... ok
+test_recent_use_and_cutoff_do_not_qualify (test_foundation.RetentionTests.test_recent_use_and_cutoff_do_not_qualify) ... ok
+test_bad_quota_does_not_create_workspace (test_foundation.WorkspaceTests.test_bad_quota_does_not_create_workspace) ... ok
+test_browser_shaped_identity_is_not_used_as_a_path (test_foundation.WorkspaceTests.test_browser_shaped_identity_is_not_used_as_a_path) ... ok
+test_corrupt_mapping_fails_closed (test_foundation.WorkspaceTests.test_corrupt_mapping_fails_closed) ... ok
+test_directory_symlink_fails_closed (test_foundation.WorkspaceTests.test_directory_symlink_fails_closed) ... ok
+test_duplicate_provision_does_not_replace_mapping (test_foundation.WorkspaceTests.test_duplicate_provision_does_not_replace_mapping) ... ok
+test_real_existing_stores_are_independent (test_foundation.WorkspaceTests.test_real_existing_stores_are_independent) ... ok
+test_unknown_and_disabled_cannot_resolve (test_foundation.WorkspaceTests.test_unknown_and_disabled_cannot_resolve) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.053s
+
+OK

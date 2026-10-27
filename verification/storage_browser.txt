@@ -1,0 +1,4 @@
+PASS Chromium: admin, 250 MiB grant; create/edit STN and Account forms; defaults, maximum and native submit validation.
+PASS Chromium: admin, 100 MiB grant; create/edit STN and Account forms; defaults, maximum and native submit validation.
+PASS Chromium: admin, 500 MiB grant; create/edit STN and Account forms; defaults, maximum and native submit validation.
+PASS Chromium: superadmin, 250 MiB grant; create/edit STN and Account forms; defaults, maximum and native submit validation.

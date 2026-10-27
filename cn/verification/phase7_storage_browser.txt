@@ -1,0 +1,1 @@
+PASS: real Chromium account usage, permission-authorised cleanup, retained-work message and calculator usage/build display; no page errors. Linux only; Windows acceptance pending.

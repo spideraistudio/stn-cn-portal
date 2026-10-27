@@ -1,0 +1,3 @@
+PASS: 15 Python application/launcher/recovery sources compile; 12 JavaScript files pass syntax checks.
+PASS: preserved appearance/CSS/dragging/zoom/workbench assets remain byte-identical.
+PASS: Phase 6 Windows launcher has CRLF and uses the existing managed web data path.

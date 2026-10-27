@@ -1,0 +1,1 @@
+export default function Loading(){return <main className="public-site"><div className="public-container public-section" role="status"><h1>Company registration</h1><p>Loading your application form…</p></div></main>}

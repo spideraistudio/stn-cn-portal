@@ -1,0 +1,7 @@
+Source: provided Amreli.pdf (97 pages, 62 parsed ledgers; no import errors).
+Read-only comparison uses an explicit test catalogue matching printed names/packing and a test ALL-state 901 rate for 475 g products; it does not claim to reproduce the user's saved workbook mapping/settings.
+Compared 508 sale/return item rows. Resolved 138 false Return rate above supply findings for matching printed 901 rates at 475 g packing.
+Previous example expected rate: 900.9999999999999999999999999; corrected: 901.00; corrected difference: 0.00000
+Before return status counts: Counter({'Return rate above supply': 139, 'Duplicate or conflicting invoice lines — review source': 26, 'Return rate matches earlier supply': 20, 'Original sale required — rate not verified': 8})
+After return status counts: Counter({'Return rate matches earlier supply': 158, 'Duplicate or conflicting invoice lines — review source': 26, 'Original sale required — rate not verified': 8, 'Return rate above supply': 1})
+PASS: statement documents, original rates/amounts/quantities and test settings unchanged. Genuine differences, ambiguous rates and missing evidence remain findings. Actual PDF and parsed private evidence are not packaged.

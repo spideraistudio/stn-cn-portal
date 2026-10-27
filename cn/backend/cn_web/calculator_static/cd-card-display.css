@@ -1,0 +1,5 @@
+/* Keep the existing card size and saved positions; fit the CD share label. */
+.radial-product[data-radial-type="CD"]{padding-top:10px;padding-bottom:10px}
+.radial-product[data-radial-type="CD"] strong{font-size:16px;line-height:1.25}
+.radial-product[data-radial-type="CD"] small{font-size:11px;line-height:1.25;margin-top:2px}
+.radial-product[data-radial-type="CD"] b{font-size:20px;line-height:1.2;margin:4px 0}

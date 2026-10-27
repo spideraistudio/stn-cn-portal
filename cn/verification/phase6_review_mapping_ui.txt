@@ -1,0 +1,2 @@
+PASS static/ledger.js: grouped repeated names, separate packing, recognised status, safe text, and mapping/creation permissions.
+PASS calculator_static/ledger-panel.js: grouped repeated names, separate packing, recognised status, safe text, and mapping/creation permissions.

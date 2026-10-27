@@ -1,0 +1,6 @@
+test_scoped_password_only_reset (__main__.Phase2Tests.test_scoped_password_only_reset) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 6.032s
+
+OK

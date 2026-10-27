@@ -1,0 +1,6 @@
+test_cash_preview_apply_and_removal (test_calculator_http.CalculatorHTTPTests.test_cash_preview_apply_and_removal) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 1.478s
+
+OK

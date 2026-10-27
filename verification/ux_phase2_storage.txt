@@ -1,0 +1,6 @@
+test_delegated_ceiling_create_edit_and_platform_override (__main__.StorageCeilingTests.test_delegated_ceiling_create_edit_and_platform_override) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 2.388s
+
+OK

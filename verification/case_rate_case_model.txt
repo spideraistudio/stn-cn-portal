@@ -1,0 +1,12 @@
+✔ temporary to permanent keeps history; unchanged saves do not add duplicates (1.611673ms)
+✔ legacy type stays unspecified until explicitly reviewed (0.668279ms)
+✔ pending corrections and removal preserve earlier case references (0.237849ms)
+✔ number type and escaped history render consistently (37.835835ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 353.466225

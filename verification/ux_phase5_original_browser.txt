@@ -1,0 +1,9 @@
+Harness: reduced-motion preference for the broad legacy flow; targeted CD-card test uses normal motion in both appearances.
+PASS: actual offline renderers are retained unchanged; PDF goes straight from Select Party to Check Ledger; all five original tabs remain clickable, with inline mapping and no web import/log/setup panels.
+PASS: original mapping modal saves; ordinary Parties/Open and a real server restart preserve party entries, dates, mappings and payment destinations.
+PASS: source-review warnings keep the original five clickable screens; explicit refresh preserves the saved payment destinations.
+PASS: original Bulk Import screen, progress, party buttons and optional inline new-product mapping operate through secured endpoints.
+PASS: original standalone Ledger Audit opens with its original upload/date fields and finding categories.
+PASS: original April–March Year Link file selection, matching, reconciliation dialog and save return to the ordinary calculation workflow.
+PASS: first-load reopening also includes older saved-source-only parties in the original directory.
+PASS: no page errors/failed API calls. Linux Chromium; Windows acceptance remains pending.

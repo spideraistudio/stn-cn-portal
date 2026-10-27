@@ -1,0 +1,98 @@
+[
+  {
+    "path": "INTEGRATION_README.md",
+    "status": "modified"
+  },
+  {
+    "path": "NEW_CHAT_PHASE3.txt",
+    "status": "added"
+  },
+  {
+    "path": "PHASE2_ADMIN_HANDOFF.md",
+    "status": "added"
+  },
+  {
+    "path": "PHASE_HANDOFF.md",
+    "status": "modified"
+  },
+  {
+    "path": "TEST_RESULTS.md",
+    "status": "modified"
+  },
+  {
+    "path": "UX_PHASE_PLAN.md",
+    "status": "modified"
+  },
+  {
+    "path": "app/admin/cn/page.tsx",
+    "status": "modified"
+  },
+  {
+    "path": "components/admin-credentials.tsx",
+    "status": "modified"
+  },
+  {
+    "path": "components/unified-account-form.tsx",
+    "status": "modified"
+  },
+  {
+    "path": "components/unified-password-reset.tsx",
+    "status": "added"
+  },
+  {
+    "path": "components/unified-users-editor.tsx",
+    "status": "modified"
+  },
+  {
+    "path": "integration/browser_combined.cjs",
+    "status": "modified"
+  },
+  {
+    "path": "integration/full_stack_test.py",
+    "status": "modified"
+  },
+  {
+    "path": "integration/test_ux_phase2.py",
+    "status": "added"
+  },
+  {
+    "path": "verification/ux_phase2_baseline.txt",
+    "status": "added"
+  },
+  {
+    "path": "verification/ux_phase2_build.txt",
+    "status": "added"
+  },
+  {
+    "path": "verification/ux_phase2_full_stack.txt",
+    "status": "added"
+  },
+  {
+    "path": "verification/ux_phase2_full_stack_server.txt",
+    "status": "added"
+  },
+  {
+    "path": "verification/ux_phase2_lint.txt",
+    "status": "added"
+  },
+  {
+    "path": "verification/ux_phase2_phase1.txt",
+    "status": "added"
+  },
+  {
+    "path": "verification/ux_phase2_portal.txt",
+    "status": "added"
+  },
+  {
+    "path": "verification/ux_phase2_reset.txt",
+    "status": "added"
+  },
+  {
+    "path": "verification/ux_phase2_storage.txt",
+    "status": "added"
+  },
+  {
+    "path": "verification/ux_phase2_typecheck.txt",
+    "status": "added"
+  }
+]

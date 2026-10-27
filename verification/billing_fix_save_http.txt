@@ -1,0 +1,7 @@
+test_all_rate_save_rerun_reclassifies_owned_pdf_and_invalidates_review (test_billing_rate_fix.BillingRateFixHTTP.test_all_rate_save_rerun_reclassifies_owned_pdf_and_invalidates_review) ... ok
+test_roundtrip_rates_matches_reviews_isolation_permissions (test_billing_rate_fix.BillingRateFixHTTP.test_roundtrip_rates_matches_reviews_isolation_permissions) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 4.217s
+
+OK

@@ -1,0 +1,11 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const events={},ctx={console,Date,Event:class{constructor(type,opts){this.type=type;Object.assign(this,opts)}},document:{addEventListener:(k,fn)=>events[k]=fn},clearTimeout,setTimeout,window:{},state:{},apiBusy:0,bulkRunning:false,auditBusy:false,yearLoading:false,workbookSwitching:false,saveTimer:null,saveQueue:Promise.resolve(),record:{status:'draft',party:'Calendar test',entries:[]},toast:m=>ctx.toastMessage=m,saveDraft:async()=>{ctx.saved=true},pywebview:{api:{finish_close:async()=>{ctx.closed=true}}}};
+vm.createContext(ctx);vm.runInContext(fs.readFileSync(__dirname+'/../static/polish.js','utf8'),ctx);const run=s=>vm.runInContext(s,ctx);
+(async()=>{assert.equal(run("calParse('2025-02-29')"),null);assert.equal(run("calParse('2024-02-29').day"),29);assert.equal(run("calParse('2026-13-01')"),null);assert.equal(run("calendarPermits({min:'2026-01-01',max:'2026-12-31'},'2027-01-01')"),false);
+ ctx.input={value:'2026-04-08',min:'',max:'',isConnected:true,disabled:false,readOnly:false,dispatchEvent:e=>ctx.dispatched=e};ctx.button={isConnected:true,focus:()=>{}};ctx.popup={remove(){}};
+ run("studioCalendar={input,button,popup,year:2026,month:3};calendarMarkup(input,2026,3)");assert.equal(ctx.input.value,'2026-04-08');run("chooseStudioDate('2026-04-09')");assert.equal(ctx.input.value,'2026-04-09');assert.equal(ctx.dispatched.type,'change');assert.equal(ctx.dispatched.bubbles,true);
+ ctx.dispatched=null;run("studioCalendar={input,button,popup,year:2026,month:3};chooseStudioDate('2026-04-09')");assert.equal(ctx.dispatched,null);
+ ctx.input.disabled=true;run("studioCalendar={input,button,popup,year:2026,month:3};chooseStudioDate('2026-04-10')");assert.equal(ctx.input.value,'2026-04-09');
+ await run('cnSaveAndClose()');assert.equal(ctx.saved,true);assert.equal(ctx.closed,true);ctx.saved=ctx.closed=false;ctx.apiBusy=1;await run('cnSaveAndClose()');assert.equal(ctx.closed,false);assert.match(ctx.toastMessage,/finish the current operation/);
+ console.log('Polish: calendar leap/min/max validation, no on-open date write, explicit bubbling change, unchanged-date/disabled guards and desktop save-before-close/busy guard passed.');
+})().catch(e=>{console.error(e);process.exitCode=1});

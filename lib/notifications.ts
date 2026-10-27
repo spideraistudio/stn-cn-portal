@@ -1,0 +1,10 @@
+import { env } from "@/lib/runtime-env";
+function reportDb(){if(!env.DB)throw new Error("Storage unavailable");return env.DB;}
+export type AppNotification={id:string;type:string;title:string;message:string;href:string;read_at:number|null;created_at:number};
+type Notice={type:string;title:string;message:string;href:string};
+async function purgeExpired(){await reportDb().prepare("DELETE FROM notifications WHERE created_at<?").bind(Date.now()-10*24*60*60*1000).run();}
+async function create(audience:"admin"|"member",memberId:number|string|null,notice:Notice){try{await reportDb().prepare("INSERT INTO notifications(id,audience,member_id,type,title,message,href,created_at) VALUES(?,?,?,?,?,?,?,?)").bind(crypto.randomUUID(),audience,memberId,notice.type,notice.title.slice(0,120),notice.message.slice(0,500),notice.href.slice(0,300),Date.now()).run();}catch(error){console.error("[notification]",error);}}
+export function notifyAdmin(notice:Notice){return create("admin",null,notice);}
+export function notifyMember(memberId:number|string,notice:Notice){return create("member",memberId,notice);}
+export async function listNotifications(audience:"admin"|"member",memberId:number|string|null){await purgeExpired();const where=audience==="admin"?"audience='admin'":"audience='member' AND member_id=?";const query=reportDb().prepare(`SELECT id,type,title,message,href,read_at,created_at FROM notifications WHERE ${where} ORDER BY created_at DESC LIMIT 200`);return (audience==="admin"?await query.all<AppNotification>():await query.bind(memberId).all<AppNotification>()).results;}
+export async function unreadNotifications(audience:"admin"|"member",memberId:number|string|null){await purgeExpired();const where=audience==="admin"?"audience='admin'":"audience='member' AND member_id=?";const query=reportDb().prepare(`SELECT count(*) count FROM notifications WHERE ${where} AND read_at IS NULL`);const row=audience==="admin"?await query.first<{count:number}>():await query.bind(memberId).first<{count:number}>();return Number(row?.count||0);}

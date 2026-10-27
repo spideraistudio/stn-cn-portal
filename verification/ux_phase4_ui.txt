@@ -1,0 +1,1 @@
+PASS: categories before NRV, closed category/party/finding/reviewed disclosures, pending/reviewed counts, unique party locations, multi-import evidence, review/reopen/stale identities, escaping, empty/all-reviewed cases and no report mutation.

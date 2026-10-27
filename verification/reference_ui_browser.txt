@@ -1,0 +1,2 @@
+PASS classic render, query, filters, kg/MT sorting, empty state, quotation API quantity, failure/retry, reset and viewport widths 1440/800/390
+PASS studio render, query, filters, kg/MT sorting, empty state, quotation API quantity, failure/retry, reset and viewport widths 1440/800/390

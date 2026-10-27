@@ -1,0 +1,15 @@
+MongoDB ready on 127.0.0.1:27017. Disposable test data.
+Synthetic STN members ready; existing member IDs explicitly linked by the test.
+PASS unified real signup approval creates one company/admin identity, modules and permissions; retry is idempotent; temporary password enforced
+PASS shared login, forced password change, legacy-session bypass denial and company admin / platform separation
+PASS individual staff login, explicit delegated company STN grant, preserved company boundaries and no automatic account merge
+PASS STN real MongoDB seed request, state scope, anonymous buyer, self-quote denial, quotation, approval/contact exchange and history
+PASS STN seller report submission, platform review and approved GST search
+PASS complete source-PDF import → mapping → scheme assignment → receipt settlement → finalisation → reporting, with original dates and late Kharif classification
+PASS CN PDF import, original evidence, exact ₹38,561 result, finalise/issue, reports/CSV, frozen history, individual isolation including platform admin, independent export/import and separate STN accounting
+PASS approval dialog fits 1366x768, 1024x600, 800x450 and 640x384 effective CSS viewports; every field and action reachable without resizing.
+PASS visible platform/company-scoped reset actions, exact membership filtering, cancellation, actual company-admin reset and forced password change; newly created staff appears without reload.
+PASS Linux Chromium: existing STN request approved through the unified form; staff credentials and STN/CN access created together in the admin backend.
+PASS Linux Chromium: real portal login, CN → portal → STN → portal without another login, company-scoped management and no uncaught page errors.
+PASS independent module disable/immediate revocation, full service restart/reopening, scoped reset/forced change and shared logout
+PASS full stack integration journey (Linux; Windows acceptance pending)

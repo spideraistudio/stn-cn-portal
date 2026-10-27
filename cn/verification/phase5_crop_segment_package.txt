@@ -1,0 +1,5 @@
+PASS: 63 cumulative web tests; six focused mapping scenarios.
+PASS: production action/DOM tests for both product mapping panels, saved crop and optional segment choices, selector and shell transport tests.
+PASS: Python compile, JS syntax, 140 baseline source hashes, unchanged CSS/appearance/dragging/zoom assets.
+PASS: final ZIP CRC, clean extraction/byte comparison, baseline and CLI startup import.
+No real user databases or credentials included. Windows/native-browser acceptance remains pending.

@@ -1,0 +1,6 @@
+test_phase5_year_link_keeps_opening_cap_and_receipt_dates (test_calculator_http.CalculatorHTTPTests.test_phase5_year_link_keeps_opening_cap_and_receipt_dates) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 2.266s
+
+OK

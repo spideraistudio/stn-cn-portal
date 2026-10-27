@@ -1,0 +1,6 @@
+PASS: single PDF preview/apply opens Check Ledger with all five steps; real party Open retains original vouchers/dates and payment allocations.
+PASS: actual server restart and fresh browser context reopen the same workbook/party, source mappings, dates and saved allocations in both interfaces.
+PASS: multi-PDF import keeps all five steps and refreshes Parties immediately; saved-source selection opens the chosen party with its full vouchers.
+PASS: changed source shows all five steps with actual saved vouchers/dates and allocations read-only, plus source-review guidance.
+PASS: Step 1 file selection reaches source import; a workbook without dates shows saved vouchers and all five steps, then continues directly after an explicit working-period choice.
+PASS: no page errors or failed API calls. Linux Chromium verified; Windows acceptance remains pending.

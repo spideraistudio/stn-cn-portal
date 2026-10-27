@@ -1,0 +1,6 @@
+PASS: cumulative web suite: 69 tests; final focused finish/source/reopen scenarios: six tests.
+PASS: preserved offline suite: 332 tests run, one skipped.
+PASS: Python compile, JavaScript syntax, 140 baseline hashes, unchanged appearance/workbench/dragging/zoom assets.
+PASS: production UI model tests for canonical party reopening, retained stale details, source replacement, summary print, mapping actions and saved selectors.
+PASS: final ZIP CRC, clean extraction, every member byte-comparison, Windows-safe relative paths, baseline check and CLI startup import.
+No real working databases or account credentials included. Windows/native-browser acceptance remains pending.

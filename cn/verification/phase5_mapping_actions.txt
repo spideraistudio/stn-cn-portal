@@ -1,0 +1,2 @@
+PASS static/ledger.js: empty catalogue guidance; create/save click posts confirmed fields; missing fields block and focus; server errors visible beside action; saved crop/segment choices, optional segment and canonical crop names.
+PASS calculator_static/ledger-panel.js: empty catalogue guidance; create/save click posts confirmed fields; missing fields block and focus; server errors visible beside action; saved crop/segment choices, optional segment and canonical crop names.

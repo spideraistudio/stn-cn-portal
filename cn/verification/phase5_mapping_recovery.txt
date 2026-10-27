@@ -1,0 +1,1 @@
+PASS: supplied local recovery scripts byte-identical; synthetic account identity/rights retained; full database backup integrity and recovery commit verified. No real accounts used.

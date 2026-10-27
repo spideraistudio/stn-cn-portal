@@ -1,0 +1,10 @@
+import { isOriginValid } from "@/lib/origin-check";
+import { NextResponse } from "next/server";
+import { currentMember } from "@/lib/member-session";
+import { categoryAccess } from "@/lib/category-access";
+import { closeOwnSeedRequest } from "@/lib/seed-requests";
+import { getOwnQuotation,getSeedRequest,supplierCanAccess,supplierCanReadOwnHistory,supplierRequestView } from "@/lib/seed-trading";
+const reply=(body:object,status=200)=>NextResponse.json(body,{status,headers:{"Cache-Control":"private, no-store"}});
+async function member(){const m=await currentMember();return m&&!m.mustChangePassword&&categoryAccess(m)?.id==="agriculture"?m:null;} type Context={params:Promise<{id:string}>};
+export async function GET(_request:Request,{params}:Context){const m=await member();if(!m)return reply({error:"Approved Agriculture membership required."},403);const{id}=await params;const item=await getSeedRequest(id);if(!item)return reply({error:"Request not found or unavailable."},404);const owner=String(item.ownerId)===String(m.id);const quote=owner?null:await getOwnQuotation(id,m.id);if(!supplierCanAccess(item,m)&&!supplierCanReadOwnHistory(item,m,quote))return reply({error:"Request not found or unavailable."},404);return reply({request:owner?item:supplierRequestView(item,quote||undefined)});}
+export async function PATCH(request:Request,{params}:Context){const m=await member();if(!m)return reply({error:"Approved Agriculture membership required."},403);if(!isOriginValid(request))return reply({error:"Invalid request origin."},403);let body:unknown;try{body=await request.json()}catch{return reply({error:"Invalid request."},400)}if(!body||typeof body!=="object"||!["closed","cancelled"].includes((body as{action?:string}).action||""))return reply({error:"Choose close or cancel."},400);const{id}=await params;const result=await closeOwnSeedRequest(m.id,id,(body as{action:"closed"|"cancelled"}).action);return result?reply({request:result}):reply({error:"Request is unavailable, not yours, or already closed."},409);}

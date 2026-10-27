@@ -1,0 +1,16 @@
+{
+  "source_archive": "STN_CN_UX5_Windows_Installation.zip",
+  "source_sha256": "68169f8db328d042c49d1c29f216d1a8cda460953c2f729c174407df00beaeba",
+  "earlier_intact_members_verified_identical": 755,
+  "changed_application_and_test_files": [
+    "cn/backend/cn_web/billing_audit.py",
+    "cn/backend/cn_web/native_interface.py",
+    "cn/backend/cn_web/calculator_static/billing-audit.js",
+    "cn/tests/test_billing_audit.py",
+    "cn/tests/test_billing_rate_fix.py",
+    "cn/tests/test_billing_rate_fix_ui.cjs",
+    "cn/tests/browser_billing.cjs",
+    "cn/tests/browser_audit_mapping.cjs"
+  ],
+  "protected_baseline_files_unchanged": 140
+}

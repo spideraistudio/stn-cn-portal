@@ -1,0 +1,3 @@
+PASS real Chromium: fresh CN dashboard, first workbook, saved scope reopened, legacy workspace redirect, both themes and FY/season context.
+PASS real Chromium: shared settings, CN-only administrator staff creation, problem-report email fallback, old STN bookmark redirects.
+PASS real Chromium: forced first-password change, staff management denial, public policies/contact without sign-in; no page errors.

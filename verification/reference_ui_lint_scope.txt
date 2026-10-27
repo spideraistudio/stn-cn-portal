@@ -1,0 +1,2 @@
+Targeted lint passed: app/member/page.tsx, components/seed-requirements-landing.tsx, components/seed-art.tsx, components/seller-search.tsx, components/app-sidebar.tsx, lib/seed-market-search.ts, tests/seed-market-search.test.ts.
+Broader check also included components/workspace-shell.tsx; its pre-existing react-hooks/set-state-in-effect findings at lines 56, 266 and 276 remain. The shell diff only adds the seller-search navigation link. Full-project lint is not certified.

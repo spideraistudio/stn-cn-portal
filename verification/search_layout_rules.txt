@@ -1,0 +1,16 @@
+✔ multiple case-insensitive words search across crop/location without mutating source (0.903506ms)
+✔ combined filters and empty results (0.161783ms)
+✔ quantity sorts normalized kg and MT; closing sorts dates (0.174202ms)
+✔ approved company state scopes access independently of notification preference (0.681593ms)
+✔ the same member may buy on one request and supply on another, but never quote their own (0.187482ms)
+✔ anonymous supplier view omits owner identifiers and reveals per quotation (0.201883ms)
+✔ quotation validates partial/full kg conversion, deadline and dates (0.870447ms)
+✔ approval respects remaining quantity and quote validity (0.406551ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 366.404267

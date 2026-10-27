@@ -1,0 +1,2 @@
+PASS: ZIP CRC and extraction; every original member retained; only six intended files modified; all 140 baseline hashes match; all calculator JS syntax checks; extracted local server health and login page.
+Windows/native browser acceptance remains pending.

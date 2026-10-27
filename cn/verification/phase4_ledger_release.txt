@@ -1,0 +1,13 @@
+test_audit_category_review_and_backup_roundtrip (test_ledger_http.LedgerHTTPTests.test_audit_category_review_and_backup_roundtrip) ... ok
+test_combined_pdf_all_49_parties (test_ledger_http.LedgerHTTPTests.test_combined_pdf_all_49_parties) ... ok
+test_late_kharif_cn_return_ipt_and_original_receipts (test_ledger_http.LedgerHTTPTests.test_late_kharif_cn_return_ipt_and_original_receipts) ... ok
+test_ownership_permissions_reauthorization_and_file_protection (test_ledger_http.LedgerHTTPTests.test_ownership_permissions_reauthorization_and_file_protection) ... ok
+test_preview_cancel_repeat_failed_batch_and_changed_source (test_ledger_http.LedgerHTTPTests.test_preview_cancel_repeat_failed_batch_and_changed_source) ... ok
+test_strict_boundaries_packing_and_concurrent_apply (test_ledger_http.LedgerHTTPTests.test_strict_boundaries_packing_and_concurrent_apply) ... ok
+test_year_link_credit_cap_and_dates (test_ledger_http.LedgerHTTPTests.test_year_link_credit_cap_and_dates) ... ok
+test_year_link_layout_and_mapping_backup_preserved (test_ledger_http.LedgerHTTPTests.test_year_link_layout_and_mapping_backup_preserved) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 27.452s
+
+OK

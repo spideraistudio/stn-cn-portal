@@ -1,0 +1,7 @@
+Continue combined STN + All Crop CN usability work from STN_CN_UX_Phase3_Source_Handoff.zip (complete cumulative SOURCE).
+Read PHASE3_BILLING_HANDOFF.md, PHASE2_ADMIN_HANDOFF.md, PHASE1_WORKFLOW_HANDOFF.md, UX_PHASE_PLAN.md, PHASE_HANDOFF.md and TEST_RESULTS.md first.
+Start Phase 4 only: category-first Ledger Audit with counts, expandable party findings, and reviewed/not-applicable items collapsed but still accessible. Preserve evidence, review reasons and stale-review invalidation. Keep billing-only checks separate from CN/NRV checks.
+Preserve Phase 3 explicit rate units, comparison trace, recorded-state/new-state chooser and save/recheck status; original-bill return comparisons must remain unchanged. The actual reported billing PDF was not supplied in Phase 3; synthetic reproduction and automated checks are not Windows acceptance.
+Preserve Phase 1 shared Account & Settings/direct CN dashboard/first workbook and Phase 2 scoped password resets/contained signup dialog. Preserve private per-person CN ownership, saved work, original receipt dates, separate rounding, frozen history, both themes/layouts, STN approval/category permissions and separate storage accounting/ceilings. Do not change the protected financial engine.
+No deployment, live migration or original Meet-Dev changes. Windows acceptance remains pending.
+Provide the cumulative SOURCE HANDOFF ZIP and NEW_CHAT_PHASE5.txt. Final installation ZIP only after all five UX phases.

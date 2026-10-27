@@ -1,0 +1,28 @@
+test_roundtrip_rates_matches_reviews_isolation_permissions (test_billing_http.BillingHTTP.test_roundtrip_rates_matches_reviews_isolation_permissions) ... ok
+test_missing_sale_overlap_and_stale_review (test_billing_audit.BillingTests.test_missing_sale_overlap_and_stale_review) ... ok
+test_seasons_original_wrong_sale_return_and_no_mutation (test_billing_audit.BillingTests.test_seasons_original_wrong_sale_return_and_no_mutation) ... ok
+test_split_no_offset_and_overreturn (test_billing_audit.BillingTests.test_split_no_offset_and_overreturn) ... ok
+test_units_prior_returns_and_dedup (test_billing_audit.BillingTests.test_units_prior_returns_and_dedup) ... ok
+test_kg_rate_entered_as_default_packet_reproduces_false_mismatch (test_ux_phase3.RateTrace.test_kg_rate_entered_as_default_packet_reproduces_false_mismatch) ... ok
+test_missing_sale_overlap_and_stale_review (test_ux_phase3.RateTrace.test_missing_sale_overlap_and_stale_review) ... ok
+test_seasons_original_wrong_sale_return_and_no_mutation (test_ux_phase3.RateTrace.test_seasons_original_wrong_sale_return_and_no_mutation) ... ok
+test_split_no_offset_and_overreturn (test_ux_phase3.RateTrace.test_split_no_offset_and_overreturn) ... ok
+test_state_choices_preserve_existing_and_reuse_case_spacing (test_ux_phase3.RateTrace.test_state_choices_preserve_existing_and_reuse_case_spacing) ... ok
+test_units_prior_returns_and_dedup (test_ux_phase3.RateTrace.test_units_prior_returns_and_dedup) ... ok
+test_roundtrip_rates_matches_reviews_isolation_permissions (test_ux_phase3.ScopedStates.test_roundtrip_rates_matches_reviews_isolation_permissions) ... ok
+test_scoped_config_states_and_saved_correction (test_ux_phase3.ScopedStates.test_scoped_config_states_and_saved_correction) ... ok
+test_missing_sale_overlap_and_stale_review (test_billing_audit.BillingTests.test_missing_sale_overlap_and_stale_review) ... ok
+test_seasons_original_wrong_sale_return_and_no_mutation (test_billing_audit.BillingTests.test_seasons_original_wrong_sale_return_and_no_mutation) ... ok
+test_split_no_offset_and_overreturn (test_billing_audit.BillingTests.test_split_no_offset_and_overreturn) ... ok
+test_units_prior_returns_and_dedup (test_billing_audit.BillingTests.test_units_prior_returns_and_dedup) ... ok
+test_roundtrip_rates_matches_reviews_isolation_permissions (test_billing_http.BillingHTTP.test_roundtrip_rates_matches_reviews_isolation_permissions) ... ok
+test_billing_only_exposes_same_owned_mapping_entry_point (test_audit_mapping_http.AuditMappingHTTP.test_billing_only_exposes_same_owned_mapping_entry_point) ... ok
+test_owned_source_permissions_atomicity_packing_and_tampering (test_audit_mapping_http.AuditMappingHTTP.test_owned_source_permissions_atomicity_packing_and_tampering) ... ok
+test_statement_prefill_save_recheck_backup_and_no_calculation_draft (test_audit_mapping_http.AuditMappingHTTP.test_statement_prefill_save_recheck_backup_and_no_calculation_draft) ... ok
+test_exact_mapping_wins_over_broad_name_without_rewriting_evidence (test_audit_mapping_model.AuditMappingModel.test_exact_mapping_wins_over_broad_name_without_rewriting_evidence) ... ok
+test_without_new_mapping_matches_original_audit_and_preserves_return_evidence (test_audit_mapping_model.AuditMappingModel.test_without_new_mapping_matches_original_audit_and_preserves_return_evidence) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 18.117s
+
+OK

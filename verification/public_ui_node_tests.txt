@@ -1,0 +1,20 @@
+✔ temporary to permanent keeps history; unchanged saves do not add duplicates (1.860059ms)
+✔ legacy type stays unspecified until explicitly reviewed (0.525724ms)
+✔ pending corrections and removal preserve earlier case references (0.224289ms)
+✔ number type and escaped history render consistently (21.708929ms)
+✔ multiple case-insensitive words search across crop/location without mutating source (1.088855ms)
+✔ combined filters and empty results (0.189606ms)
+✔ quantity sorts normalized kg and MT; closing sorts dates (0.162055ms)
+✔ approved company state scopes access independently of notification preference (1.047432ms)
+✔ the same member may buy on one request and supply on another, but never quote their own (0.293173ms)
+✔ anonymous supplier view omits owner identifiers and reveals per quotation (0.293844ms)
+✔ quotation validates partial/full kg conversion, deadline and dates (1.004567ms)
+✔ approval respects remaining quantity and quote validity (0.33753ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 474.0746

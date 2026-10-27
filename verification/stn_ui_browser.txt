@@ -1,0 +1,7 @@
+page.setContent: Target page, context or browser has been closed
+Call log:
+[2m  - setting frame content, waiting until "load"[22m
+
+    at /tmp/stn-browser.cjs:1:866 {
+  log: [ '  - setting frame content, waiting until "load"' ]
+}

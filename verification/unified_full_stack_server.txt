@@ -1,0 +1,14 @@
+Combined local application: http://127.0.0.1:56187/portal
+Independent test data only. No live migration or deployment.
+▲ Next.js 16.3.3
+- Local:         http://127.0.0.1:47367
+- Network:       http://127.0.0.1:47367
+✓ Ready in 102ms
+✓ Running next.config.ts took 31ms
+Combined local application: http://127.0.0.1:56187/portal
+Independent test data only. No live migration or deployment.
+▲ Next.js 16.3.3
+- Local:         http://127.0.0.1:47367
+- Network:       http://127.0.0.1:47367
+✓ Ready in 83ms
+✓ Running next.config.ts took 23ms

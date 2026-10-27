@@ -1,0 +1,10 @@
+test_download_and_all_new_permission_boundaries (test_workspaces_http.WorkspaceHTTPTests.test_download_and_all_new_permission_boundaries) ... ok
+test_owned_graph_and_export_import (test_workspaces_http.WorkspaceHTTPTests.test_owned_graph_and_export_import) ... ok
+test_parallel_store_writes_and_restart (test_workspaces_http.WorkspaceHTTPTests.test_parallel_store_writes_and_restart) ... ok
+test_revision_atomicity_files_layouts_and_revocation (test_workspaces_http.WorkspaceHTTPTests.test_revision_atomicity_files_layouts_and_revocation) ... ok
+test_strict_mutation_boundaries (test_workspaces_http.WorkspaceHTTPTests.test_strict_mutation_boundaries) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 10.847s
+
+OK

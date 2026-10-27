@@ -1,0 +1,13 @@
+{
+  "backend/cn_web/__init__.py": "53ac8b160705f8bc7bddf31abbad08a3e8e1558c223631f96b1f1de215b80259",
+  "backend/cn_web/accounts.py": "f8df6847a9613feb46a44b04f05362ff5811cb8c85120ead001d7862310b3004",
+  "backend/cn_web/cli.py": "5dd56ba892431bfc496f10b2f7222b7f03b0ccac8c8cbcfef6033dccdbd52b04",
+  "backend/cn_web/http_app.py": "d5919c436be029eb84496df69e3c939670a29f4fe2626d0ab5e30517d238c9d1",
+  "backend/cn_web/retention.py": "996f8e9e931772fe6772bf5de75d65272cb7b33a50ab15b0bd16cf9abdb327ee",
+  "backend/cn_web/security.py": "11b1798e60cacbcb8a5b44f12697052c8abfd4da52282eb4855673462f06cf74",
+  "backend/cn_web/static/account.css": "e8f8331f16f6aadf9a343a1a56907c6e3c5ab515aab3404661b410e949d17deb",
+  "backend/cn_web/static/account.js": "4f26c8643ad6708fc86bd154f688cbc5a31ee1b7fc62593b81e78e4536380a24",
+  "backend/cn_web/static/index.html": "522e0c68c42c2378fcfba39f890fa9b8a0f68fdc3b3b8bba06118aadcbee801f",
+  "backend/cn_web/workspaces.py": "6d377ae2ae945d9bb31b00ec88f5f2e6a6ffc0ed83082f2e3d384103377bfbbe",
+  "backend/cn_web/wsgi.py": "ac035b9e7f66e9aa87c25ed586dd77e70f0f7cfb9d636193cdd92b1443586b1f"
+}

@@ -1,0 +1,20 @@
+PASS: all prior reference-UI archive members retained.
+PASS: no CN, integration, API or lib file changed in this correction.
+PASS: dependencies, build caches, credentials, screenshots and user databases excluded.
+Changed prior members:
+PACKAGE_INFO.json
+PHASE_HANDOFF.md
+START_HERE_WINDOWS.md
+START_HERE_WINDOWS.txt
+TEST_RESULTS.md
+UPDATE_INFO.json
+app/globals.css
+app/member/page.tsx
+app/member/sellers/page.tsx
+components/app-sidebar.tsx
+components/member-dashboard.tsx
+components/report-shell.tsx
+components/seed-requirements-landing.tsx
+components/seller-search.tsx
+components/workspace-shell.tsx
+tests/reference-ui-browser.mjs

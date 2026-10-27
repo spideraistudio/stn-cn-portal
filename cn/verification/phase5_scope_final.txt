@@ -1,0 +1,6 @@
+test_phase4_season_projection_dates_and_staleness (test_calculator_http.CalculatorHTTPTests.test_phase4_season_projection_dates_and_staleness) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 2.537s
+
+OK

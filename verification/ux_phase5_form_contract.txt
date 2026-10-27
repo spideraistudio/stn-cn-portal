@@ -1,0 +1,6 @@
+test_pc_console_form_bindings_and_no_inline_execution (test_accounts_http.PasswordAndConfigurationTests.test_pc_console_form_bindings_and_no_inline_execution) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.003s
+
+OK

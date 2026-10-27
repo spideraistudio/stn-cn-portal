@@ -1,0 +1,3 @@
+MongoDB ready on 127.0.0.1:27017. Local test data retained in integration-data/mongo.
+MongoDB ready on 127.0.0.1:27017. Local test data retained in integration-data/mongo.
+PASS Linux persistent restart retains saved data on fixed port 27017, paths with spaces and startup log. Windows arguments tested separately.

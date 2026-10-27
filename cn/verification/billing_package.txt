@@ -1,0 +1,1 @@
+PASS: cumulative archive membership, unchanged offline baseline, ZIP CRC and extraction, all JS syntax, Python compilation, extracted-server startup and billing assets; Windows launcher CRLF. 99 cumulative tests and targeted billing rerun passed. Linux Chromium new billing UI and original workflow passed. New Windows acceptance pending.

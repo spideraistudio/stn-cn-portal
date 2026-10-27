@@ -1,0 +1,7 @@
+PASS: zoomed Navy empty-canvas left drag pans camera in both axes without changing scale, positions or allocations.
+PASS: card dragging still moves node positions after camera panning; camera and card gestures remain separate.
+Account after panning: user-a · user 
+PASS: shared login followed by module choice opens calculator in Navy Studio after Classic was selected in the previous session.
+PASS: superadmin account UI creates an admin with 1 GiB/five users/250 MiB defaults and resets its password.
+PASS: admin temporary login forces password change, then own-user creation defaults to 250 MiB; role controls are hidden, list is scoped, own-user password reset works.
+PASS: superadmin account UI creates an admin with 1 GiB/five users/250 MiB defaults and resets its password. No page errors. Linux Chromium; new Windows acceptance pending.

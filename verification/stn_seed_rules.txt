@@ -1,0 +1,13 @@
+✔ approved company state scopes access independently of notification preference (0.927699ms)
+✔ the same member may buy on one request and supply on another, but never quote their own (0.244163ms)
+✔ anonymous supplier view omits owner identifiers and reveals per quotation (0.583439ms)
+✔ quotation validates partial/full kg conversion, deadline and dates (1.293231ms)
+✔ approval respects remaining quantity and quote validity (0.950762ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1209.016459

@@ -1,0 +1,32 @@
+{
+  "version": "STN CN clean new-profile source 2026-10-27",
+  "source_commit": "491d892e5b5b507e87e18393babb0d0ada387607",
+  "local_integration_commit": "adb1a650750b965acc94843f6b1e9b6d989a4b61",
+  "branch": "integration/stn-cn-2026-10-23",
+  "windows_acceptance": "pending",
+  "public_deployment": false,
+  "ux_phase": 5,
+  "release_date": "2026-10-27",
+  "package_role": "cumulative source and Windows setup scripts",
+  "includes_installed_dependencies": false,
+  "includes_user_data": false,
+  "billing_rate_fix": "2026-10-25",
+  "source_integrity": "intact authoritative UX5 Windows archive; all earlier intact members verified identical",
+  "actual_reported_pdf_reproduced": true,
+  "supersedes": [
+    "STN_CN_Billing_Audit_Fix_Windows_Candidate.zip",
+    "STN_CN_Billing_Audit_Fix_Source_Candidate.zip"
+  ],
+  "stn_ui_update": "2026-10-25",
+  "reference_ui_phases_completed": 3,
+  "reference_ui_windows_acceptance": "pending",
+  "search_layout_fix": "2026-10-25",
+  "stn_case_number_update": "2026-10-26",
+  "billing_precision_fix": "2026-10-26",
+  "actual_pdf_verification_scope": "Amreli printed-rate precision bug with test catalogue; saved user workbook settings unavailable",
+  "public_visitor_ui_update": "2026-10-26",
+  "previous_case_rate_windows_acceptance": "user confirmed working",
+  "repository_status": "new independent source prepared; remote creation pending",
+  "fresh_profile_defaults": "empty catalogue and schemes; no saved user data",
+  "packet_weight_unknown_feature": "pending"
+}

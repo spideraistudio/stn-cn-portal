@@ -1,0 +1,1 @@
+PASS: native bootstrap, scoped authenticated transport, preserved offline page functions, canonical reopening/stale-result routing and canonical print. Real browser parity is checked separately.

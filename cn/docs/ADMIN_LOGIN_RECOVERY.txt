@@ -1,0 +1,21 @@
+ALL CROP CN - SUPERADMIN RECOVERY (PHASE 7.1)
+
+Users: ask your own admin or superadmin to reset your password.
+Admins: ask superadmin. Temporary passwords require change at next login;
+old sessions are revoked and saved work is retained.
+
+SUPERADMIN FORGOTTEN PASSWORD - trusted PC operator only:
+1. Stop the web server. Back up the WEB data folder.
+2. Run Recover_Admin_Windows.bat from this extracted program folder.
+3. Choose the existing superadmin login, then type and confirm a NEW password
+   (12-128 characters). Typed characters are hidden.
+4. The tool verifies a full database backup before resetting the password.
+5. Start_Web_Phase7_1_Windows.bat starts the app. Sign in with the new password.
+
+Custom data folder: Recover_Admin_Windows.bat --data "D:\YourWebDataFolder"
+Use your actual WEB folder, never the offline calculator folder. No new account
+is created. Saved users, permissions and financial work remain. Old superadmin
+sessions are revoked. Protect recovery_backups; no passwords are printed.
+
+Future hosted recovery requires protected server-console access and an operator
+backup. There is no public superadmin-reset URL or email recovery in this release.

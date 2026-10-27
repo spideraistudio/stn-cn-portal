@@ -1,0 +1,9 @@
+Continue combined STN + All Crop CN usability work from the attached STN_CN_UX_Phase1_Source_Handoff.zip (complete cumulative source).
+Read PHASE1_WORKFLOW_HANDOFF.md, PHASE_HANDOFF.md, UX_PHASE_PLAN.md, INTEGRATION_README.md and TEST_RESULTS.md first.
+Phase 1 implementation and Linux automated/browser verification are complete; Windows acceptance remains pending. Preserve the shared Account & Settings navigation and direct CN dashboard/first-workbook flow.
+Start Phase 2 only:
+1. Add clearly visible Reset password actions in STN administration for eligible individual users and company admins. Reuse the common login reset process and forced temporary-password change/session revocation. Platform superadmin can manage company admins/staff; company admins only their own staff. Do not create a second credential system or reset by guessed company/email matching.
+2. Fix the signup approval form so normal desktop windows/browser zoom need no manual resizing. Use sensible field widths, stacked sections where needed, contained scrolling and reachable actions.
+At completion provide a cumulative SOURCE HANDOFF ZIP and continuation text for Phase 3. Final installation ZIP is due only after all five UX phases. Do not deploy.
+Remaining phases: 3 billing-rate mismatch investigation/fix and recorded-state chooser; 4 category-first ledger audit; 5 common appearance and full workflow verification.
+Preserve Update35.2 engine, original payment dates/rounding, accepted calculator workflow, both themes, saved data/layouts, private per-person CN ownership, separate CN/STN storage, STN approval/category rules, staff ceilings and server permissions. Work only in the independent integration copy; keep Meet-Dev and live app untouched. Distinguish Linux verification from Windows acceptance.

@@ -1,0 +1,1 @@
+export async function readJsonResponse<T>(response:Response):Promise<T>{const type=response.headers.get("content-type")||"";if(!type.includes("application/json"))throw new Error("The service is temporarily unavailable. Please try again.");return response.json() as Promise<T>;}

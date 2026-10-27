@@ -1,0 +1,3 @@
+import Link from "next/link";
+import { BrandLogo } from "@/components/brand-logo";
+export function PublicHeader(){return <header className="public-header"><Link href="/home" className="public-brand"><BrandLogo compact className="size-11"/><span>STN <span className="public-muted">+ All Crop CN</span><small>One account. Connected business tools.</small></span></Link><nav aria-label="Public navigation"><Link href="/home#workspaces">Explore tools</Link><Link href="/contact">Contact</Link><Link href="/login" className="public-button secondary">Log in</Link><Link href="/join" className="public-button">Register company</Link></nav></header>}

@@ -1,0 +1,2 @@
+PASS static/ledger.js: empty lists, saved workbook/season, distinct April–March pair, partial current year, replaced source exclusion, stale preview reset.
+PASS calculator_static/ledger-panel.js: empty lists, saved workbook/season, distinct April–March pair, partial current year, replaced source exclusion, stale preview reset.

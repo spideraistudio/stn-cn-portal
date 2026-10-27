@@ -1,0 +1,24 @@
+test_freight_journal_not_crop_and_generic_journal_not_guessed (test_audit_reviews.AuditReviewTests.test_freight_journal_not_crop_and_generic_journal_not_guessed) ... ok
+test_new_workbook_never_copies_review_dispositions (test_audit_reviews.AuditReviewTests.test_new_workbook_never_copies_review_dispositions) ... ok
+test_other_classification_no_crop (test_audit_reviews.AuditReviewTests.test_other_classification_no_crop) ... ok
+test_reason_fingerprint_stale_validation (test_audit_reviews.AuditReviewTests.test_reason_fingerprint_stale_validation) ... ok
+test_review_bound_to_exact_evidence_and_period_not_filename (test_audit_reviews.AuditReviewTests.test_review_bound_to_exact_evidence_and_period_not_filename) ... ok
+test_review_reopen_and_source_unchanged (test_audit_reviews.AuditReviewTests.test_review_reopen_and_source_unchanged) ... ok
+test_review_survives_backup_restore (test_audit_reviews.AuditReviewTests.test_review_survives_backup_restore) ... ok
+test_workbook_scoping (test_audit_reviews.AuditReviewTests.test_workbook_scoping) ... ok
+test_actual_combined_all_parties_and_repeat_no_added_findings (test_ledger_audit.LedgerAuditTests.test_actual_combined_all_parties_and_repeat_no_added_findings) ... ok
+test_cn_same_narration_amount_only_and_crop_list (test_ledger_audit.LedgerAuditTests.test_cn_same_narration_amount_only_and_crop_list) ... ok
+test_cross_layout_precision_and_family_not_false_duplicate (test_ledger_audit.LedgerAuditTests.test_cross_layout_precision_and_family_not_false_duplicate) ... ok
+test_equal_amounts_never_sufficient (test_ledger_audit.LedgerAuditTests.test_equal_amounts_never_sufficient) ... ok
+test_exact_bank_reference_across_parties_dates_and_different_amounts (test_ledger_audit.LedgerAuditTests.test_exact_bank_reference_across_parties_dates_and_different_amounts) ... ok
+test_invalid_period (test_ledger_audit.LedgerAuditTests.test_invalid_period) ... ok
+test_ipt_and_separate_packing_never_used_as_sale (test_ledger_audit.LedgerAuditTests.test_ipt_and_separate_packing_never_used_as_sale) ... ok
+test_period_and_no_mutation (test_ledger_audit.LedgerAuditTests.test_period_and_no_mutation) ... ok
+test_rate_excess_and_mixed_rate_uncertainty (test_ledger_audit.LedgerAuditTests.test_rate_excess_and_mixed_rate_uncertainty) ... ok
+test_repeated_import_not_duplicate_but_identical_printed_entries_retained (test_ledger_audit.LedgerAuditTests.test_repeated_import_not_duplicate_but_identical_printed_entries_retained) ... ok
+test_same_amount_distinct_references_not_flagged (test_ledger_audit.LedgerAuditTests.test_same_amount_distinct_references_not_flagged) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 5.429s
+
+OK

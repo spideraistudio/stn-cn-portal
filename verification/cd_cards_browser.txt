@@ -1,0 +1,3 @@
+PASS: actual CD crop click/preview/apply shows all three product funding shares, which sum to the crop allocation in both themes; receipt highlighting and card fit verified. Only one pooled row persists; engine result unchanged by display.
+PASS: party reopen/server restart restore product shares; capped one-packet case displays only retained CD funding and leaves excess available.
+PASS: no browser/API errors. Linux Chromium; Windows acceptance pending.

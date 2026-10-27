@@ -1,0 +1,3 @@
+PASS: 500 matching rows hidden by default, category/party/product disclosure, separate unchecked reasons, escaping, all-entry disclosure and replacement on recheck.
+PASS: explicit units, saved-state/new-state controls, save then recheck, saved-but-recheck-failed state and stale report cleared.
+PASS: categories before NRV, closed category/party/finding/reviewed disclosures, pending/reviewed counts, unique party locations, multi-import evidence, review/reopen/stale identities, escaping, empty/all-reviewed cases and no report mutation.

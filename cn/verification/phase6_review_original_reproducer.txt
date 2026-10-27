@@ -1,0 +1,13 @@
+EXPECTED FAILURE against attached original bridge:
+evalmachine.<anonymous>:44
+function summaryPanel(){return `<div class="card summary grid"><label>Ledger before new CN<span class="stat">${money(result.ledger_closing)}</span></label><label>Separate proposed CNs<span class="stat">${money(result.new_CN_total)}</span></label><label>${Number(result.final_balance)>=0?'Party still owes':'Excess party credit'}<span class="stat">${money(Math.abs(Number(result.final_balance)))}</span></label><label>Amount still unallocated ${money(result.unallocated)}</label><label>${result.issues.length} blocking review item(s)</label><label>${esc(record.status)} · ${esc(record.season)}</label></div>`}
+                                                                                                                            ^
+
+TypeError: Cannot read properties of null (reading 'ledger_closing')
+    at summaryPanel (evalmachine.<anonymous>:44:125)
+    at workspace (evalmachine.<anonymous>:45:463)
+    at evalmachine.<anonymous>:1:1
+    at Script.runInContext (node:vm:149:12)
+    at Object.runInContext (node:vm:301:6)
+    at run (/tmp/tmpiky53bd5/reproduce.cjs:16:39)
+    at /tmp/tmpiky53bd5/reproduce.cjs:37:2

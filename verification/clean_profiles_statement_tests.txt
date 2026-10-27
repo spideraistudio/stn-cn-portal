@@ -1,0 +1,13 @@
+test_three_actual_pdfs_owned_import_repeat_review_and_finalisation_block (test_multi_statement.PrivateStatementTests.test_three_actual_pdfs_owned_import_repeat_review_and_finalisation_block) ... ok
+test_canonical_review_gates_cannot_be_removed_by_browser_metadata (test_multi_statement.ReviewTests.test_canonical_review_gates_cannot_be_removed_by_browser_metadata) ... ok
+test_column_geometry_and_ambiguity (test_multi_statement.ReviewTests.test_column_geometry_and_ambiguity) ... ok
+test_malformed_pdf_is_a_validation_error (test_multi_statement.ReviewTests.test_malformed_pdf_is_a_validation_error) ... ok
+test_packing_and_issuer_separation (test_multi_statement.ReviewTests.test_packing_and_issuer_separation) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 12.525s
+
+OK
+PASS actual PDF: account-compact-v1 vouchers 31 closing 1243450.00
+PASS actual PDF: account-item-detail-v1 vouchers 6 closing 42000.00
+PASS actual PDF: tally-balance-columns-v1 vouchers 35 closing -35053.00

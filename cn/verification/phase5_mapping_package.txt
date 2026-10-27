@@ -1,0 +1,6 @@
+PASS: all Python application sources compile; all 12 web JavaScript files pass node --check.
+PASS: all 140 Update35.2 baseline files match; preserved appearance/dragging/zoom assets byte-identical.
+PASS: archive CRC, fresh extraction, member byte comparison, Windows-safe relative paths, baseline check and CLI import/startup help.
+PASS: no working user databases, real account credentials or generated caches bundled.
+Windows/native-browser acceptance remains pending for Phases 3–5.
+Follow-up correction: production create/save callbacks and row feedback pass in both panels; five mapping HTTP tests rerun successfully; source identity rules unchanged.

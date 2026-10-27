@@ -1,0 +1,2 @@
+PASS: all 140 preserved Update35.2 files match.
+PASS package source, Windows launchers, preserved baseline, fresh test evidence and complete handoff.

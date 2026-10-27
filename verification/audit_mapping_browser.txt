@@ -1,0 +1,2 @@
+PASS: clicking an unmapped source line opens prefilled statement mapping, saves a new product and rechecks; statement dates, quantities, rates and values remain identical. Existing NRV rows have direct mapping links.
+PASS: billing-only unmapped line also opens mapping; saved mapping survives reload and is reused; both themes render. No page errors. Linux Chromium; Windows acceptance pending.

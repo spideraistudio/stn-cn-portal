@@ -1,0 +1,99 @@
+# =========================
+# Dependencies
+# =========================
+node_modules
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# Use npm only on Hostinger (dual lockfiles break standalone path)
+bun.lock
+bun.lockb
+yarn.lock
+pnpm-lock.yaml
+
+# =========================
+# Build / cache
+# =========================
+.next/
+out/
+build/
+dist/
+.turbo/
+.cache/
+*.tsbuildinfo
+next-env.d.ts
+
+# =========================
+# Testing / coverage
+# =========================
+coverage/
+.nyc_output/
+
+# =========================
+# Env / secrets
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Logs / debug
+# =========================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# =========================
+# IDE / editor / Cursor
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+.cursor/
+.cursorrules
+*.cursor*
+.claude/
+
+# =========================
+# Project documentation is tracked
+# =========================
+
+# =========================
+# Platform noise / local
+# =========================
+.vercel
+vercel.json
+*.local
+*.tmp
+*.temp
+
+# Private integration runtime data
+integration-data/
+__pycache__/
+*.pyc
+
+# Private test statement inputs are supplied separately; synthetic tests remain tracked.
+cn/offline_baseline/fixtures/*.pdf
+*.sqlite
+*.sqlite3
+*.db
+*.db-wal
+*.db-shm
+*.pem
+*.key
+*.p12
+*.pfx
+*.zip
+*.bundle
+integration-data*/
