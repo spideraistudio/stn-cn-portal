@@ -1,4 +1,4 @@
-import { readJsonBody } from "@/lib/request-body";
+import { readJsonBody, RequestBodyError } from "@/lib/request-body";
 import { NextResponse } from "next/server";
 import { createRegistration } from "@/lib/member-data";
 import { consumeLimit,networkHash,recordSecurityEvent } from "@/lib/security";
@@ -30,6 +30,8 @@ export async function POST(request: Request) {
     await notifyAdmin({type:"member_registration",title:"New company registration",message:`${value(data,"companyName")} submitted a membership application.`,href:"/admin#companies"});
     return NextResponse.json({ success: true });
   } catch (error) {
+    if (error instanceof RequestBodyError) return NextResponse.json({ error: error.message }, { status: error.status });
+    if (error instanceof SyntaxError) return NextResponse.json({ error: "Invalid registration request. Please check your details and try again." }, { status: 400 });
     console.error("[registration]", error);
     const code = (error as { code?: string } | null)?.code;
     const duplicate = Boolean(code === "11000" || (error instanceof Error && /duplicate key/i.test(error.message)));

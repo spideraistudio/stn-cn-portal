@@ -148,12 +148,12 @@ export default function FaqPage() {
       <header className="gradient-mesh relative overflow-hidden">
         <div className="pointer-events-none absolute -right-20 top-10 size-72 rounded-full bg-blue-400/20 blur-3xl" />
         <nav className="relative z-10 mx-auto flex max-w-5xl items-center justify-between px-5 py-5">
-          <Link href="/home" className="flex items-center gap-3">
+          <a href="/home" className="flex items-center gap-3">
             <span className="grid size-11 place-items-center rounded-xl bg-white/10 ring-1 ring-white/20 backdrop-blur-md">
               <BrandLogo compact className="size-9" />
             </span>
             <span className="text-lg font-semibold text-white">Sellers Trust Network</span>
-          </Link>
+          </a>
           <Link href="/" className="rounded-lg px-4 py-2 text-sm font-semibold text-white/90 transition hover:bg-white/10">
             Home
           </Link>

@@ -1,7 +1,8 @@
 'use strict';
 const $=s=>document.querySelector(s);let csrf='',state=null;
 const say=m=>{$('#notice').textContent=m};
-async function api(path,body){const r=await fetch(path,{method:body?'POST':'GET',credentials:'same-origin',headers:body?{'Content-Type':'application/json','X-CSRF-Token':csrf}:{},body:body?JSON.stringify(body):undefined});const d=await r.json();if(!r.ok)throw Error(d.error||'Request failed');return d}
+function signedOut(){csrf='';state=null;$('#signed').hidden=true;$('#login').hidden=false;$('#logout').hidden=true;$('#identity').textContent='Sign in to continue.';$('#management').hidden=true;$('#users').replaceChildren();}
+async function api(path,body){const r=await fetch(path,{method:body?'POST':'GET',credentials:'same-origin',headers:body?{'Content-Type':'application/json','X-CSRF-Token':csrf}:{},body:body?JSON.stringify(body):undefined});const d=await r.json();if(!r.ok){if(r.status===401)signedOut();throw Error(d.error||'Request failed');}return d}
 function option(select,value,label){const e=document.createElement('option');e.value=value;e.textContent=label;select.append(e)}
 function pickAccess(){const f=$('#access-form'),u=state.users.find(u=>u.id===f.user_id.value);if(!u)return;f.company_id.value=u.company?.id||'';f.cn.checked=u.requested_cn;f.stn.checked=u.requested_stn;f.stn_member_id.value=u.stn_member_id||(state.user.role==='admin'?state.policy.stn_member_id:'')||''}
 function localDate(t){if(t==null)return '';const d=new Date(t*1000);return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16)}
@@ -10,7 +11,8 @@ async function refresh(){const me=await api('/api/me');csrf=me.csrf_token;if(me.
 async function act(fn){try{await fn()}catch(e){say(e.message)}}
 let signingIn=false;
 $('#login-form').onsubmit=async e=>{e.preventDefault();if(signingIn)return;signingIn=true;const f=e.target,b=f.querySelector('button');b.disabled=true;b.textContent='Signing in…';f.setAttribute('aria-busy','true');say('Signing in…');try{await api('/api/auth/login',{username:f.username.value,password:f.password.value});f.reset();say('');await refresh()}catch(error){say(error.message)}finally{signingIn=false;b.disabled=false;b.textContent='Continue';f.setAttribute('aria-busy','false')}};
-$('#logout').onclick=()=>act(async()=>{await api('/api/auth/logout',{});location.assign('/portal')});
+let signingOut=false;
+$('#logout').onclick=async()=>{if(signingOut)return;signingOut=true;const b=$('#logout');b.disabled=true;b.textContent='Signing out…';b.setAttribute('aria-busy','true');try{await api('/api/auth/logout',{});location.assign('/portal')}catch(e){say(e.message)}finally{signingOut=false;b.disabled=false;b.textContent='Sign out';b.setAttribute('aria-busy','false')}};
 $('#company-form').elements.id.onchange=pickCompany;$('#access-form').user_id.onchange=pickAccess;
 $('#company-form').onsubmit=e=>{e.preventDefault();act(async()=>{const f=e.target,id=f.elements.id.value,c=state.companies.find(c=>c.id===id);await api('/api/portal/company',{...(id?{id,revision:c.revision}:{}),name:f.elements.name.value,plan:f.plan.value,enabled:f.enabled.checked,cn:f.cn.checked,stn:f.stn.checked,starts_at:f.starts_at.value?new Date(f.starts_at.value).getTime()/1000:null,ends_at:f.ends_at.value?new Date(f.ends_at.value).getTime()/1000:null});say('Company settings saved. Affected sessions revoked.');await refresh()})};
 $('#access-form').onsubmit=e=>{e.preventDefault();act(async()=>{const f=e.target,root=state.user.role==='superadmin';await api('/api/portal/access',{user_id:f.user_id.value,cn:f.cn.checked,stn:f.stn.checked,...(root?{company_id:f.company_id.value||null,stn_member_id:f.stn_member_id.value.trim()||null}:f.stn.checked&&state.policy.stn_member_id?{stn_member_id:state.policy.stn_member_id}:{})});say('Access saved. Affected sessions revoked.');await refresh()})};

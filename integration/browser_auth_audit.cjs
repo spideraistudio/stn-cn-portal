@@ -1,0 +1,55 @@
+/* Disposable real-server authentication tests plus rendered logout fault checks. */
+const assert = require('node:assert/strict');
+const {build} = require('esbuild');
+const {chromium} = require('playwright');
+const info=JSON.parse(process.env.AUTH_AUDIT_INFO);
+(async()=>{
+ const bundle=await build({stdin:{contents:"import React from 'react';import {createRoot} from 'react-dom/client';import {PortalSwitch} from './components/portal-switch';createRoot(document.getElementById('root')).render(<PortalSwitch/>);",resolveDir:process.cwd(),loader:'tsx'},bundle:true,write:false,platform:'browser',jsx:'automatic',define:{'process.env.NEXT_PUBLIC_COMMON_PORTAL':'"1"','process.env.NODE_ENV':'"development"'}});
+ const browser=await chromium.launch({executablePath:process.env.CN_BROWSER_EXECUTABLE,headless:true,args:['--no-sandbox']});
+ try{
+  const context=await browser.newContext();
+  await context.addCookies([{name:'cn_dev_session',value:info.token,url:info.origin,httpOnly:true,sameSite:'Strict'}]);
+  const page=await context.newPage(), errors=[];
+  page.on('pageerror',e=>errors.push(e.message));
+  await page.route('**/auth-test-component',r=>r.fulfill({contentType:'text/html',body:'<div id="root"></div><script src="/auth-test-component.js"></script>'}));
+  await page.route('**/auth-test-component.js',r=>r.fulfill({contentType:'text/javascript',body:bundle.outputFiles[0].text}));
+  await page.goto(info.origin+'/auth-test-component');
+  await page.route('**/api/auth/logout',r=>r.fulfill({status:500,contentType:'application/json',body:'{"error":"Synthetic failure"}'}));
+  await page.getByRole('button',{name:'Sign out',exact:true}).click();
+  await page.getByRole('alert').waitFor();assert.match(await page.getByRole('alert').innerText(),/did not complete/);assert.match(page.url(),/auth-test-component$/);
+  assert.equal((await context.request.get(info.origin+'/api/me')).status(),200);
+  console.log('PASS rendered failed logout retains session, displays retryable error and does not navigate');
+  await page.unroute('**/api/auth/logout');
+  await page.route('**/api/auth/logout',r=>r.abort());
+  await page.getByRole('button',{name:'Sign out',exact:true}).click();
+  await page.getByRole('alert').waitFor();assert.match(page.url(),/auth-test-component$/);
+  assert.equal(await page.getByRole('button',{name:'Sign out',exact:true}).isEnabled(),true);
+  assert.equal((await context.request.get(info.origin+'/api/me')).status(),200);
+  console.log('PASS network-aborted logout preserves session and permits retry');
+  await page.unroute('**/api/auth/logout');
+  await page.route('**/api/me',r=>r.fulfill({status:503,contentType:'application/json',body:'{"error":"Synthetic session-check failure"}'}));
+  await page.getByRole('button',{name:'Sign out',exact:true}).click();
+  await page.getByRole('alert').waitFor();assert.match(await page.getByRole('alert').innerText(),/check your session/);assert.match(page.url(),/auth-test-component$/);
+  await page.unroute('**/api/me');
+  assert.equal((await context.request.get(info.origin+'/api/me')).status(),200);
+  console.log('PASS failed session check retains session and prevents false sign-out redirect');
+  let posts=0; await page.route('**/api/auth/logout',async r=>{posts++;await new Promise(resolve=>setTimeout(resolve,150));await r.continue();});
+  await page.getByRole('button',{name:'Sign out',exact:true}).focus();await page.keyboard.press('Enter');
+  await page.getByRole('button',{name:'Signing out…'}).waitFor();assert.equal(await page.getByRole('button',{name:'Signing out…'}).isDisabled(),true);
+  await page.waitForURL('**/portal');assert.equal(posts,1);assert.equal((await context.request.get(info.origin+'/api/me')).status(),401);
+  console.log('PASS keyboard logout, busy button, one submission, server session revoked and portal login shown');
+  await page.goto(info.origin+'/auth-test-component');await page.getByRole('button',{name:'Sign out',exact:true}).click();await page.waitForURL('**/portal');
+  console.log('PASS already-expired session returns to sign-in');
+  await page.goto(info.origin+'/account');await page.locator('#login-form [name=username]').fill(info.username);await page.locator('#login-form [name=password]').fill(info.password);await page.locator('#login-form button').click();await page.waitForURL('**/portal');
+  await page.locator('#logout').click();await page.locator('#login-form').waitFor();assert.equal((await context.request.get(info.origin+'/api/me')).status(),401);
+  console.log('PASS account login → portal → portal logout revokes shared session');
+  await page.goto(info.origin+'/account');await page.locator('#login-form [name=username]').fill(info.username);await page.locator('#login-form [name=password]').fill(info.password);await page.locator('#login-form button').click();await page.waitForURL('**/portal');await page.goto(info.origin+'/account');await page.locator('#logout-all').click();await page.locator('#login-form').waitFor();assert.equal((await context.request.get(info.origin+'/api/me')).status(),401);
+  console.log('PASS account settings logout-all revokes session and restores login');
+  await page.goto(info.origin+'/portal');await page.locator('#login-form [name=username]').fill(info.username);await page.locator('#login-form [name=password]').fill(info.password);await page.locator('#login-form button').click();await page.locator('#signed').waitFor();
+  const me=await (await context.request.get(info.origin+'/api/me')).json();
+  assert.equal((await context.request.post(info.origin+'/api/auth/logout-all',{headers:{Origin:info.origin,'X-CSRF-Token':me.csrf_token},data:{}})).status(),200);
+  await page.locator('#logout').click();await page.locator('#login-form').waitFor();assert.equal(await page.locator('#signed').isVisible(),false);assert.equal(await page.locator('#logout').isVisible(),false);
+  console.log('PASS session revoked elsewhere restores login instead of trapping user on signed-in portal');
+  assert.deepEqual(errors,[]);console.log('PASS no uncaught browser exceptions');
+ }finally{await browser.close();}
+})().catch(e=>{console.error(e);process.exit(1)});

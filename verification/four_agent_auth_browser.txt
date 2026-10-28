@@ -1,0 +1,9 @@
+PASS rendered failed logout retains session, displays retryable error and does not navigate
+PASS network-aborted logout preserves session and permits retry
+PASS failed session check retains session and prevents false sign-out redirect
+PASS keyboard logout, busy button, one submission, server session revoked and portal login shown
+PASS already-expired session returns to sign-in
+PASS account login → portal → portal logout revokes shared session
+PASS account settings logout-all revokes session and restores login
+PASS session revoked elsewhere restores login instead of trapping user on signed-in portal
+PASS no uncaught browser exceptions

@@ -1,0 +1,20 @@
+✔ malformed JSON (9.361005ms)
+✔ non-object JSON (0.897018ms)
+✔ null JSON (1.082256ms)
+✔ streamed oversized body (1.042066ms)
+✔ declared oversized request (0.975155ms)
+✔ required company (0.795605ms)
+✔ invalid GSTIN (1.121415ms)
+✔ invalid mobile (0.881564ms)
+✔ invalid email (1.662082ms)
+✔ other category details (2.251884ms)
+✔ valid application persists once (1.373373ms)
+✔ honeypot does not persist (0.417137ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 656.675095

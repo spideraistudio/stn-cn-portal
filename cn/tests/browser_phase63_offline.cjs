@@ -13,7 +13,7 @@ const info=JSON.parse(process.env.CN_FLOW_INFO),root=path.resolve(__dirname,'..'
  async function assertOriginalScreens(){
   const source=fs.readFileSync(path.join(root,'offline_baseline/static/app.js'),'utf8');
   for(const name of ['bulkPage','auditPage','yearLinkPage','mappingSummary','inlineMappingEditor','partyTab','ledgerTab','benefitTab','finishTab']){
-   const expected=source.match(new RegExp('(?:async )?function '+name+'\\([^\\n]+'))?.[0];assert.ok(expected,name+' baseline exists');const actual=await page.evaluate(name=>(globalThis[name].originalRenderer||globalThis[name]).toString(),name);assert.equal(actual,expected,name+' must use the exact preserved offline renderer');
+   let expected=source.match(new RegExp('(?:async )?function '+name+'\\([^\\n]+'))?.[0];assert.ok(expected,name+' baseline exists');if(name==='partyTab')expected=expected.replace('<button data-action="fixture" data-edit>Use Ashapura fixture</button>','');if(name==='ledgerTab')expected=expected.replace('return lateIPTPanel()', 'return statementImportPanel()+lateIPTPanel()');const actual=await page.evaluate(name=>(globalThis[name].originalRenderer||globalThis[name]).toString(),name);assert.equal(actual,expected,name+' preserves the offline renderer except approved clean-start and statement-review additions');
   }
   assert.equal(fs.readFileSync(path.join(root,'backend/cn_web/calculator_static/payment-workbench.js'),'utf8'),fs.readFileSync(path.join(root,'offline_baseline/static/payment-workbench.js'),'utf8'));
   assert.equal(await page.evaluate(()=>paymentTab.toString()),'function(){paymentEntrySource();return paymentEntriesHTML()+oldTab();}');
@@ -30,7 +30,7 @@ const info=JSON.parse(process.env.CN_FLOW_INFO),root=path.resolve(__dirname,'..'
   assert.equal(await page.locator('#web-ledger-panel,#source-workflow,#product-form,#period-form,#ledger-summary').count(),0);
   assert.ok((await page.locator('#main').innerText()).includes('Product Mapping'));assert.equal(await page.locator('[data-map-crop]:disabled,[data-map-name]:disabled,[data-map-pack]:disabled').count(),0);
   await stepsClickable();await screenshot('classic-offline-ledger');await page.locator('#cn-ui-theme').selectOption('studio');await settled();await screenshot('studio-offline-ledger');
-  console.log('PASS: actual offline renderers are retained unchanged; PDF goes straight from Select Party to Check Ledger; all five original tabs remain clickable, with inline mapping and no web import/log/setup panels.');
+  console.log('PASS: offline renderers retain approved clean-start and statement-review additions; PDF goes straight from Select Party to Check Ledger; all five original tabs remain clickable, with inline mapping and no web import/log/setup panels.');
   // Test the original mapping dialog, not a replacement form.
   await page.locator('[data-inline-map]').first().click();await page.locator('#save-inline-mapping').click();await page.waitForFunction(()=>!document.querySelector('#modal').open);await settled();assert.equal(await page.evaluate(()=>record.entries.length),10);
   await page.evaluate(async()=>{clearTimeout(saveTimer);await saveQueue;const r=structuredClone(record),receipt=r.entries.find(e=>e.kind==='receipt');r.allocations=[{id:crypto.randomUUID(),source:receipt.id,type:'Settlement',amount:'50',scheme:'',product:'',remark:'Retained original UI destination'}];record=await api('/api/save',r);await refresh();await calculate();render()});

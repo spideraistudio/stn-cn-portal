@@ -1,0 +1,1 @@
+PASS: fresh profile first-workbook form, empty catalogue/schemes/parties, Settings and import entry, both themes, reload retention, no sample actions or page errors. Windows acceptance pending.

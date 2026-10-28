@@ -18,12 +18,12 @@ export function LandingNav() {
   return (
     <nav className="relative z-20 mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
       {/* Logo */}
-      <Link href="/home" className="flex items-center gap-3">
+      <a href="/home" className="flex items-center gap-3">
         <span className="grid size-11 place-items-center rounded-xl bg-white/10 backdrop-blur-md ring-1 ring-white/20">
           <span className="text-sm font-bold text-amber-300">STN</span>
         </span>
         <span className="text-lg font-semibold text-white">Sellers Trust Network</span>
-      </Link>
+      </a>
 
       {/* Desktop nav */}
       <div className="hidden items-center gap-1 md:flex">

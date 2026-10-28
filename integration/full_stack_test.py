@@ -138,6 +138,7 @@ def main():
             info={'origin':origin,'username':'buyer-admin','password':PASSWORD+' changed','project':p['id'],'workbook':w['id'],'admin_username':'platform','admin_password':PASSWORD,'case_report_id':case_report_id}
             subprocess.run(['node',str(ROOT/'integration/browser_case_numbers.cjs')],cwd=ROOT,env={**env,'INTEGRATION_BROWSER_INFO':json.dumps(info)},check=True)
             subprocess.run(['node',str(ROOT/'integration/browser_combined.cjs')],cwd=ROOT,env={**env,'INTEGRATION_BROWSER_INFO':json.dumps(info)},check=True)
+            subprocess.run(['node',str(ROOT/'integration/browser_stn_navigation.cjs')],cwd=ROOT,env={**env,'INTEGRATION_BROWSER_INFO':json.dumps(info)},check=True)
             code,out,_=admin.request('/api/portal/access',{'user_id':people[0][0]['id'],'stn':False});check(code,200,out)
             assert buyer.request('/api/member/seed-browse')[0]==403
             for path in ['/api/member/seed-requests','/api/member/seed-quote-history','/api/notifications','/api/portal-stn/storage']:

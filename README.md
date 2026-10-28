@@ -30,3 +30,7 @@ Real-browser clean-profile verification is available in cn/tests/run_clean_profi
 ## Future releases
 
 Work on feature branches, test on disposable data and staging, then release reviewed versions. Keep live databases, keys, backups, uploads, statements, generated dependencies and runtime caches outside Git. New statement adapters should affect new imports or deliberate user re-reading, and must not silently rewrite saved calculations. Production hosting, HTTPS, backup/restore, migration and rollback validation are separate work.
+
+## Combined portal audit branch
+
+See FULL_AUDIT_HANDOFF.md for verified fixes and current limits. `npm start` starts STN only. The complete combined runtime requires Python and persistent storage. This branch is not yet a production deployment package for Hostinger Node.js web hosting. Do not point the local-only launcher at a live database.
