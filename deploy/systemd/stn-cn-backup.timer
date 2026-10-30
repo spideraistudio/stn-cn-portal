@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily encrypted STN + CN backup
+
+[Timer]
+OnCalendar=*-*-* 03:45:00 UTC
+RandomizedDelaySec=10m
+Persistent=true
+
+[Install]
+WantedBy=timers.target

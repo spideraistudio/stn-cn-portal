@@ -1,0 +1,3 @@
+PASS real Caddy TLS validation, Gunicorn listeners, Next pages, authenticated Mongo readiness and private-route denial.
+PASS HTTPS registration, duplicate rejection, real unified approval callback, secure login, forced password change and permitted STN/CN access.
+PASS edge-header replacement, dependency outage/recovery, gateway restart with saved account/session and shared sign-out.

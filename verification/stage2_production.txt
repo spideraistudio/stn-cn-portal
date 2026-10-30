@@ -1,0 +1,22 @@
+test_activation_switches_only_to_prepared_release (deploy.test_production.OperatorTests.test_activation_switches_only_to_prepared_release) ... ok
+test_backup_always_restores_only_previous_service_state (deploy.test_production.OperatorTests.test_backup_always_restores_only_previous_service_state) ... ok
+test_inactive_services_are_not_started_by_backup (deploy.test_production.OperatorTests.test_inactive_services_are_not_started_by_backup) ... ok
+test_readiness_failure_restores_previous_code (deploy.test_production.OperatorTests.test_readiness_failure_restores_previous_code) ... ok
+test_bridge_introspection_accepts_secure_cookie_only (deploy.test_production.ProductionTests.test_bridge_introspection_accepts_secure_cookie_only) ... ok
+test_config_is_private_exclusive_and_never_rotates_existing_keys (deploy.test_production.ProductionTests.test_config_is_private_exclusive_and_never_rotates_existing_keys) ... ok
+test_cross_origin_login_rejected (deploy.test_production.ProductionTests.test_cross_origin_login_rejected) ... ok
+test_gateway_removes_browser_private_headers_and_corrects_ip (deploy.test_production.ProductionTests.test_gateway_removes_browser_private_headers_and_corrects_ip) ... ok
+test_https_only_and_no_checkout_data_or_dev_cookie (deploy.test_production.ProductionTests.test_https_only_and_no_checkout_data_or_dev_cookie) ... ok
+test_liveness_and_dependency_readiness_differ (deploy.test_production.ProductionTests.test_liveness_and_dependency_readiness_differ) ... ok
+test_private_health_and_bridge_never_public (deploy.test_production.ProductionTests.test_private_health_and_bridge_never_public) ... ok
+test_private_health_requires_loopback_and_secret (deploy.test_production.ProductionTests.test_private_health_requires_loopback_and_secret) ... ok
+test_proxy_cannot_be_forged_by_remote_client (deploy.test_production.ProductionTests.test_proxy_cannot_be_forged_by_remote_client) ... ok
+test_secure_cookie_and_real_login (deploy.test_production.ProductionTests.test_secure_cookie_and_real_login) ... ok
+test_wrong_host_proto_or_untrusted_chain_rejected (deploy.test_production.ProductionTests.test_wrong_host_proto_or_untrusted_chain_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 5.155s
+
+OK
+Activated commit bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb; HTTPS readiness passed.
+Previous code release restored; verify its readiness and data before use.

@@ -1,6 +1,15 @@
 # STN + All Crop CN Portal
 
-Independent combined application source, prepared for a new private repository under meetpatelhmt-dev. Original Meet-Dev and sellers-trust-buy-sell repositories are not modified. This repository is not deployed.
+Independent combined application source in `spideraistudio/stn-cn-portal`, branch `fix/combined-portal-production`. Original Meet-Dev and sellers-trust-buy-sell repositories are not modified. The complete combined VPS deployment remains pending.
+
+## Production configuration
+
+Read [STAGE2_PRODUCTION_HANDOFF.md](STAGE2_PRODUCTION_HANDOFF.md) and
+[deploy/README.md](deploy/README.md) for the HTTPS production entry points,
+private services/storage, backups and staged release procedure. Local production
+configuration tests passed; this is not yet a verified deployment on the owner's
+VPS. Do not expose the Windows/local launcher or switch live hosting without
+the separate hosted checks and owner approval.
 
 ## Start locally on Windows
 

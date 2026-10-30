@@ -1,0 +1,22 @@
+# Replace app-staging.example.com with the approved staging hostname.
+# Import this file into Caddy's existing config; do not replace other sites.
+app-staging.example.com {
+	request_body {
+		max_size 16MB
+	}
+	header Strict-Transport-Security "max-age=31536000"
+	header -Server
+	reverse_proxy 127.0.0.1:8787 {
+		header_up Host {hostport}
+		header_up X-Forwarded-Host {hostport}
+		header_up X-Forwarded-Proto https
+		header_up X-Forwarded-For {remote_host}
+		header_up CF-Connecting-IP {remote_host}
+		header_up -Forwarded
+		header_up -X-Real-IP
+		header_up -X-Portal-Key
+		transport http {
+			response_header_timeout 180s
+		}
+	}
+}

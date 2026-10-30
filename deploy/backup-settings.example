@@ -1,0 +1,8 @@
+# Install as /etc/stn-cn/backup.env, root-owned mode 0600.
+# Values below are placeholders. Never commit real credentials.
+RESTIC_REPOSITORY="s3:https://BACKUP_ENDPOINT/PRIVATE_BUCKET/stn-cn"
+RESTIC_PASSWORD_FILE="/etc/stn-cn/restic.password"
+RESTIC_CACHE_DIR="/var/cache/stn-cn/restic"
+AWS_ACCESS_KEY_ID="REPLACE_ON_SERVER"
+AWS_SECRET_ACCESS_KEY="REPLACE_ON_SERVER"
+MONGO_DUMP_CONFIG="/etc/stn-cn/mongodump.yml"

@@ -1,0 +1,34 @@
+[Unit]
+Description=STN + CN Python %i
+After=network.target
+StartLimitIntervalSec=120
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=stncn
+Group=stncn
+WorkingDirectory=/srv/stn-cn/current
+EnvironmentFile=/etc/stn-cn/app.env
+Environment=PORTAL_PROCESS=%i
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/srv/stn-cn/current/.venv/bin/gunicorn --config deploy/gunicorn.conf.py "deploy.production:create_%i()"
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=200
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/stn-cn/cn
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

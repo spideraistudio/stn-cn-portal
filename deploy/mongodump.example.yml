@@ -1,0 +1,3 @@
+# /etc/stn-cn/mongodump.yml: root-owned 0600; use a dedicated backup account.
+# The config keeps the password out of shell history and process arguments.
+uri: "mongodb://BACKUP_USER:ENCODED_PASSWORD@127.0.0.1:27017/stn_portal?authSource=admin"

@@ -1,0 +1,2 @@
+Unit syntax/dependency checks with test-host ExecStart substitutions; production executable availability requires VPS setup.
+PASS

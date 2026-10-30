@@ -1,0 +1,18 @@
+[Unit]
+Description=Encrypted STN + CN coherent backup (brief maintenance window)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/srv/stn-cn/current
+EnvironmentFile=/etc/stn-cn/backup.env
+ExecStart=/usr/bin/python3 -m deploy.backup
+TimeoutStartSec=1h
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/backups/stn-cn /var/cache/stn-cn/restic /run/lock

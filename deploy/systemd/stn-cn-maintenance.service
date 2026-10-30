@@ -1,0 +1,17 @@
+[Unit]
+Description=STN + CN temporary-file cleanup (saved evidence retained)
+
+[Service]
+Type=oneshot
+User=stncn
+Group=stncn
+WorkingDirectory=/srv/stn-cn/current
+EnvironmentFile=/etc/stn-cn/app.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/srv/stn-cn/current/.venv/bin/python -m deploy.manage cleanup
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/stn-cn/cn

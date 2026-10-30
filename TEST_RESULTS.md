@@ -235,3 +235,15 @@ The first MongoDB 8.2 test binary could not start under this environment's sandb
 - Actual legacy STN account/database/lookup-key migration, real-user-data copy rehearsal and production backup restoration. Synthetic legacy-CN hierarchy/schema/interchange checks are not a live migration rehearsal.
 - The STN end-to-end coverage above does not claim exhaustive acceptance of every inherited governance, legal-hold, deletion, resolution or moderation edge case. Those functions retain source policies and common auth gates; include them in private staging/user acceptance as applicable.
 - Public hosting, deployed-commit verification, production capacity/concurrency, TLS/trusted-proxy/process supervision and operational restore/cutover. No purchases, public deployment or live database changes occurred.
+# Stage 2 production configuration — 30 October 2026
+
+Fresh: 15 production boundary/session/operator tests, 24 existing account tests,
+combined Next production build/TypeScript, Caddy validation and systemd unit
+syntax checks passed. Real local Caddy TLS + Gunicorn + Next + authenticated
+disposable Mongo passed registration/approval/forced-change/module access,
+private routes, spoofed headers, dependency recovery, restart and logout.
+See STAGE2_PRODUCTION_HANDOFF.md and verification/stage2_* for scope and limits.
+The unit checks substitute test-host executable paths; the integrated test uses
+a local CA, test DNS mapping and a five-second worker drain budget. No VPS
+installation, public certificate, off-server restore drill, production financial
+acceptance, migration or live cutover occurred. Existing results are historical and were not all repeated in this stage.

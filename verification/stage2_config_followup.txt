@@ -1,0 +1,6 @@
+test_config_is_private_exclusive_and_never_rotates_existing_keys (deploy.test_production.ProductionTests.test_config_is_private_exclusive_and_never_rotates_existing_keys) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.276s
+
+OK
