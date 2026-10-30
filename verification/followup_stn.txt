@@ -1,0 +1,20 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> sellers-trust-network@0.1.0 test:seed
+> node --import tsx --test tests/seed-trade.test.ts
+
+✔ approved company state scopes access independently of notification preference (0.737451ms)
+✔ the same member may buy on one request and supply on another, but never quote their own (0.203481ms)
+✔ anonymous supplier view omits owner identifiers and reveals per quotation (0.241988ms)
+✔ quotation validates partial/full kg conversion, deadline and dates (0.919321ms)
+✔ approval respects remaining quantity and quote validity (0.293695ms)
+✔ optional requirement dates stay open and allow supplier quotation (33.198793ms)
+✔ business summary accepts blank, omitted and short text (30.899636ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 441.450379

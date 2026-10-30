@@ -23,7 +23,7 @@ export type SeedBuyerContact = SeedSupplierContact & { companyName:string };
 export type SeedOwnQuotation = SeedQuotation & { buyerContact?:SeedBuyerContact };
 
 function idKey(id:MemberId){ return typeof id === "string" && ObjectId.isValid(id) ? new ObjectId(id) : id; }
-export function isExpired(r:SeedRequest, now=Date.now()){return r.quotationDeadline <= now;}
+export function isExpired(r:SeedRequest, now=Date.now()){return !!r.quotationDeadline && r.quotationDeadline <= now;}
 export function selectionError(r:SeedRequest, candidate:SeedQuotation, otherSelected:SeedQuotation[], now=Date.now()){
   if(r.status!=="published")return "This request is closed or cancelled.";
   const validityEnd=Date.parse(`${candidate.validUntil}T23:59:59+05:30`);
@@ -51,7 +51,7 @@ export function supplierRequestView(r:SeedRequest, q?:Pick<SeedQuotation,"reveal
 
 export async function getSeedRequest(id:string){return (await mongoDb()).collection<SeedRequest>("seed_buy_requests").findOne({id});}
 export async function listAccessibleSeedRequests(member:Member){
-  const all=await (await mongoDb()).collection<SeedRequest>("seed_buy_requests").find({status:"published",quotationDeadline:{$gt:Date.now()}}).sort({createdAt:-1}).toArray();
+  const all=await (await mongoDb()).collection<SeedRequest>("seed_buy_requests").find({status:"published",$or:[{quotationDeadline:{$gt:Date.now()}},{quotationDeadline:0},{quotationDeadline:{$exists:false}}]}).sort({createdAt:-1}).toArray();
   const accessible=all.filter(r=>supplierCanQuote(r,member));
   const ownQuotes=accessible.length?await (await mongoDb()).collection<SeedQuotation>("seed_quotations").find({supplierId:member.id,requestId:{$in:accessible.map(r=>r.id)}},{projection:{requestId:1,revealBuyerName:1}}).toArray():[];
   const quotes=new Map(ownQuotes.map(q=>[q.requestId,q]));
@@ -85,8 +85,8 @@ export function validateQuotation(raw:Record<string,unknown>, r:SeedRequest, now
   if(!Number.isFinite(price)||price<=0||!["kg","MT"].includes(String(raw.priceUnit)))throw new Error("Enter a positive price and price unit.");
   const validUntil=txt(raw.validUntil,10), earliestDelivery=txt(raw.earliestDelivery,10);
   const validEnd=Date.parse(`${validUntil}T23:59:59+05:30`), deliveryStart=Date.parse(`${earliestDelivery}T00:00:00+05:30`);
-  if(!dateOnly(validUntil)||!Number.isFinite(validEnd)||validEnd<now||validEnd>Date.parse(`${r.deliveryBy}T23:59:59+05:30`))throw new Error("Quotation validity must be today/future and no later than the required delivery date.");
-  if(!dateOnly(earliestDelivery)||!Number.isFinite(deliveryStart)||deliveryStart>Date.parse(`${r.deliveryBy}T23:59:59+05:30`))throw new Error("Choose a delivery date no later than the buyer requirement.");
+  if(!dateOnly(validUntil)||!Number.isFinite(validEnd)||validEnd<now||(!!r.deliveryBy && validEnd>Date.parse(`${r.deliveryBy}T23:59:59+05:30`)))throw new Error("Quotation validity must be today/future and no later than the required delivery date.");
+  if(!dateOnly(earliestDelivery)||!Number.isFinite(deliveryStart)||(!!r.deliveryBy && deliveryStart>Date.parse(`${r.deliveryBy}T23:59:59+05:30`)))throw new Error("Choose a delivery date no later than the buyer requirement.");
   if(![raw.germinationAvailable,raw.gotAvailable,raw.transportIncluded].every(yn))throw new Error("Complete all Yes/No declarations.");
   const paymentType=String(raw.paymentType); if(!["cash","credit"].includes(paymentType))throw new Error("Choose cash or credit.");
   const creditDays=paymentType==="credit"?Number(raw.creditDays):null; if(paymentType==="credit"&&(!Number.isInteger(creditDays)||Number(creditDays)<0||Number(creditDays)>365))throw new Error("Enter valid credit days.");

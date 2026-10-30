@@ -520,3 +520,21 @@ html[data-suite-surface=stn][data-suite-theme=studio] .stn-content .text-emerald
 html[data-suite-surface=stn] .public-footer :is(.text-slate-400,.text-slate-500,.text-slate-600){color:#486358!important}
 html[data-suite-surface=stn][data-suite-theme=studio] .public-footer :is(.text-slate-400,.text-slate-500,.text-slate-600){color:#b4c8dc!important}
 .public-footer a:focus-visible{outline:3px solid var(--suite-accent,#096548);outline-offset:4px}
+
+/* Public information, administrator auth and route skeletons share portal tokens. */
+html .public-site.public-legacy{background:var(--pub-bg)!important;color:var(--pub-text)!important}
+html .public-site.public-legacy .gradient-mesh{background:linear-gradient(135deg,var(--pub-soft),var(--pub-panel))!important;color:var(--pub-text)}
+html .public-site.public-legacy [class*="bg-white"],html .public-site.public-legacy [class*="bg-[#faf"],html .public-site.public-legacy [class*="bg-[#f5"]{background-color:var(--pub-panel)!important}
+html .public-site.public-legacy [class*="bg-blue"],html .public-site.public-legacy [class*="bg-slate-1"],html .public-site.public-legacy [class*="bg-slate-2"],html .public-site.public-legacy [class*="bg-[#ece"],html .public-site.public-legacy [class*="bg-[#15388c]/"]{background-color:var(--pub-soft)!important}
+html .public-site.public-legacy [class*="text-slate-9"],html .public-site.public-legacy [class*="text-slate-8"],html .public-site.public-legacy [class*="text-slate-7"],html .public-site.public-legacy .gradient-mesh [class*="text-white"]{color:var(--pub-text)!important}
+html .public-site.public-legacy [class*="text-slate-6"],html .public-site.public-legacy [class*="text-slate-5"],html .public-site.public-legacy [class*="text-slate-4"],html .public-site.public-legacy [class*="text-blue-1"]{color:var(--pub-muted)!important}
+html .public-site.public-legacy [class*="text-[#15388c]"],html .public-site.public-legacy [class*="text-blue-8"],html .public-site.public-legacy [class*="text-[#a57c10]"],html .public-site.public-legacy [class*="text-amber-2"]{color:var(--pub-accent)!important}
+html .public-site.public-legacy [class*="border-slate"],html .public-site.public-legacy [class*="border-blue"]{border-color:var(--pub-line)!important}
+html .public-site.public-legacy [class*="bg-[#15388c]"]:not([class*="bg-[#15388c]/"]){background:var(--pub-button)!important;color:var(--pub-button-text)!important}
+html .public-site.public-legacy :is(input,select,textarea){background:var(--pub-bg)!important;color:var(--pub-text)!important;border-color:var(--pub-line)!important}
+html .public-site.public-legacy :is(input,select,textarea):focus-visible{outline:2px solid var(--pub-accent);outline-offset:2px}
+html .public-site.public-legacy svg path[fill="#f5f7fb"]{fill:var(--pub-bg)}
+html .public-site.public-legacy [class*="shadow-slate"],html .public-site.public-legacy [class*="shadow-[#15388c]"]{--tw-shadow-color:color-mix(in srgb,var(--pub-accent) 10%,transparent)}
+html .public-site.public-legacy a:focus-visible,html .public-site.public-legacy button:focus-visible{outline:2px solid var(--pub-accent);outline-offset:4px}
+
+html .public-site.public-legacy.public-auth h1{font-size:30px;line-height:1.2;overflow-wrap:anywhere}

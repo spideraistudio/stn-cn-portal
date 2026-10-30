@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <main className="min-h-screen bg-[#f5f7fb]">
+    <main className="public-site public-legacy min-h-screen bg-[#f5f7fb]">
       {/* Hero skeleton */}
       <div className="gradient-mesh relative h-64 overflow-hidden">
         <div className="relative z-10 mx-auto max-w-5xl px-5 py-5">

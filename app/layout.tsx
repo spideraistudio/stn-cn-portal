@@ -105,8 +105,8 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         {combined && <link rel="stylesheet" href="/suite-theme.css?v=ux5"/>}
-        <meta name="theme-color" content="#15388c" />
-        <meta name="msapplication-TileColor" content="#15388c" />
+        <meta name="theme-color" content={combined?"#0b182b":"#f0f8f5"} />
+        <meta name="msapplication-TileColor" content={combined?"#0b182b":"#f0f8f5"} />
       </head>
       <body className="antialiased">
         {/* Skip-to-content link for keyboard / screen-reader users */}

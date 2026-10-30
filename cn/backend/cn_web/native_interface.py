@@ -1,3 +1,4 @@
+from decimal import Decimal
 """Secure transport for the preserved offline screens, without replacement UI."""
 import base64
 import copy
@@ -136,6 +137,47 @@ class NativeInterface:
 
     def execute(self,db,u,project,workbook,meta,s,st,action,b):
         need=lambda p:require_permission(u,p)
+        if action.startswith('native-payment-history-'):
+            from prior_payments import party_match, analyse, attach
+            need('allocate_payments')
+            r=Store.get(st,b['id'])
+            if r.get('revision')!=b.get('revision'):raise AuthError('Record changed; reopen payment history',409)
+            if r.get('status')!='draft' or not r.get('web_source'):raise AuthError('Open an imported draft statement first',400)
+            st.project(r)
+            current=self.ledger.ledger(s,r['web_source']['ledger_id'])['document']
+            if action=='native-payment-history-match':
+                docs=self.documents(db,u,workbook,b['documents'],s)
+                matches=[i for i,d in enumerate(docs) if party_match(d,current)['matched']]
+                if len(matches)!=1:raise AuthError('Expected exactly one prior statement with the same seller name and full address; found '+str(len(matches))+'. Wrong/missing/ambiguous identity is blocked.',400)
+                i=matches[0];previous=docs[i]
+                from year_link import period
+                _,end=period(previous)
+                start=str(end.year)+'-01-01'
+                return {'previous':b['documents'][i],'match':party_match(previous,current),'plan':analyse(previous,current,start,end.isoformat())}
+            if action=='native-payment-history-unlink':
+                need('edit_ledger')
+                import copy
+                candidate=copy.deepcopy(r)
+                ids={x['id'] for x in r.get('reserved_sources',[])}|{x['id'] for x in r.get('opening_sources',[]) if x.get('year_link_receipt')}
+                if any(a.get('source') in ids for a in r.get('allocations',[])):
+                    raise AuthError('Remove allocations using linked prior-year receipts before unlinking. Other opening-credit allocations can stay.',400)
+                candidate['reserved_sources']=[]
+                candidate['opening_sources']=[x for x in candidate.get('opening_sources',[]) if x['id'] not in ids]
+                candidate.pop('payment_history',None)
+                candidate.pop('prior_year_link',None)
+                candidate['old_dues']=str(max(0,Decimal(str(candidate['opening']))))
+                candidate.pop('opening_dues_review',None)
+                candidate['opening_dues_review_required']=True
+                return st.save(candidate)
+            previous=self.documents(db,u,workbook,[b['previous']],s)[0]
+            if action=='native-payment-history-preview':return analyse(previous,current,b['start'],b['end'],b.get('approvals',[]))
+            if action=='native-payment-history-save':
+                need('edit_ledger')
+                allowed={p['crop'] for p in st.settings()['products']}|set(st.settings().get('crops',[]))
+                if any(x.get('crop') not in allowed for x in b.get('selections',[])):raise AuthError('Choose an existing workbook crop',400)
+                candidate=attach(r,previous,current,b['start'],b['end'],b.get('approvals',[]),b.get('selections',[]))
+                return st.save(candidate)
+            raise AuthError('Unknown payment history action',404)
         if action.startswith('native-billing-'):
             from . import billing_audit as billing
             cfg=s.get('billing_audit',billing.empty())
@@ -484,7 +526,7 @@ class NativeInterface:
         if changed:
             r['id']=uuid.uuid4().hex;r['revision']=0
             with st.db() as c:c.execute('INSERT INTO records VALUES(?,?,?)',(r['id'],0,dump(r)))
-        if link:
+        if link and not r.get('payment_history'):
             manual=[x for x in r.get('opening_sources',[]) if not x.get('year_link_receipt')]
             r['opening_sources']=manual+copy.deepcopy(link['record']['opening_sources']);r['prior_year_link']=copy.deepcopy(link['record']['prior_year_link'])
         return st.save(r)

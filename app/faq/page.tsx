@@ -137,7 +137,7 @@ const faqJsonLd = {
 
 export default function FaqPage() {
   return (
-    <main className="min-h-screen bg-[#f5f7fb] text-slate-900">
+    <main className="public-site public-legacy min-h-screen bg-[#f5f7fb] text-slate-900">
       <BreadcrumbsJsonLd items={[{ name: "FAQ", path: "/faq" }]} />
       <WebPageJsonLd name="FAQ — Sellers Trust Network" path="/faq" description="Frequently asked questions about membership, seller reports, disputes, security, and data privacy." />
       <script

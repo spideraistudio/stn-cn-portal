@@ -1,0 +1,21 @@
+test_boundary_mismatch (__main__.PriorPaymentTests.test_boundary_mismatch) ... ok
+test_cn_duplicate_date_missing_reason (__main__.PriorPaymentTests.test_cn_duplicate_date_missing_reason) ... ok
+test_cn_not_counted_twice_at_posting_for_later_receipt (__main__.PriorPaymentTests.test_cn_not_counted_twice_at_posting_for_later_receipt) ... ok
+test_cross_crop_rejected (__main__.PriorPaymentTests.test_cross_crop_rejected) ... ok
+test_current_receipt_clears_gross_dues_not_reserve (__main__.PriorPaymentTests.test_current_receipt_clears_gross_dues_not_reserve) ... ok
+test_exact_identity_and_missing_address (__main__.PriorPaymentTests.test_exact_identity_and_missing_address) ... ok
+test_frozen_record_cannot_change (__main__.PriorPaymentTests.test_frozen_record_cannot_change) ... ok
+test_issued_budget_not_released_by_unissued_revision (__main__.PriorPaymentTests.test_issued_budget_not_released_by_unissued_revision) ... ok
+test_later_paddy_invoice_never_consumes_reserve (__main__.PriorPaymentTests.test_later_paddy_invoice_never_consumes_reserve) ... ok
+test_one_lakh_fully_consumed (__main__.PriorPaymentTests.test_one_lakh_fully_consumed) ... ok
+test_overlapping_opening_credit_blocked (__main__.PriorPaymentTests.test_overlapping_opening_credit_blocked) ... ok
+test_reuse_across_records_and_revisions (__main__.PriorPaymentTests.test_reuse_across_records_and_revisions) ... ok
+test_same_late_cn_cannot_release_different_receipts (__main__.PriorPaymentTests.test_same_late_cn_cannot_release_different_receipts) ... ok
+test_tamper_proof_and_overspend (__main__.PriorPaymentTests.test_tamper_proof_and_overspend) ... ok
+test_three_lakh_late_cn_and_paddy_reserve (__main__.PriorPaymentTests.test_three_lakh_late_cn_and_paddy_reserve) ... ok
+test_unapproved_cn_not_retrospective (__main__.PriorPaymentTests.test_unapproved_cn_not_retrospective) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.011s
+
+OK

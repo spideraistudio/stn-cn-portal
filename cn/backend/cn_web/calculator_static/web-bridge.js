@@ -35,6 +35,7 @@ workspace=()=>{
  $('#main').insertAdjacentHTML('afterbegin','<div class="warn">'+esc(nativeStale.message)+' Saved vouchers and allocations are retained. <button data-native-refresh>Review updated source</button></div>');
 };
 async function nativeAdopt(r,targetStep=1){
+ $('#modal')?.close();
  record=r;nativeStale=null;mappingCropChoices={};editEpoch++;
  await refresh();page='Calculate CN';step=targetStep;await calculate();render();globalThis.scrollTo?.(0,0);
 }
@@ -125,3 +126,85 @@ async function startCN(){
   });
  }catch(err){$('#main').innerHTML='<h1>All Crop CN</h1><p>'+esc(err.message)+'</p><a href="/portal">Sign in / choose application</a> · <a href="/account">Account &amp; Settings</a>';}
 }
+
+// Prior-year receipts live inside Assign Payments. Canonical PDF amounts are read server-side.
+let paymentHistoryReview=null,paymentHistoryRequest=0;
+const historyPaymentTab=paymentTab;
+paymentTab=()=>`<div class="card"><span class="eyebrow">PREVIOUS-YEAR PAYMENT EVIDENCE</span><h2>Prior receipts & crop reservations</h2><p>Upload last year's statement. Seller name and full address are matched automatically to this saved statement; no retyping. Earlier dues clear first. Later crop invoices do not consume a reservation.</p>${record.payment_history?`<p class="ok">Linked ${esc(record.payment_history.start)}–${esc(record.payment_history.end)} · ${(record.reserved_sources||[]).length} reserved receipt(s).</p><details><summary>Saved receipt and earlier-dues working</summary><table><tr><th>Receipt</th><th>Received</th><th>Earlier dues</th><th>Late CN adjustment</th><th>Cleared</th><th>Available</th></tr>${record.payment_history.plan.rows.map(r=>`<tr><td>${date(r.date)} · ${esc(r.reference)}</td><td>${money(r.amount)}</td><td>${money(r.earlier_dues)}</td><td>${money(r.cn_adjustment)}</td><td>${money(r.cleared)}</td><td>${money(r.available)}</td></tr>`).join('')}</table></details>`:''}<button data-payment-history-open data-edit ${record.status!=='draft'||!record.web_source?'disabled':''}>${record.payment_history?'Review prior receipts':'Add previous-year statement PDF'}</button>${record.payment_history||record.prior_year_link?'<button data-payment-history-unlink data-edit>Unlink previous year</button>':''}${!record.web_source?'<p>Import/open the current statement first.</p>':''}</div>`+historyPaymentTab();
+const historySourceLabel=sourceLabel;
+sourceLabel=id=>(record.reserved_sources||[]).find(s=>s.id===id)?.label||historySourceLabel(id);
+const historyOpeningAvailable=openingCreditAvailable;
+openingCreditAvailable=()=>{if(!(record.reserved_sources||[]).length)return historyOpeningAvailable();return exactDifference(String(Math.max(0,-Number(record.opening)-allocationTotal(record.reserved_sources))),record.opening_sources.map(s=>s.amount||0));};
+const historyOpeningPanel=openingCreditPanel;
+openingCreditPanel=()=>{if(!(record.reserved_sources||[]).length)return historyOpeningPanel();const free=Math.max(0,-Number(record.opening)-allocationTotal(record.reserved_sources));return free>0?`<div class="card"><h2>Opening credit available for ABS</h2><p>Total opening credit <strong>${money(Math.max(0,-Number(record.opening)))}</strong> · Protected prior receipts <strong>${money(allocationTotal(record.reserved_sources))}</strong> · Other carried credit <strong>${money(free)}</strong>.</p><p>Unused carried credit, including prior CN credit, can fund next-season ABS. Each amount is allocated once.</p><button data-action="opening-source" data-edit>Allocate available opening credit</button></div>`:'';};
+const historyDuesPanel=openingDuesPanel;
+openingDuesPanel=()=>{if(!(record.reserved_sources||[]).length)return historyDuesPanel();return `<section class="opening-dues-panel"><div><h3>Earlier dues with protected crop reservations</h3><p>Net statement opening ${money(record.opening)} + protected receipts ${money(allocationTotal(record.reserved_sources))} = gross opening dues ${money(Math.max(0,Number(record.opening)+allocationTotal(record.reserved_sources)))}.</p><p>Ordinary receipts clear ${money(record.old_dues)} first; still due ${money(result.old_dues_remaining)}. Protected receipts have already cleared their own earlier dues and are not deducted twice.</p></div></section>`;};
+async function openPaymentHistory(){
+ clearTimeout(saveTimer);await saveQueue;await saveDraft();
+ paymentHistoryReview=null;paymentHistoryRequest++;
+ modal(`<h2>Previous-year receipts · ${esc(record.party)}</h2><p>${esc(record.address||record.location)}. The current saved statement is used automatically.</p><label>Previous full April–March statement PDF<input id="payment-history-file" type="file" accept=".pdf,application/pdf"></label><p id="payment-history-status">Choose the PDF. Same seller name/address and year-boundary balances must match.</p><div id="payment-history-body"></div>`);
+}
+function readHistoryApprovals(){if(!paymentHistoryReview)return [];return [...document.querySelectorAll('[data-history-cn]')].filter(el=>el.value).map(el=>({cn:el.dataset.historyCn,receipt:el.value,earned:document.querySelector('[data-history-earned="'+el.dataset.historyCn+'"]').value,reason:document.querySelector('[data-history-cn-note="'+el.dataset.historyCn+'"]').value}));}
+function renderHistoryPlan(){
+ const h=paymentHistoryReview,p=h.plan,crops=catalogCrops();
+ $('#payment-history-body').innerHTML=`<div class="ok">${esc(h.match.message)}<br>${esc(h.match.current.party)} · ${esc(h.match.current.address)}</div><p>${date(p.previous_end)} closing ${money(p.previous_close)} = current opening ${money(p.current_opening)}. No receipt is inserted into the ledger again.</p><div class="grid"><label>Receipt period from<input id="payment-history-from" type="date" value="${esc(p.start)}"></label><label>To<input id="payment-history-to" type="date" value="${esc(p.end)}"></label></div><details><summary>Late-posted CNs earned before a receipt (optional)</summary><p>Amounts and posting dates come from the PDF. Only choose the affected receipt, actual earlier earning date and approval evidence. A CN is used once; do not approve one already reflected in the earlier dues.</p>${p.cn_candidates.map(c=>{const a=(p.approvals||[]).find(a=>a.cn===c.id);return `<div class="card"><strong>${date(c.date)} · ${esc(c.reference)} · ${money(c.credit)}</strong><label>Release against earlier receipt<select data-history-cn="${esc(c.id)}">${option('','No retrospective adjustment',a?.receipt||'')}${p.rows.map(r=>option(r.id,date(r.date)+' · '+r.reference,a?.receipt||'')).join('')}</select></label><label>Earned before receipt on<input type="date" data-history-earned="${esc(c.id)}" value="${esc(a?.earned||'')}"></label><label>Approval evidence / reason<input data-history-cn-note="${esc(c.id)}" value="${esc(a?.reason||'')}"></label></div>`;}).join('')||'<p>No posted CNs in this statement.</p>'}</details><button id="payment-history-recalculate">Refresh receipt working</button><div class="tablewrap"><table><tr><th>Reserve</th><th>Original receipt</th><th>Received</th><th>Earlier dues</th><th>Approved CN</th><th>Dues cleared</th><th>Available</th><th>Crop</th><th>Reserve amount ₹</th></tr>${p.rows.map((r,i)=>{const prior=(record.reserved_sources||[]).find(s=>s.receipt===r.id);return `<tr><td><input type="checkbox" data-history-select="${i}" ${Number(r.available)<=0?'disabled':''} ${prior?'checked':''}></td><td>${date(r.date)}<br>${esc(r.reference)}</td><td>${money(r.amount)}</td><td>${money(r.earlier_dues)}</td><td>${money(r.cn_adjustment)}</td><td>${money(r.cleared)}</td><td>${money(r.available)}</td><td><select data-history-crop="${i}">${option('','Choose crop',prior?.crop||'')}${crops.map(c=>option(c,c,prior?.crop||'')).join('')}</select></td><td><input data-history-amount="${i}" type="number" min="0" max="${esc(r.available)}" step="0.01" value="${esc(prior?.amount||r.available)}"></td></tr>`;}).join('')}</table></div><p>Only selected receipts are reserved. Unselected receipts were included in this period's chronological working; later invoices cannot consume the available portion shown. Review/reduce an available amount if it already settled another purpose.</p><details><summary>Original prior-year activity</summary><div class="tablewrap"><table><tr><th>Date / reference</th><th>Type</th><th>Debit</th><th>Credit</th></tr>${p.activity.map(e=>`<tr><td>${date(e.date)} · ${esc(e.reference)}</td><td>${esc(e.kind)}</td><td>${money(e.debit)}</td><td>${money(e.credit)}</td></tr>`).join('')}</table></div></details><p role="status">Review any earlier settlement or late-CN exceptions. Each amount can be allocated only once.</p><button id="payment-history-save" class="primary">Save reviewed receipt sources</button>`;
+ h.dirty=false;
+}
+async function refreshHistoryPlan(){const h=paymentHistoryReview;if(!h)throw Error('Upload a statement first');const approvals=readHistoryApprovals();const p=await nativeTransport('/api/native-payment-history-preview',{id:record.id,revision:record.revision,previous:h.previous,start:$('#payment-history-from').value,end:$('#payment-history-to').value,approvals});h.plan=p;renderHistoryPlan();}
+document.addEventListener('change',async e=>{
+ const t=e.target;
+ if(t.id==='payment-history-file'){
+  e.stopImmediatePropagation();const file=t.files[0];if(!file)return;
+  const request=++paymentHistoryRequest,historyRecordId=record.id;paymentHistoryReview=null;$('#payment-history-body').innerHTML='';$('#payment-history-status').textContent='Reading and matching '+file.name+'…';t.disabled=true;
+  try{const imported=await api('/api/audit-import',{data:await fileBase64(file),filename:file.name});
+   if(request!==paymentHistoryRequest||!$('#modal').open||record.id!==historyRecordId)return;
+   const h=await nativeTransport('/api/native-payment-history-match',{id:record.id,revision:record.revision,documents:imported.documents});if(request!==paymentHistoryRequest||!$('#modal').open||record.id!==historyRecordId)return;paymentHistoryReview=h;$('#payment-history-status').textContent='Matched automatically. Amounts, dates and earlier-dues working were read from the PDFs.';renderHistoryPlan();
+  }catch(err){if(request===paymentHistoryRequest&&$('#modal').open&&$('#payment-history-status')){$('#payment-history-status').textContent=err.message;toast(err.message);}}finally{if(t.isConnected)t.disabled=false;}
+  return;
+ }
+ if(t.id?.startsWith('payment-history-')||t.hasAttribute('data-history-cn')||t.hasAttribute('data-history-earned')||t.hasAttribute('data-history-cn-note')){
+  if(t.id==='payment-history-confirm')return;
+  if(paymentHistoryReview){paymentHistoryReview.dirty=true;$('#payment-history-save')?.setAttribute('disabled','');}
+ }
+},true);
+document.addEventListener('click',async e=>{
+ const b=e.target.closest('button');if(!b)return;
+ try{
+  if(b.hasAttribute('data-payment-history-unlink')){e.stopImmediatePropagation();clearTimeout(saveTimer);await saveQueue;await saveDraft();const r=await nativeTransport('/api/native-payment-history-unlink',{id:record.id,revision:record.revision});await nativeAdopt(r,2);toast('Previous year unlinked. Opening credit remains available for allocation.');return;}
+  if(b.hasAttribute('data-payment-history-open')){e.stopImmediatePropagation();await openPaymentHistory();return;}
+  if(b.id==='payment-history-recalculate'){e.stopImmediatePropagation();b.disabled=true;try{await refreshHistoryPlan();}finally{if(b.isConnected)b.disabled=false;}return;}
+  if(b.id==='payment-history-save'){
+   e.stopImmediatePropagation();const h=paymentHistoryReview;if(!h||h.dirty)throw Error('Refresh receipt working after changing dates or CN approvals.');
+   const selections=[...document.querySelectorAll('[data-history-select]:checked')].map(t=>{const i=+t.dataset.historySelect;return {receipt:h.plan.rows[i].id,crop:document.querySelector('[data-history-crop="'+i+'"]').value,amount:document.querySelector('[data-history-amount="'+i+'"]').value};});
+   b.disabled=true;try{const r=await nativeTransport('/api/native-payment-history-save',{id:record.id,revision:record.revision,previous:h.previous,start:h.plan.start,end:h.plan.end,approvals:h.plan.approvals,selections});$('#modal').close();await nativeAdopt(r,2);toast('Prior receipts saved with original dates and protected crop reservations. Choose ABS/CD/Settlement explicitly.');}finally{if(b.isConnected)b.disabled=false;}return;
+  }
+ }catch(err){toast(err.message);}
+},true);
+
+// Carried credit is booked on the explicitly selected conversion date.
+allocateOpeningCredit=async()=>{
+ if(record.status!=='draft')return;
+ const available=openingCreditAvailable(),schemes=calculationSettings().schemes.filter(s=>s.benefits.includes('ABS'));
+ if(Number(available)<=0){toast('No unregistered opening credit remains. Review existing sources and allocations.');return;}
+ modal(`<h2>Convert carried credit to booking</h2><p>Available ${money(available)}. Original statement dates remain in the linked evidence; this conversion date controls the booking slab.</p><label>Crop<select id="credit-crop">${[...new Set(schemes.map(s=>s.crop))].map(c=>option(c,c,'')).join('')}</select></label><label>Scheme<select id="credit-scheme">${schemes.filter(s=>s.crop===schemes[0]?.crop).map(s=>option(s.id,s.name+' · '+s.crop,'')).join('')}</select></label><label>Conversion date<input id="credit-date" type="date"></label><label>Amount ₹<input id="credit-amount" type="number" min="0.01" step="0.01" value="${esc(available)}"></label><button id="credit-convert" class="primary">Convert credit</button><button id="closemodal">Cancel</button>`);
+};
+document.addEventListener('click',async e=>{
+ const b=e.target.closest('#credit-convert');if(!b)return;e.stopImmediatePropagation();
+ try{
+  const crop=$('#credit-crop').value,scheme=$('#credit-scheme').value,dt=$('#credit-date').value,amount=$('#credit-amount').value;
+  const sc=calculationSettings().schemes.find(s=>s.id===scheme);
+  if(!sc||sc.crop!==crop)throw Error('Choose a scheme belonging to the selected crop.');
+  if(!dt||!(Number(amount)>0)||Number(amount)>Number(openingCreditAvailable()))throw Error('Choose a conversion date and an amount within available credit.');
+  const source={id:uid(),amount,date:dt,conversion:true,crop,scheme,original_date:null};
+  const candidate={...record,opening_sources:[...record.opening_sources,source]};
+  await api('/api/validate-limits',candidate);record.opening_sources.push(source);
+  record.allocations.push({id:uid(),source:source.id,type:'ABS',scheme,product:'',amount:'0',remark:'Carried-credit conversion '+dt});
+  paymentSelectedId=record.allocations.at(-1).id;changed();await saveDraft();$('#modal').close();await calculate();render();toast('Credit converted. Choose the product and allocation amount.');
+ }catch(err){toast(err.message);}
+},true);
+
+document.addEventListener('change',e=>{
+ if(e.target.id!=='credit-crop')return;
+ const crop=e.target.value,schemes=calculationSettings().schemes.filter(s=>s.crop===crop&&s.benefits.includes('ABS'));
+ $('#credit-scheme').innerHTML=schemes.map(s=>option(s.id,s.name,'')).join('');
+});

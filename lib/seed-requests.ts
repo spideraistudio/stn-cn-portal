@@ -26,7 +26,7 @@ export function validateSeedRequest(raw: Record<string, unknown>, now = Date.now
   const paymentTerms = clean(raw.paymentTerms, 400);
   const quantity = raw.quantity;
   const deadline = typeof raw.quotationDeadline === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(raw.quotationDeadline)
-    ? Date.parse(`${raw.quotationDeadline}:00+05:30`) : NaN;
+    ? Date.parse(`${raw.quotationDeadline}:00+05:30`) : (raw.quotationDeadline === "" || raw.quotationDeadline == null ? 0 : NaN);
   const selected = raw.supplierStates;
   if (!crop || crop.length > 80 || !segment || segment.length > 80 || !description || description.length > 1200) throw new Error("Enter crop, segment and a product description.");
   if (!choice(raw.varietyType, ["hybrid", "research"]) || !choice(raw.productMatch, ["exact", "equivalent"])) throw new Error("Choose the product type and acceptable match.");
@@ -34,15 +34,15 @@ export function validateSeedRequest(raw: Record<string, unknown>, now = Date.now
   if (![raw.partialAllowed, raw.germinationRequired, raw.gotRequired, raw.anonymous, raw.panIndia].every(bool)) throw new Error("Complete all Yes/No choices.");
   if (!choice(raw.cleaning, ["clean", "raw", "either"]) || !choice(raw.treatment, ["treated", "untreated", "either"])) throw new Error("Choose the required seed condition.");
   if (!states[deliveryState] || !states[deliveryState].includes(deliveryDistrict) || !destination || destination.length > 240) throw new Error("Choose a valid delivery state, district and destination.");
-  if (!dateOnly(raw.deliveryBy) || Date.parse(`${raw.deliveryBy}T23:59:59+05:30`) < now) throw new Error("Choose a future delivery date.");
+  if (raw.deliveryBy && (!dateOnly(raw.deliveryBy) || Date.parse(`${raw.deliveryBy}T23:59:59+05:30`) < now)) throw new Error("Choose a future delivery date.");
   if (!choice(raw.transport, ["included", "excluded", "negotiable"]) || paymentTerms.length > 400) throw new Error("Choose transportation terms.");
-  if (!Number.isFinite(deadline) || deadline <= now || deadline > Date.parse(`${raw.deliveryBy}T23:59:59+05:30`)) throw new Error("Quotation deadline must be in the future and no later than delivery.");
+  if (!Number.isFinite(deadline) || (deadline !== 0 && deadline <= now)) throw new Error("Enter a future quotation deadline, or leave it blank.");
   if (!Array.isArray(selected) || selected.length > Object.keys(states).length || selected.some(v => typeof v !== "string" || !states[v])) throw new Error("Select valid supplier states.");
   const supplierStates = [...new Set(selected as string[])].sort();
   if (!raw.panIndia && !supplierStates.length) throw new Error("Select at least one supplier state or Pan India.");
   return { crop, segment, description, varietyType: raw.varietyType, productMatch: raw.productMatch, quantity, quantityUnit: raw.quantityUnit,
     partialAllowed: raw.partialAllowed, cleaning: raw.cleaning, treatment: raw.treatment, germinationRequired: raw.germinationRequired,
-    gotRequired: raw.gotRequired, deliveryState, deliveryDistrict, destination, deliveryBy: raw.deliveryBy, transport: raw.transport,
+    gotRequired: raw.gotRequired, deliveryState, deliveryDistrict, destination, deliveryBy: raw.deliveryBy || "", transport: raw.transport,
     paymentTerms, quotationDeadline: deadline, anonymous: raw.anonymous, panIndia: raw.panIndia, supplierStates: raw.panIndia ? [] : supplierStates } as Pick<SeedRequest, "crop" | "segment" | "description" | "varietyType" | "productMatch" | "quantity" | "quantityUnit" | "partialAllowed" | "cleaning" | "treatment" | "germinationRequired" | "gotRequired" | "deliveryState" | "deliveryDistrict" | "destination" | "deliveryBy" | "transport" | "paymentTerms" | "quotationDeadline" | "anonymous" | "panIndia" | "supplierStates">;
 }
 export async function createSeedRequest(ownerId: MemberId, ownerCompany: string, values: ReturnType<typeof validateSeedRequest>) {

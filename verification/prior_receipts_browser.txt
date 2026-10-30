@@ -1,0 +1,1 @@
+PASS Linux Chromium: real PDF upload, automatic name/address match, CN approval 190000, cotton reserve survives paddy, ledger unchanged, save/reload, wrong-party block in Classic/Studio; no JS errors

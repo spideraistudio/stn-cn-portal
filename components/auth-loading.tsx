@@ -6,7 +6,7 @@ import { Building2 } from "lucide-react";
  */
 export function AuthLoading({ label = "Loading…" }: { label?: string }) {
   return (
-    <main className="grid min-h-screen place-items-center bg-[#f5f7fb] p-5">
+    <main className="public-site public-legacy public-auth grid min-h-screen place-items-center bg-[#f5f7fb] p-5">
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -right-20 -top-20 size-96 rounded-full bg-[#15388c]/5 blur-3xl" />
         <div className="absolute -left-20 bottom-0 size-96 rounded-full bg-[#a57c10]/5 blur-3xl" />

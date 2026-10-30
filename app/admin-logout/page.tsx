@@ -29,7 +29,7 @@ export default function Page() {
   }, []);
 
   return (
-    <main className="grid min-h-screen place-items-center bg-gradient-to-br from-slate-50 via-[#f5f7fb] to-blue-50 p-5">
+    <main className="public-site public-legacy grid min-h-screen place-items-center bg-gradient-to-br from-slate-50 via-[#f5f7fb] to-blue-50 p-5">
       <div className="flex w-full max-w-sm flex-col items-center rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
         {error ? (
           <>

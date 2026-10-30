@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-[#f5f7fb] text-slate-900">
+    <main className="public-site public-legacy min-h-screen bg-[#f5f7fb] text-slate-900">
       <BreadcrumbsJsonLd items={[{ name: "About", path: "/about" }]} />
       <WebPageJsonLd name="About Sellers Trust Network" path="/about" description="A private trust network built for Indian businesses — verified seller reports, dispute resolution, and category isolation." />
       {/* ── Hero ── */}

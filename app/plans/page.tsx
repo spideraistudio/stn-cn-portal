@@ -89,7 +89,7 @@ const plans = [
 
 export default function PlansPage() {
   return (
-    <main className="min-h-screen bg-[#f5f7fb] text-slate-900">
+    <main className="public-site public-legacy min-h-screen bg-[#f5f7fb] text-slate-900">
       <BreadcrumbsJsonLd items={[{ name: "Plans", path: "/plans" }]} />
       <WebPageJsonLd name="Membership Plans — Sellers Trust Network" path="/plans" description="Membership plans for Sellers Trust Network — Free, Trial, Monthly, and Annual options for verified Indian businesses." />
 

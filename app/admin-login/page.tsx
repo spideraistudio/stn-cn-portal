@@ -9,7 +9,7 @@ export default async function Page({searchParams}:{searchParams:Promise<{returnT
  if(await getChatGPTUser())redirect("/admin");
  const returnTo=String((await searchParams).returnTo||"/admin");
  return (
-  <main className="grid min-h-screen place-items-center bg-[#f5f7fb] p-5">
+  <main className="public-site public-legacy public-auth grid min-h-screen place-items-center bg-[#f5f7fb] p-5">
     {/* Decorative background */}
     <div className="pointer-events-none fixed inset-0 overflow-hidden">
       <div className="absolute -right-20 -top-20 size-96 rounded-full bg-[#15388c]/5 blur-3xl" />

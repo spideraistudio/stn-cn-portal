@@ -1,0 +1,6 @@
+test_real_pdf_match_cn_reservation_save_reopen_tamper_and_backup (test_prior_payments_http.PriorPaymentHTTPTests.test_real_pdf_match_cn_reservation_save_reopen_tamper_and_backup) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 2.399s
+
+OK

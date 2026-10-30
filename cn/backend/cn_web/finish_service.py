@@ -95,6 +95,7 @@ class FinishService:
         st.finance = True
         raw = Store.get(st, body['id']); st.source_finance = bool(raw.get('web_source'))
         projected = st.project(raw)  # revalidates current source/period/Year Link
+        st.check_payment_usage(projected)
         original_settings = Store.settings(st)
         calculation_settings = st.settings()
         # Store.finalise reads SQLite directly. Supply the same private settings
@@ -125,6 +126,8 @@ class FinishService:
         if record.get('web_source'):
             check = copy.deepcopy(record); check['status'] = 'draft'; st.project(check)
         all_rows = self.all_records(db, user['id'])
+        from prior_payments import conflicts
+        conflicts(record,[r for _,r in all_rows])
         cfg = record['frozen_settings']
         season = next(s for s in cfg['seasons'] if s['name'] == record['season'])
         proposed = {cn['key'] for cn in record['result']['proposals']}

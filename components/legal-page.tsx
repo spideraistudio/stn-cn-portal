@@ -3,7 +3,7 @@ import { BreadcrumbsJsonLd } from "@/components/breadcrumbs-jsonld";
 
 export function LegalPage({ title, path, effective, children }: { title: string; path: string; effective: string; children: React.ReactNode }) {
   return (
-    <main className="min-h-screen bg-[#f5f7fb] text-slate-900">
+    <main className="public-site public-legacy min-h-screen bg-[#f5f7fb] text-slate-900">
       <BreadcrumbsJsonLd items={[{ name: title, path }]} />
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-5xl items-center gap-3 px-5 py-4">

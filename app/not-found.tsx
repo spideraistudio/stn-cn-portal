@@ -3,7 +3,7 @@ import { Home, Search, ShieldAlert } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <main className="relative grid min-h-screen place-items-center overflow-hidden bg-[#f5f7fb] p-5">
+    <main className="public-site public-legacy relative grid min-h-screen place-items-center overflow-hidden bg-[#f5f7fb] p-5">
       {/* Decorative background */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -right-20 -top-20 size-96 rounded-full bg-[#15388c]/5 blur-3xl" />

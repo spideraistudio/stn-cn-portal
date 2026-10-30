@@ -1,3 +1,24 @@
+# 29 October 2026 public-theme follow-up
+
+TypeScript and production build passed. Local Chromium checked About, Admin login, Contact, FAQ, Plans, Privacy, Terms and Forgot password in Classic and Studio (16 page/theme checks). Admin-login screenshot visually reviewed after fixing heading overflow and input contrast. Loading placeholders share the new theme scope; native Windows acceptance remains pending. No live deployment.
+
+# 29 October 2026 follow-up
+
+23 focused CN tests and 7 STN seed/summary tests passed. TypeScript check and Next.js production build passed. Browser/Windows acceptance of this follow-up remains pending. See PRIOR_RECEIPTS_UPDATE.md. Earlier records below are historical.
+
+# Prior receipt reservations — 28 October 2026
+
+Fresh Linux checks for this update (see `verification/prior_receipts_*`):
+
+- Combined-account cumulative suite: 78 tests run, 77 passed, 1 skipped because the private 49-party PDF is not in GitHub.
+- New focused model checks: 16 passed. New real-PDF HTTP checks: 3 passed (also included in the cumulative suite).
+- Available original financial suite against the extended runtime engine: 314 reported tests, 274 passed and 40 skipped, predominantly because the original private PDF fixtures are not in GitHub. Missing private fixtures are explicitly reported, not represented as passing. Original class fixtures can skip their class instead of enumerating every member test. Historical 331-pass results were not rerun or claimed here.
+- Shared account/permission tests: 24 passed.
+- Real Linux Chromium: upload prior PDF, automatically match exact seller/address, approve the ₹90,000 earlier-earned late CN, reserve ₹1,90,000 for cotton, preserve paddy settlement and original ledger reconciliation, save/reload, and block wrong-party files in Classic/Studio. No uncaught JavaScript errors.
+- Original public baseline: all 133 available files match the release manifest; 7 private fixture PDFs are intentionally absent. The original batch-file CRLF endings were restored after Git normalisation.
+
+Windows user acceptance and the user's actual statement verification remain pending. No production deployment, live data migration, VPS changes or original Meet-Dev repository changes were made. Earlier sections are historical evidence.
+
 # Latest: clean new-profile repository preparation — 27 October 2026
 
 Read CLEAN_START_HANDOFF.md and README.md first. New profiles and blank workbooks now start without catalogue or schemes; existing saved payloads are preserved. Demo-party buttons are removed. Prepared for a separate private stn-cn-portal repository; remote publication and Windows acceptance remain pending. No deployment, live migration or original Meet-Dev changes. Unknown-packet-weight schemes remain pending. Earlier notes are historical.

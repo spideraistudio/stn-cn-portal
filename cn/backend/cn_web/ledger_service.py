@@ -20,6 +20,9 @@ BASELINE = Path(__file__).resolve().parents[2] / 'offline_baseline'
 # Fixed application code path, never a request/user/data path.
 if str(BASELINE) not in sys.path:
     sys.path.insert(0, str(BASELINE))
+# Extended payment-source engine; original Update35.2 baseline remains unchanged.
+FINANCIAL_RUNTIME=Path(__file__).resolve().parent/'financial_runtime'
+if str(FINANCIAL_RUNTIME) not in sys.path:sys.path.insert(0,str(FINANCIAL_RUNTIME))
 from importer import compare_import, source_content
 from .statement_import import import_pdf_documents
 from .product_mapping import plan as mapping_plan, identity as mapping_identity, compatible as packing_compatible

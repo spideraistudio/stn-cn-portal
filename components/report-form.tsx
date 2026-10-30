@@ -185,10 +185,6 @@ export function ReportForm({ initial }: { initial?: EditableReport }) {
           setError("Select an experience rating before submitting.");
           return;
         }
-        if (summary.length < 20) {
-          setError("Business summary must be at least 20 characters.");
-          return;
-        }
         if (legal && (!numberType || (numberType === "unspecified" && caseNumber !== initial?.case_number))) {
           setError("Choose Temporary / filing number or Permanent / registered case number.");
           return;
@@ -593,11 +589,9 @@ export function ReportForm({ initial }: { initial?: EditableReport }) {
 
           <DetailSection title="Factual business summary">
             <label className="block">
-              <span className={labelClass}>Business summary *</span>
+              <span className={labelClass}>Business summary (optional)</span>
               <textarea
                 name="summary"
-                required
-                minLength={20}
                 maxLength={5000}
                 rows={5}
                 defaultValue={initial?.summary}

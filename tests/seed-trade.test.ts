@@ -69,3 +69,23 @@ test('approval respects remaining quantity and quote validity',()=>{
   assert.match(selectionError({...request,status:'closed'},candidate,[],NOW)||'',/closed/);
   assert.match(selectionError(request,{...candidate,validUntil:'2026-09-28'},[],NOW)||'',/no longer valid/);
 });
+
+test('optional requirement dates stay open and allow supplier quotation',async()=>{
+  const {validateSeedRequest}=await import('../lib/seed-requests');
+  const {isExpired}=await import('../lib/seed-trading');
+  const raw={...request,deliveryDistrict:'Ahmadabad',deliveryBy:'',quotationDeadline:''};
+  const values=validateSeedRequest(raw,NOW);
+  assert.equal(values.deliveryBy,'');assert.equal(values.quotationDeadline,0);
+  assert.equal(isExpired({...request,...values},NOW),false);
+  assert.doesNotThrow(()=>validateQuotation(quote,{...request,...values},NOW));
+  assert.doesNotThrow(()=>validateSeedRequest({...raw,deliveryBy:'2026-10-05',quotationDeadline:'2026-10-10T12:00'},NOW));
+  assert.throws(()=>validateSeedRequest({...raw,quotationDeadline:'invalid'},NOW));
+  assert.throws(()=>validateSeedRequest({...raw,deliveryBy:'2026-02-31'},NOW));
+});
+
+test('business summary accepts blank, omitted and short text',async()=>{
+ const {reportInput}=await import('../lib/report-validation');
+ const summary=reportInput.innerType().shape.summary;
+ assert.equal(summary.parse(undefined),'');assert.equal(summary.parse(''),'');assert.equal(summary.parse('Brief note'),'Brief note');
+ assert.equal(summary.safeParse('x'.repeat(5001)).success,false);
+});

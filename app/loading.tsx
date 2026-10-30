@@ -2,7 +2,7 @@ import { Building2, FileSearch, Scale, Lock } from "lucide-react";
 
 export default function Loading() {
   return (
-    <main className="min-h-screen bg-[#f5f7fb]">
+    <main className="public-site public-legacy min-h-screen bg-[#f5f7fb]">
       {/* Hero skeleton */}
       <div className="gradient-mesh relative h-[420px] overflow-hidden">
         <div className="pointer-events-none absolute -right-20 top-10 size-72 rounded-full bg-blue-400/20 blur-3xl animate-pulse" />

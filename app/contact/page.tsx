@@ -29,7 +29,7 @@ const contactJsonLd = {
 
 export default function ContactPage() {
   return (
-    <main className="min-h-screen bg-[#f5f7fb] text-slate-900">
+    <main className="public-site public-legacy min-h-screen bg-[#f5f7fb] text-slate-900">
       <BreadcrumbsJsonLd items={[{ name: "Contact", path: "/contact" }]} />
       <script
         type="application/ld+json"

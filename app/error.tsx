@@ -9,7 +9,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
   }, [error]);
 
   return (
-    <main className="relative grid min-h-screen place-items-center overflow-hidden bg-[#f5f7fb] p-5">
+    <main className="public-site public-legacy relative grid min-h-screen place-items-center overflow-hidden bg-[#f5f7fb] p-5">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -right-20 -top-20 size-96 rounded-full bg-rose-200/30 blur-3xl" />
         <div className="absolute -left-20 bottom-0 size-96 rounded-full bg-amber-200/20 blur-3xl" />

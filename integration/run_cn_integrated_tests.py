@@ -11,10 +11,13 @@ import test_accounts_http as helpers
 helpers.Accounts=PortalAccounts
 helpers.AccountApp=partial(PortalApp,bridge_key='integration-test-secret-'*3)
 suite=unittest.TestSuite()
-for name in ['test_workspaces_http','test_ledger_http','test_product_mapping_http','test_calculator_http','test_native_interface_http','test_finish_http','test_storage_http','test_billing_http','test_audit_mapping_http','test_hierarchy_http']:
+for name in ['test_workspaces_http','test_ledger_http','test_product_mapping_http','test_calculator_http','test_native_interface_http','test_finish_http','test_storage_http','test_billing_http','test_audit_mapping_http','test_hierarchy_http','test_prior_payments_http','test_prior_payments']:
     module=__import__(name)
     module.Accounts=PortalAccounts
     module.AccountApp=helpers.AccountApp
+    if name=='test_ledger_http' and not (ROOT/'cn/offline_baseline/fixtures/surendranagar_combined.pdf').exists():
+        case=module.LedgerHTTPTests
+        case.test_combined_pdf_all_49_parties=unittest.skip('Private combined-party PDF is not included in this repository')(case.test_combined_pdf_all_49_parties)
     suite.addTests(unittest.defaultTestLoader.loadTestsFromModule(module))
 result=unittest.TextTestRunner(verbosity=1).run(suite)
 raise SystemExit(not result.wasSuccessful())

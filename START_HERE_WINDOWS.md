@@ -1,3 +1,7 @@
+# Latest update: prior receipts inside Payment Allocation — 28 October 2026
+
+Read **PRIOR_RECEIPTS_UPDATE.md** first. This cumulative offline Windows package adds automatic exact seller/address matching of the prior-year PDF, earlier-dues working, reviewed late-CN adjustments and crop-protected receipt sources inside Assign Payments. Existing issued history is not rewritten. Windows acceptance with your real statements remains pending. Installation/startup and complete-data backup instructions below still apply. No VPS deployment or live migration is included.
+
 # Latest: clean new-profile repository preparation — 27 October 2026
 
 Read CLEAN_START_HANDOFF.md and README.md first. New profiles and blank workbooks now start without catalogue or schemes; existing saved payloads are preserved. Demo-party buttons are removed. Prepared for a separate private stn-cn-portal repository; remote publication and Windows acceptance remain pending. No deployment, live migration or original Meet-Dev changes. Unknown-packet-weight schemes remain pending. Earlier notes are historical.

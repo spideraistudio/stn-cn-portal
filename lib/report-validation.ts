@@ -61,7 +61,7 @@ export const reportInput = z
     legal: z.boolean(),
     caseNumber: z.string().trim().max(200),
     caseNumberType: z.enum(["temporary", "permanent", "unspecified"]).default("unspecified"),
-    summary: z.string().trim().min(20).max(5000),
+    summary: z.string().trim().max(5000).optional().default(""),
   })
   .superRefine((v, c) => {
     const issue = (path: string, message: string) =>

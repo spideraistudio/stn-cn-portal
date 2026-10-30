@@ -1,0 +1,8 @@
+test_permissions_and_stale_requests (__main__.PriorPaymentHTTPTests.test_permissions_and_stale_requests) ... ok
+test_real_pdf_match_cn_reservation_save_reopen_tamper_and_backup (__main__.PriorPaymentHTTPTests.test_real_pdf_match_cn_reservation_save_reopen_tamper_and_backup) ... ok
+test_wrong_party_ambiguous_and_cross_owner_files_blocked (__main__.PriorPaymentHTTPTests.test_wrong_party_ambiguous_and_cross_owner_files_blocked) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 7.704s
+
+OK

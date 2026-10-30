@@ -39,7 +39,7 @@ export default async function SeedTradeOversight({ searchParams }: {
         return <section key={r.id} className="rounded-xl border bg-white p-5 text-sm shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-2"><h2 className="text-lg font-semibold">{r.crop} · {r.segment}</h2><span className="rounded-full bg-slate-100 px-3 py-1">{r.status}</span></div>
           <p className="mt-2">{r.ownerCompany} · {r.quantity} {r.quantityUnit} · {r.anonymous ? "Anonymous to suppliers" : "Company visible"} · {r.panIndia ? "Pan India" : r.supplierStates.join(", ")}</p>
-          <p className="text-slate-600">ID {r.id} · Published {ist(r.publishedAt)} · quote deadline {ist(r.quotationDeadline)}</p>
+          <p className="text-slate-600">ID {r.id} · Published {ist(r.publishedAt)} · quote deadline {r.quotationDeadline?ist(r.quotationDeadline):"No deadline"}</p>
           <details className="mt-3"><summary className="cursor-pointer font-medium">{offers.length} private quotations · inspect activity</summary>
             <div className="mt-3 space-y-2">
               {offers.map(q => <div key={q.id} className="rounded-lg border p-3">

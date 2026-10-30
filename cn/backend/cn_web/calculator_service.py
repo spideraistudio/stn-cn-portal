@@ -23,7 +23,7 @@ TABLES = {'records': ('id','revision','data'), 'settings': ('version','data'),
           'audit': ('id','time','action','target','data'),
           'issued': ('identity','total','record'), 'bulk_imports': ('id','data')}
 ALLOCATION_FIELDS = ('allocations','cash_splits','manual_order','old_dues',
-                     'opening_dues_review','opening_dues_review_required','opening_sources')
+                     'opening_dues_review','opening_dues_review_required','opening_sources','reserved_sources','payment_history')
 SCHEME_FIELDS = ('scheme_overrides','cash_deduction_rates','product_assignments')
 
 class YearLinkEvidenceError(ValueError):
@@ -38,6 +38,12 @@ def validate_opening_sources(record, expected):
         if not isinstance(source,dict):raise ValueError('Invalid opening-credit source')
         if source.get('year_link_receipt'):
             linked.append(source)
+        elif source.get('conversion'):
+            if set(source)-{'id','amount','date','conversion','crop','scheme','original_date'} or source.get('conversion') is not True or source.get('original_date') is not None:
+                raise ValueError('Invalid carried-credit conversion')
+            from datetime import date
+            if date.fromisoformat(source['date']).isoformat()!=source['date'] or not source.get('crop') or not source.get('scheme'):
+                raise ValueError('Choose conversion date, crop and scheme')
         elif set(source)-{'id','amount','date'} or source.get('date') is not None:
             raise ValueError('Use reviewed Year Link for dated opening-credit sources')
     if linked!=[s for s in expected if s.get('year_link_receipt')]:
@@ -47,6 +53,7 @@ class Runtime(Store):
     def __init__(self, payload, ledger, service):
         self.connection = sqlite3.connect(':memory:')
         self.ledger, self.service, self.finance, self.source_finance = ledger, service, False, False
+        self.owner=None;self.workbook=None
         super().__init__(':memory:')
         if payload:
             with self.db() as c:
@@ -147,8 +154,21 @@ class Runtime(Store):
                     result['stock_scope'][e['id']]=False
         return result
 
+    def check_payment_usage(self,r):
+        from prior_payments import conflicts
+        others=self.all()
+        # Parent account transaction serialises check and write across workbooks.
+        if getattr(self,'account_db',None) is not None:
+            for row in self.account_db.execute('SELECT workbook,payload FROM calculator_workspaces WHERE owner=?',(self.owner,)):
+                if row['workbook']==self.workbook:continue
+                payload=json.loads(row['payload'])
+                others += [json.loads(x[2]) for x in payload.get('records',[])]
+        conflicts(r,others)
+
     def save(self,r):
-        return super().save(self.project(r))
+        r=self.project(r)
+        self.check_payment_usage(r)
+        return super().save(r)
 
     def payload(self):
         return {t:[list(row) for row in self.connection.execute('SELECT * FROM '+t)] for t in TABLES}
@@ -238,12 +258,12 @@ class CalculatorService:
             if {k:v for k,v in r.items() if k not in skip}!={k:v for k,v in old.items() if k not in skip}:require_permission(u,'edit_ledger')
             try:validate_opening_sources(r,old.get('opening_sources',[]))
             except YearLinkEvidenceError as exc:raise AuthError(str(exc),409) from None
-            for key in ('prior_year_link','prior_issued','lineage','source'):
+            for key in ('prior_year_link','prior_issued','lineage','source','reserved_sources','payment_history'):
                 if r.get(key)!=old.get(key):raise AuthError('Source and Year Link evidence cannot be replaced through Save',409)
         else:
             require_permission(u,'edit_ledger')
             validate_opening_sources(r,[])
-            if r.get('prior_year_link'):raise AuthError('Use reviewed Year Link',400)
+            if r.get('prior_year_link') or r.get('reserved_sources') or r.get('payment_history'):raise AuthError('Use reviewed payment history / Year Link',400)
             for e in r.get('entries',[]):e.pop('original',None)
         # Cash deduction edits are configuration, including direct Save shortcuts.
         old_splits={ (x.get('scheme'),x.get('product')):x for x in old.get('cash_splits',[])}
@@ -256,6 +276,7 @@ class CalculatorService:
 
     def execute(self,db,u,project,workbook,parent,s,st,action,b,record_id):
         def need(p):require_permission(u,p)
+        st.owner=u['id'];st.workbook=workbook;st.account_db=db
         meta={'id':workbook,**json.loads(parent['payload'])}
         if action.startswith('native-'):return self.native.execute(db,u,project,workbook,meta,s,st,action,b)
         if action=='state':
