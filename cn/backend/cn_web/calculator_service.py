@@ -111,8 +111,12 @@ class Runtime(Store):
     def project(self, r):
         r=copy.deepcopy(r)
         if r.get('status') in ('finalised','issued'):return r
+        r['cn_history_matching']='explicit-v1'
         binding=r.get('web_source')
-        if not binding:return r
+        if not binding:
+            r.pop('period_accounting',None)
+            r.pop('receipt_party_identity',None)
+            return r
         source=self.service.ledger.ledger(self.ledger,binding['ledger_id'])
         if binding['revision'] != digest(source):
             raise AuthError('Source ledger/reviews changed. Reopen from Ledger & Seasons to refresh this draft.',409)
@@ -124,10 +128,16 @@ class Runtime(Store):
             if configured and not configured.get('confirmed'):
                 return project_reviews(r, source['document'])  # Offline draft workflow: dates must be confirmed before finalisation.
             raise AuthError('Choose a saved season',400)
+        doc=source['document']
+        r['receipt_party_identity']=[doc.get('party'),doc.get('address'),doc.get('source',{}).get('issuer')]
+        r['posted_cn_assignments']=copy.deepcopy(source.get('posted_cn_assignments',{}))
+        r['accounting_review']=copy.deepcopy(source.get('accounting_reviews',{}).get(r['season']))
         by_id={e['id']:i for i,e in enumerate(source['document']['entries'])}
         for e in r['entries']:
             if e['id'] not in by_id:continue
             i=by_id[e['id']];review=source['reviews'].get(str(i),{})
+            e.pop('settlement_reference',None)
+            if e['id'] in source.get('settlement_references',{}):e['settlement_reference']=source['settlement_references'][e['id']]
             included=review.get('season')==period['name'] if review.get('season') else period['start']<=e['date']<=period['end']
             if e['kind'] in ('sale','return','ipt_in','ipt_out'):
                 if included and not period['start']<=e['date']<=period['cutoff']:
@@ -137,6 +147,8 @@ class Runtime(Store):
                         item.pop('exclude',None);item.pop('review_reason',None)
                 if not included:
                     for item in e.get('items',[]):item.update(_web_season_excluded=True,exclude=True,review_reason='Reviewed benefit season: '+str(review.get('season') or 'outside selected period'))
+        from period_accounting import view
+        r['period_accounting']=view(r,period)
         # Late IPT remains validated in Phase 4; the envelope includes it once.
         r['late_ipt_reviews']={}
         return project_reviews(r, source['document'])
@@ -147,6 +159,7 @@ class Runtime(Store):
     def calculate(self,r):
         r=self.calculation_record(r)
         result=super().calculate(r)
+        if r.get('period_accounting'):result['period_accounting']=copy.deepcopy(r['period_accounting'])
         if r.get('web_source') and r.get('status') not in ('finalised','issued'):
             projected=self.project(r)
             for e in projected['entries']:
@@ -265,6 +278,18 @@ class CalculatorService:
             validate_opening_sources(r,[])
             if r.get('prior_year_link') or r.get('reserved_sources') or r.get('payment_history'):raise AuthError('Use reviewed payment history / Year Link',400)
             for e in r.get('entries',[]):e.pop('original',None)
+        # The scope picker uses existing item exclusions, never rewrites vouchers.
+        # Reject conflicting saved benefit allocations even if the browser is bypassed.
+        old_items={(e['id'],i):item for e in old.get('entries',[]) for i,item in enumerate(e.get('items',[]))}
+        scope_changed=False
+        prefix='Working-period product selection: '
+        for e in r.get('entries',[]):
+            for i,item in enumerate(e.get('items',[])):
+                prior=old_items.get((e['id'],i),{})
+                if (str(item.get('review_reason','')).startswith(prefix) or str(prior.get('review_reason','')).startswith(prefix)) and bool(item.get('exclude'))!=bool(prior.get('exclude')):
+                    scope_changed=True
+        if scope_changed and (any(a.get('type')!='Settlement' for a in r.get('allocations',[])) or r.get('cash_splits')):
+            raise AuthError('Remove benefit allocations and cash quantity splits before changing the product scope. Saved allocations are unchanged.',409)
         # Cash deduction edits are configuration, including direct Save shortcuts.
         old_splits={ (x.get('scheme'),x.get('product')):x for x in old.get('cash_splits',[])}
         for split in r.get('cash_splits',[]):
@@ -280,11 +305,11 @@ class CalculatorService:
         meta={'id':workbook,**json.loads(parent['payload'])}
         if action.startswith('native-'):return self.native.execute(db,u,project,workbook,meta,s,st,action,b)
         if action=='state':
-            rows=db.execute('SELECT * FROM workspace_documents WHERE owner=? AND deleted=0 ORDER BY rowid',(u['id'],)).fetchall()
+            rows=db.execute("SELECT * FROM workspace_documents WHERE owner=? AND deleted=0 AND kind IN ('projects','workbooks') ORDER BY rowid",(u['id'],)).fetchall()
             projects=[{'id':r['id'],**json.loads(r['payload'])} for r in rows if r['kind']=='projects']
             books=[{'id':r['id'],**json.loads(r['payload'])} for r in rows if r['kind']=='workbooks' and r['project']==project]
             return {'project':next(p for p in projects if p['id']==project),'projects':projects,'workbook':meta,'workbooks':books,'deleted_workbooks':[],
-                    'settings':st.settings(),'records':st.all(),'bulk_history':__import__('workbooks').bulk_history(st), 'permissions':u['permissions'],
+                    'selected_period':s.get('selected_period'),'settings':st.settings(),'records':st.all(),'bulk_history':__import__('workbooks').bulk_history(st), 'permissions':u['permissions'],
                     'source_ledgers':[{'id':r['id'],'party':r['document']['party'],'location':r['document'].get('location',''),
                       'state':r['document'].get('state',''),'entries':len(r['document']['entries']),
                       'report_period':self.ledger.report_period(r['document'])} for r in s['ledgers'] if not r['superseded_by']]}
@@ -399,14 +424,14 @@ class CalculatorService:
         if action=='workbooks':
             need('edit_ledger');need('edit_schemes')
             from datetime import date
-            if not b.get('name') or not b.get('state') or not b.get('period'):raise ValueError('Enter name, state and period')
-            if not date.fromisoformat(b['start'])<=date.fromisoformat(b['end'])<=date.fromisoformat(b['cutoff']):raise ValueError('Invalid working period')
+            if not b.get('name') or not b.get('state'):raise ValueError('Enter workbook name and state')
+            b={**b,'period':'Working season'}
             oid=uuid.uuid4().hex
             db.execute('INSERT INTO workspace_documents VALUES(?,?,?,?,?,1,0,?)',(u['id'],oid,'workbooks',project,None,validate('workbooks',{'name':b['name'],'state':b['state'],'season':b['period']})))
             _,ledger_rev,ledger_state=self.ledger.load(db,u['id'],oid)
-            ledger_state['periods']=[{'name':b['period'],'start':b['start'],'end':b['end'],'cutoff':b['cutoff']}]
+            ledger_state['periods']=[]
             self.ledger.save(db,u['id'],oid,ledger_rev,ledger_state,'ledger_period_created')
-            cfg=Runtime.seed({'catalogue':[],'periods':[]}) if b.get('mode')=='blank' else st.settings();cfg['version']=1;cfg['seasons']=[{'name':b['period'],'start':b['start'],'end':b['end'],'cutoff':b['cutoff'],'confirmed':True}]
+            cfg=Runtime.seed({'catalogue':[],'periods':[]}) if b.get('mode')=='blank' else st.settings();cfg['version']=1;cfg['seasons']=[{'name':'Working season','start':None,'end':None,'cutoff':None,'confirmed':False}]
             if b.get('mode')=='blank':
                 cfg['products']=[];cfg['schemes']=[]
             for sc in cfg['schemes']:

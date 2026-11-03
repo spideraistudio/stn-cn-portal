@@ -130,13 +130,27 @@ def allocation_crops(record,settings):
 
 def usage(record):
     """Physical receipt identity, independent of PDF hash or workbook IDs."""
-    prefix=(exact(record.get('party')),exact(record.get('address')),exact((record.get('source') or {}).get('issuer')))
-    def key(e):return prefix+((e.get('original') or e).get('date'),exact(e.get('reference') or e['id']),str(amount(e.get('credit') or e.get('original_amount'))))
+    prefix=tuple(exact(x) for x in record.get('receipt_party_identity',[record.get('party'),record.get('address'),(record.get('source') or {}).get('issuer')]))
+    def key(e):return prefix+((e.get('original') or e).get('date'),exact(e.get('reference') or ''),str(amount(e.get('credit') or e.get('original_amount')).normalize()))
     out={}
+    if record.get('period_accounting'):
+        eligible={s['id']:amount(s['available']) for s in record['period_accounting']['sources']}
+    elif record.get('status') in ('finalised','issued') and record.get('result',{}).get('sources') is not None:
+        eligible={s['id']:amount(s['available']) for s in record['result']['sources']}
+    else:
+        from engine import payment_work
+        eligible={s['id']:amount(s['available']) for s in payment_work(record)[0]}
     for e in record.get('entries',[]):
         if e.get('kind')=='receipt':
             n=sum((amount(a.get('amount')) for a in record.get('allocations',[]) if a.get('source')==e['id']),Decimal(0))
-            if n:out[key(e)]=(n,amount(e['credit']))
+            if n:out[key(e)]=(n,min(amount(e['credit']),eligible.get(e['id'],Decimal(0))))
+    # Anonymous carried credit is one shared statement pool across working periods.
+    anonymous={s['id'] for s in record.get('opening_sources',[]) if not s.get('year_link_receipt')}
+    used=sum((amount(a.get('amount')) for a in record.get('allocations',[]) if a.get('source') in anonymous),Decimal(0))
+    if used and record.get('period_accounting'):
+        source=record.get('source') or {}
+        pool=prefix+('carried-credit',source.get('report_start') or source.get('start') or '',str(Decimal(str(record.get('opening',0))).normalize()))
+        out[pool]=(used,amount(record['period_accounting'].get('untraced_opening_remaining',0)))
     proof=(record.get('payment_history') or {});prior={e['id']:e for e in proof.get('previous',{}).get('entries',[])}
     for s in record.get('reserved_sources',[]):
         e=prior.get(s['receipt'])
@@ -148,17 +162,17 @@ def usage(record):
         e=prior.get(s.get('year_link_receipt'))
         if e:
             n=sum((amount(a.get('amount')) for a in record.get('allocations',[]) if a.get('source')==s['id']),Decimal(0))
-            if n:out[key(e)]=(n,amount(e['credit']))
+            if n:out[key(e)]=(n,min(amount(e['credit']),eligible.get(e['id'],Decimal(0))))
     return out
 
 def conflicts(record,others):
     # Keep legacy draft semantics; new reservations additionally lock their receipt budgets.
     others=list(others)
-    if not record.get('reserved_sources') and not any(r.get('reserved_sources') for r in others):return
+    # Enforce canonical receipt budgets for every calculation, including ordinary receipts.
     # Keep an issued ancestor's consumption locked until a later issued revision replaces it.
     groups={}
     for r in others:
-        if r.get('deleted_at') and r.get('status')!='issued':continue
+        if r.get('deleted_at') and r.get('status') not in ('finalised','issued'):continue
         if r.get('id')==record.get('id') or r.get('lineage',r.get('id'))==record.get('lineage',record.get('id')):continue
         k=r.get('lineage') or r.get('id');groups.setdefault(k,[]).append(r)
     own=usage(record);totals={k:n for k,(n,cap) in own.items()};caps={k:cap for k,(n,cap) in own.items()}
@@ -176,7 +190,7 @@ def conflicts(record,others):
     targets=cn_targets(record)
     for rows in groups.values():
         current=max(rows,key=lambda r:(r.get('saved_at',''),r.get('revision',0)))
-        issued=[r for r in rows if r.get('status')=='issued']
+        issued=[r for r in rows if r.get('status') in ('finalised','issued')]
         candidates=[current]
         if issued:candidates.append(max(issued,key=lambda r:(r.get('issued_at',''),r.get('revision',0))))
         combined={}

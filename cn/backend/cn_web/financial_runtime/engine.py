@@ -1,3 +1,4 @@
+from period_accounting import payment_sources
 import copy,hashlib,json
 from decimal import Decimal, localcontext, ROUND_HALF_UP, ROUND_FLOOR
 from datetime import date
@@ -196,7 +197,7 @@ def validate_input_limits(r, settings):
         if D(e.get('debit') or 0)<0 or D(e.get('credit') or 0)<0:raise ValueError('Negative ledger entry')
         if e.get('kind')=='receipt':receipts.append({'id':e.get('id'),'amount':D(e.get('credit') or 0),'date':(e.get('original') or e).get('date')})
     opening_sources=r.get('opening_sources',[])
-    if sum((D(x.get('amount') or 0) for x in opening_sources),Decimal(0))>max(Decimal(0),-opening-reserved):raise ValueError('Opening-credit sources exceed actual opening credit')
+    if sum((D(x.get('amount') or 0) for x in opening_sources),Decimal(0))>(D(r['period_accounting'].get('untraced_opening_remaining',0)) if r.get('period_accounting') else max(Decimal(0),-opening-reserved)):raise ValueError('Opening-credit sources exceed actual opening credit')
     receipts += [{'id':x.get('id'),'amount':D(x.get('amount') or 0),'date':x.get('date')} for x in opening_sources]
     receipts += [dict(x,amount=D(x['amount']),reserved=True) for x in r.get('reserved_sources',[])]
     available={}
@@ -205,6 +206,8 @@ def validate_input_limits(r, settings):
         seen.add(src['id'])
         if src['amount']<0:raise ValueError('Negative payment source')
         used=Decimal(0) if src.get('reserved') else min(due,src['amount']);due-=used;available[src['id']]=src['amount']-used
+    planned,pdue=payment_sources(r,receipts)
+    if pdue is not None:available={x['id']:x['available'] for x in planned}
     assigned=defaultdict(lambda:Decimal(0));seen=set()
     for a in r.get('allocations',[]):
         if not a.get('id') or a['id'] in seen:raise ValueError('Duplicate/missing allocation identity')
@@ -261,6 +264,11 @@ def payment_work(r):
     sources=[{'id':e['id'],'date':(e.get('original') or e).get('date'),'amount':D(e.get('credit') or 0),'opening':False} for e in r.get('entries',[]) if e.get('kind')=='receipt']
     sources += [{'id':x['id'],'date':x.get('date'),'amount':D(x.get('amount') or 0),'opening':True} for x in r.get('opening_sources',[])]
     sources += [dict(x,amount=D(x['amount']),opening=True,reserved=True) for x in r.get('reserved_sources',[])]
+    period_sources,period_due=payment_sources(r,sources)
+    if period_due is not None:
+        assigned=defaultdict(lambda:Decimal(0))
+        for a in r.get('allocations',[]):assigned[a.get('source')]+=D(a.get('amount') or 0)
+        return period_sources,sum((max(Decimal(0),x['available']-assigned[x['id']]) for x in period_sources),Decimal(0)),period_due
     assigned=defaultdict(lambda:Decimal(0));out=[]
     for a in r.get('allocations',[]):assigned[a.get('source')]+=D(a.get('amount') or 0)
     for src in sorted(sources,key=lambda x:(x['date'] or '',x['id'])):
@@ -347,6 +355,8 @@ def _compute(r,settings):
     def flag(message,target=None):
         if message not in issues:
             issues.append(message);issue_details.append({'message':message,**(target or {})})
+    if r.get('period_accounting',{}).get('review_required'):
+        flag('Review unclear bill allocations / same-day receipt-CN order before finalising',{'step':1,'accounting_review':True})
     products={p['id']:p for p in settings['products']};schemes={s['id']:s for s in settings['schemes']}
     season=next((x for x in settings['seasons'] if x['name']==r.get('season')),None)
     season_valid=False
@@ -362,7 +372,7 @@ def _compute(r,settings):
     if r.get('workbook_scheme_state') and r['workbook_scheme_state']!=r.get('state'):info.append('Address state '+str(r.get('state'))+' differs from workbook scheme state '+r['workbook_scheme_state']+'; workbook schemes are used without changing the address.')
     if r.get('scheme_state') and r['scheme_state']!=r.get('state') and not r.get('override_reason'):flag('State override requires reason')
     entries=r.get('entries',[]);opening=D(r.get('opening',0));closing=D(r.get('closing',0))
-    if r.get('opening_dues_review_required') and opening>0:
+    if r.get('opening_dues_review_required') and opening>0 and not r.get('period_accounting'):
         review=r.get('opening_dues_review') or {}
         if (str(review.get('opening')),str(review.get('old_dues')))!=(str(r.get('opening')),str(r.get('old_dues'))):flag('Confirm opening outstanding handling before allocating payments',{'step':2})
         elif D(r.get('old_dues') or 0)<opening and not str(review.get('reason') or '').strip():flag('Explain the opening balance excluded from old-dues clearance',{'step':2})
@@ -427,7 +437,7 @@ def _compute(r,settings):
     for source in r.get('opening_sources',[]):
         receipts.append({'id':source['id'],'date':source.get('date'),'amount':D(source['amount']),'opening':True})
     reserved=sum((D(s['amount']) for s in r.get('reserved_sources',[])),Decimal(0))
-    if sum((x['amount'] for x in receipts if x['opening']),Decimal(0))>max(Decimal(0),-opening-reserved):flag('Opening-credit sources exceed actual opening credit')
+    if sum((x['amount'] for x in receipts if x['opening']),Decimal(0))>(D(r['period_accounting'].get('untraced_opening_remaining',0)) if r.get('period_accounting') else max(Decimal(0),-opening-reserved)):flag('Opening-credit sources exceed actual opening credit')
     receipts += [dict(x,amount=D(x['amount']),opening=True,reserved=True) for x in r.get('reserved_sources',[])]
     due=D(r.get('old_dues',0));availability={};sources={};clearances=[]
     if due<0 or due>max(Decimal(0),opening+reserved):flag('Old dues must be within confirmed opening debit')
@@ -439,6 +449,9 @@ def _compute(r,settings):
         availability[src['id']]=src['amount']-used
         clearances.append({**src,'old_dues_cleared':used,'available':src['amount']-used})
         if not src['opening'] and not src['date']:flag('Enter original receipt date: '+src['id'])
+    planned,pdue=payment_sources(r,receipts)
+    if pdue is not None:
+        clearances=planned;due=pdue;availability={x['id']:x['available'] for x in planned};sources={x['id']:x for x in planned}
     assigned=defaultdict(lambda:Decimal(0));abs_by=defaultdict(lambda:Decimal(0));cd_by=defaultdict(list);cash_by=defaultdict(lambda:Decimal(0));allocation_ids=set()
     for a in r.get('allocations',[]):
         aid=a.get('id')
@@ -586,9 +599,37 @@ def _compute(r,settings):
         if cn['proposed']!=0:proposals.append(cn)
     for key,amount in prior.items():
         if key not in {cn['key'] for cn in cns} and D(amount)>0:flag('Previously issued benefit removed; review '+key)
-    new_total=sum((cn['proposed'] for cn in proposals),Decimal(0));final=closing-new_total
+    given_work=[]
+    assignments=r.get('posted_cn_assignments',{})
+    prior_crop=defaultdict(lambda:Decimal(0))
+    for cn in cns:prior_crop[cn['crop']]+=max(D(0),cn['previous_issued'])
+    for eid,a in assignments.items():
+        e=next((e for e in entries if e['id']==eid),None)
+        if not e or e.get('kind')!='posted_cn':raise ValueError('Already-given CN must reference an actual posted credit note')
+        n=D(a.get('amount'));crop=a.get('crop');target_season=a.get('season')
+        if n<0 or n>D(e.get('credit')) or not crop or not target_season:raise ValueError('Choose CN crop, season and amount within the posted credit')
+        if target_season!=r['season'] or (r.get('period_accounting') and e['date']>r['period_accounting']['cutoff']):continue
+        relation=a.get('history_relation')
+        if relation not in (None,'','same_issued','separate'):raise ValueError('Choose a valid posted-CN history relation')
+        # Reproduce old frozen proof exactly; drafts must resolve ambiguous overlap.
+        explicit=r.get('status') not in ('finalised','issued') or r.get('cn_history_matching')=='explicit-v1'
+        if explicit and n and prior_crop[crop]>0 and not relation:
+            flag('Identify whether posted CN '+eid+' is the same app-issued CN or a separate CN',{'step':3,'entry':eid})
+        if explicit and relation=='same_issued' and n>prior_crop[crop]:
+            flag('Posted CN '+eid+' exceeds matching app-issued history in this calculation; review the document match',{'step':3,'entry':eid})
+        history_overlap=D(0) if explicit and relation=='separate' else min(n,prior_crop[crop])
+        prior_crop[crop]-=history_overlap
+        left=n-history_overlap
+        for cn in proposals:
+            sc=schemes.get(cn.get('scheme'),{})
+            if sc.get('crop')!=crop:continue
+            used=min(left,max(D(0),cn['proposed']));cn['proposed']-=used;left-=used
+        given_work.append({'entry':eid,'crop':crop,'season':target_season,'amount':n,'already_in_issued_history':history_overlap,'unabsorbed':left})
+        if left:info.append('Already-given CN exceeds current entitlement for '+crop+'; review '+eid)
+    proposals=[cn for cn in proposals if cn['proposed']!=0]
+    new_total=sum((cn['proposed'] for cn in proposals),Decimal(0));final=D(r['period_accounting']['closing'])-new_total if r.get('period_accounting') else closing-new_total
     distribute_product_cns(product_rows,cns,r)
-    return {'engine_version':VERSION,'ledger_computed':ledger,'ledger_closing':closing,'mismatch':mismatch,'CNs':cns,'proposals':proposals,'product_CNs':product_rows,'new_CN_total':new_total,'final_balance':final,'party_owes':max(Decimal(0),final),'excess_credit':max(Decimal(0),-final),'groups':groups,'sources':clearances,'unallocated':sum((max(Decimal(0),availability[k]-assigned[k]) for k in availability),Decimal(0)),'old_dues_remaining':due,'issues':issues,'issue_details':issue_details,'information':info,'stock_scope':{e['id']:stock_in_period(r,e,season) for e in entries if e.get('id') and e.get('kind') in ('sale','return','ipt_in','ipt_out')},'can_finalise':not issues}
+    return {'engine_version':VERSION,'ledger_computed':ledger,'ledger_closing':closing,'mismatch':mismatch,'CNs':cns,'proposals':proposals,'product_CNs':product_rows,**({'period_accounting':copy.deepcopy(r['period_accounting'])} if r.get('period_accounting') else {}),**({'already_given_CNs':given_work} if assignments else {}),'new_CN_total':new_total,'final_balance':final,'party_owes':max(Decimal(0),final),'excess_credit':max(Decimal(0),-final),'groups':groups,'sources':clearances,'unallocated':sum((max(Decimal(0),availability[k]-assigned[k]) for k in availability),Decimal(0)),'old_dues_remaining':due,'issues':issues,'issue_details':issue_details,'information':info,'stock_scope':{e['id']:stock_in_period(r,e,season) for e in entries if e.get('id') and e.get('kind') in ('sale','return','ipt_in','ipt_out')},'can_finalise':not issues}
 
 def apportion_rupees(total,weights):
     """Display attribution only: preserve every already-rounded benefit exactly."""

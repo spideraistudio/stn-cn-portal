@@ -157,6 +157,7 @@ class LedgerHTTPTests(unittest.TestCase):
         self.admin.request('/api/admin/users/'+ub['id'],{'permissions':['view_workspace','import_statements','edit_ledger']},'PATCH')
         self.assertEqual(b.request('/api/projects/import',{'backup':backup})[0],403)
 
+    @unittest.skipUnless((Path(__file__).resolve().parents[1]/'offline_baseline/fixtures/surendranagar_combined.pdf').exists(), 'Private 49-party PDF not supplied')
     def test_combined_pdf_all_49_parties(self):
         ua,a=self.user_browser();p,w=self.setup_book(a)
         raw=(Path(__file__).resolve().parents[1]/'offline_baseline/fixtures/surendranagar_combined.pdf').read_bytes()

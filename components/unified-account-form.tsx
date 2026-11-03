@@ -1,12 +1,23 @@
 'use client';
-import {useEffect,useState} from 'react';
+import {useEffect,useState,useRef} from 'react';
 import {CNStorageAllowance} from './cn-storage-allowance';
 const names=['view_workspace','edit_schemes','import_statements','edit_ledger','allocate_payments','finalise','issue_cn','export_print','delete_records','permanent_delete'];
 type State={user:{role:string;permissions:string[];user_quota_bytes:number};users:Array<{id:string;username:string;role:string}>};
 export function UnifiedAccountForm({memberId}:{memberId?:string|number}){
  const [message,setMessage]=useState(''),[busy,setBusy]=useState(false),[state,setState]=useState<State|null>(null);
+ const [usernameNote,setUsernameNote]=useState('');const usernameSequence=useRef(0);
+ async function checkUsername(value:string,required=false){
+  const sequence=++usernameSequence.current;setUsernameNote('Checking username…');
+  try{const me=await fetch('/api/me').then(r=>r.json());
+   const response=await fetch('/api/portal/username-availability',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':me.csrf_token},body:JSON.stringify({username:value,...(memberId?{member_id:String(memberId)}:{})})});
+   const result=await response.json();if(!response.ok)throw Error(result.error||'Unable to check username');
+   const text=result.available?'Username is available.':'This username is already registered. Choose a different username.';
+   if(sequence===usernameSequence.current)setUsernameNote(text);if(required&&!result.available)throw Error(text);
+  }catch(error){if(sequence===usernameSequence.current)setUsernameNote(error instanceof Error?error.message:'Unable to check username');if(required)throw error;}
+ }
  useEffect(()=>{fetch('/api/portal/state').then(r=>{if(!r.ok)throw Error('Unable to load permissions');return r.json()}).then(setState).catch(()=>setMessage('Unable to load permissions'))},[]);
  async function submit(e:React.FormEvent<HTMLFormElement>){e.preventDefault();const form=e.currentTarget;const f=new FormData(form);setBusy(true);setMessage('');try{
+ await checkUsername(String(f.get('username')||''),true);
  const me=await fetch('/api/me').then(r=>r.json());
  const body={username:f.get('username'),temporary_password:f.get('password'),permissions:f.getAll('permission'),cn:f.get('cn')==='on',stn:f.get('stn')==='on',quota_bytes:Number(f.get('quota'))*1048576,...(memberId?{member_id:String(memberId),max_users:Number(f.get('max_users')),user_quota_bytes:Number(f.get('user_quota'))*1048576,plan:f.get('plan'),starts_at:f.get('start')?new Date(String(f.get('start'))).getTime()/1000:null,ends_at:f.get('end')?new Date(String(f.get('end'))).getTime()/1000:null}:{parent_admin:f.get('parent_admin')||undefined})};
  const r=await fetch(memberId?'/api/portal-stn/approve':'/api/portal/provision',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':me.csrf_token},body:JSON.stringify(body)});const d=await r.json();if(!r.ok)throw Error(d.error||'Save failed');
@@ -17,7 +28,7 @@ export function UnifiedAccountForm({memberId}:{memberId?:string|number}){
  const input='block w-full min-w-0 rounded border p-2 text-slate-900 bg-white';
  return <section className="min-w-0 rounded-xl border bg-white p-3 text-slate-900 sm:p-5"><h2 className="font-semibold text-blue-900">{memberId?'Approve & create account':'Create staff user — login & permissions'}</h2>{<form onSubmit={submit} className="mt-4 grid min-w-0 grid-cols-1 gap-4 text-sm sm:grid-cols-2 [&>label]:min-w-0">
  <p className="sm:col-span-2">{memberId?'Approve this exact signup request and create its company administrator in one action.':'Create an individual user within the company admin’s granted limits.'}</p>
- <label>Username<input className={input} name="username" required autoComplete="off"/></label><label>Temporary password<input className={input} name="password" type="password" minLength={12} maxLength={128} required autoComplete="new-password"/></label>
+ <label>Username<input className={input} name="username" required minLength={3} maxLength={80} autoComplete="off" onChange={()=>{usernameSequence.current++;setUsernameNote('')}} onBlur={e=>{if(e.currentTarget.value)void checkUsername(e.currentTarget.value)}}/><small role="status">{usernameNote}</small></label><label>Temporary password<input className={input} name="password" type="password" minLength={12} maxLength={128} required autoComplete="new-password"/></label>
  <fieldset className="flex min-w-0 flex-wrap gap-x-6 gap-y-2 sm:col-span-2"><legend>Application access</legend><label><input name="cn" type="checkbox" defaultChecked/> CN Calculator</label><label><input name="stn" type="checkbox" defaultChecked={!!memberId}/> Seller Trust Network</label></fieldset>
  <fieldset className="grid min-w-0 grid-cols-1 gap-2 sm:col-span-2 sm:grid-cols-2"><legend>CN permissions</legend>{names.map(n=><label key={n}><input type="checkbox" name="permission" value={n} defaultChecked={n!=='permanent_delete'} disabled={!state||state.user.role!=='superadmin'&&!state.user.permissions.includes(n)}/> {n.replaceAll('_',' ')}</label>)}</fieldset>
  {state&&<CNStorageAllowance className={input} maximum={state.user.role==='superadmin'?undefined:Math.floor(state.user.user_quota_bytes/1048576)} defaultValue={memberId?1024:state.user.role==='superadmin'?250:Math.min(250,Math.floor(state.user.user_quota_bytes/1048576))}/>}

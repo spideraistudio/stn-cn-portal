@@ -93,7 +93,7 @@ class Accounts:
                        (uid, username, password_hash, int(admin), int(not admin), json.dumps(permissions), self.clock()))
             db.execute("INSERT INTO workspaces VALUES(?,?,1,?)", (uid, key, quota))
         except sqlite3.IntegrityError:
-            raise AuthError("That username is unavailable", 409) from None
+            raise AuthError("This username is already registered. Choose a different username.", 409) from None
         return uid
 
     def bootstrap(self, username, password, *, quota_bytes):
@@ -222,6 +222,23 @@ class Accounts:
                 if actor['role']=='superadmin' or value.get('parent_admin')==actor['id']:
                     result.append(value | storage_ops.status(db,row['id']))
             return result
+
+    def username_availability(self, token, value, member_id=None):
+        """Admin-only global uniqueness check; never disclose the owning account."""
+        name = self.username(value)
+        with self._tx() as db:
+            actor = self._session(db, token, admin=True)
+            existing = db.execute('SELECT id FROM users WHERE username=?', (name,)).fetchone()
+            retry = False
+            if member_id is not None:
+                if actor['role'] != 'superadmin':
+                    raise AuthError('Platform superadmin required', 403)
+                if not isinstance(member_id, str) or not member_id or len(member_id) > 100:
+                    raise AuthError('Invalid signup request', 400)
+                prepared = db.execute('SELECT user_id FROM portal_provisioning WHERE member_id=?', (member_id,)).fetchone()
+                retry = bool(existing and prepared and prepared['user_id'] == existing['id'])
+            return {'username': name, 'available': not bool(existing) or retry,
+                    'prepared_retry': retry}
 
     def create_user(self, token, *, username, temporary_password, permissions,
                     quota_bytes=None, role='user', parent_admin=None, max_users=5,

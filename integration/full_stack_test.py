@@ -18,6 +18,25 @@ from test_accounts_http import Browser
 from test_finish_http import FinishHTTPTests
 from case_number_checks import exercise_case_numbers
 
+def node_script(name,env):
+    """Optional compact acceptance resolves test tools outside the install tree."""
+    script=ROOT/'integration'/name
+    if os.environ.get('COMPACT_ACCEPTANCE')!='1':
+        return subprocess.run(['node',str(script)],env=env,cwd=ROOT,check=True)
+    source=script.read_text()
+    modules={'mongodb':ROOT/'runtime/tools/node_modules/mongodb/lib/index.js',
+             'playwright':Path(os.environ['COMPACT_PLAYWRIGHT_PACKAGE']),
+             '@sparticuz/chromium':Path(os.environ['CN_CHROMIUM_PACKAGE'])}
+    for module,file in modules.items():
+        source=source.replace("require('"+module+"')",'require('+json.dumps(str(file))+')')
+        esm=file.with_suffix('.mjs') if module=='playwright' else file
+        source=source.replace("from '"+module+"'","from '"+esm.as_uri()+"'")
+        source=source.replace("import('"+module+"')","import('"+esm.as_uri()+"')")
+    with tempfile.NamedTemporaryFile(mode='w',suffix=script.suffix,prefix='.compact-acceptance-',dir=script.parent,delete=False) as out:
+        out.write(source);temporary=Path(out.name)
+    try:return subprocess.run(['node',str(temporary)],env=env,cwd=ROOT,check=True)
+    finally:temporary.unlink(missing_ok=True)
+
 PASSWORD='Synthetic integration password 2026!'
 def port():
     with socket.socket() as s:s.bind(('127.0.0.1',0));return s.getsockname()[1]
@@ -26,7 +45,7 @@ def check(code,expected,body):
 def main():
     dbname='integration_e2e_'+uuid.uuid4().hex
     env={**os.environ,'MONGODB_URI':'mongodb://127.0.0.1:27017/'+dbname,'STN_MONGO_TLS':'0','NEXT_TELEMETRY_DISABLED':'1'}
-    subprocess.run(['node',str(ROOT/'integration/seed_fixture.mjs')],env=env,cwd=ROOT,check=True)
+    node_script('seed_fixture.mjs',env)
     with tempfile.TemporaryDirectory(prefix='stn-cn-e2e-') as temp:
         data=Path(temp)/'cn';a=PortalAccounts(data);a.bootstrap('platform',PASSWORD,quota_bytes=1024**3)
         root=a.login('platform',PASSWORD,'synthetic')
@@ -50,7 +69,7 @@ def main():
             raise RuntimeError('STN startup timed out')
         try:
             start_ready()
-            subprocess.run(['node',str(ROOT/'integration/browser_public.mjs')],cwd=ROOT,env={**env,'PUBLIC_BROWSER_INFO':json.dumps({'origin':origin,'admin_username':'platform','admin_password':PASSWORD})},check=True)
+            node_script('browser_public.mjs',{**env,'PUBLIC_BROWSER_INFO':json.dumps({'origin':origin,'admin_username':'platform','admin_password':PASSWORD})})
             admin=Browser(origin);admin.login('platform',PASSWORD)
             signup={'member_id':str(4).zfill(24),'username':'signup-company-admin','temporary_password':PASSWORD,'permissions':sorted(PERMISSIONS),'cn':True,'stn':True,'max_users':5,'quota_bytes':1024**3,'user_quota_bytes':250*1024**2}
             code,created,_=admin.request('/api/portal-stn/approve',signup);check(code,200,created)
@@ -136,9 +155,9 @@ def main():
             print('PASS CN PDF import, original evidence, exact ₹38,561 result, finalise/issue, reports/CSV, frozen history, individual isolation including platform admin, independent export/import and separate STN accounting',flush=True)
             # Browser checks use the same gateway and actual STN/CN services.
             info={'origin':origin,'username':'buyer-admin','password':PASSWORD+' changed','project':p['id'],'workbook':w['id'],'admin_username':'platform','admin_password':PASSWORD,'case_report_id':case_report_id}
-            subprocess.run(['node',str(ROOT/'integration/browser_case_numbers.cjs')],cwd=ROOT,env={**env,'INTEGRATION_BROWSER_INFO':json.dumps(info)},check=True)
-            subprocess.run(['node',str(ROOT/'integration/browser_combined.cjs')],cwd=ROOT,env={**env,'INTEGRATION_BROWSER_INFO':json.dumps(info)},check=True)
-            subprocess.run(['node',str(ROOT/'integration/browser_stn_navigation.cjs')],cwd=ROOT,env={**env,'INTEGRATION_BROWSER_INFO':json.dumps(info)},check=True)
+            node_script('browser_case_numbers.cjs',{**env,'INTEGRATION_BROWSER_INFO':json.dumps(info)})
+            node_script('browser_combined.cjs',{**env,'INTEGRATION_BROWSER_INFO':json.dumps(info)})
+            node_script('browser_stn_navigation.cjs',{**env,'INTEGRATION_BROWSER_INFO':json.dumps(info)})
             code,out,_=admin.request('/api/portal/access',{'user_id':people[0][0]['id'],'stn':False});check(code,200,out)
             assert buyer.request('/api/member/seed-browse')[0]==403
             for path in ['/api/member/seed-requests','/api/member/seed-quote-history','/api/notifications','/api/portal-stn/storage']:
@@ -168,7 +187,8 @@ def main():
             log.close()
     print('PASS full stack integration journey (Linux; Windows acceptance pending)',flush=True)
 if __name__=='__main__':
-    mongo=subprocess.Popen(['node',str(ROOT/'integration/mongo_local.mjs')],cwd=ROOT,env={**os.environ,'STN_DISPOSABLE_MONGO':'1'},stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
+    mongo_script=ROOT/('runtime/tools/integration/mongo_local.mjs' if os.environ.get('COMPACT_ACCEPTANCE')=='1' else 'integration/mongo_local.mjs')
+    mongo=subprocess.Popen(['node',str(mongo_script)],cwd=ROOT,env={**os.environ,'STN_DISPOSABLE_MONGO':'1'},stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
     try:
         for line in mongo.stdout:
             print(line,end='',flush=True)

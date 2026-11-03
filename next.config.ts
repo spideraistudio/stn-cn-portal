@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 import path from "node:path";
 
 const nextConfig: NextConfig = {
+  // Compact offline setup uses a traced runtime; other build workflows retain their output setting.
+  ...(process.env.CN_COMPACT_BUILD === "1" ? { output: "standalone" as const } : {}),
   // Hostinger injects output:"standalone" itself and starts the bundled server.
   // Pinning the tracing root keeps that standalone output inside this app folder
   // even when another lockfile exists above the checkout on the build machine.

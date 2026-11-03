@@ -120,6 +120,20 @@ class NativeInterfaceTests(unittest.TestCase):
         self.admin.request('/api/admin/users/'+u['id'],{'permissions':list(PERMISSIONS)},'PATCH')
         second=self.imported(b,w,'mapping_b.pdf');self.assertTrue(any(i.get('product')==p['id'] for e in second['entries'] for i in e.get('items',[])))
 
+    def test_mapping_updates_already_imported_parties(self):
+        _,b=self.user_browser();_,w=self.setup_book(b);self.config(b,w)
+        first=self.imported(b,w,'mapping_a.pdf');second=self.imported(b,w,'mapping_b.pdf')
+        entry=next(e for e in first['entries'] if e.get('items'));item=entry['items'][0]
+        before=copy.deepcopy(second)
+        code,out,_=self.calc(b,w,'native-map',{'id':first['id'],'revision':first['revision'],'entry_id':entry['id'],'item_index':0,'crop':'Maize','name':item['name'],'packing':item.get('mapping_suggestion',{}).get('detected_packing_kg') or '4'})
+        self.assertEqual(code,200,out)
+        code,opened,_=self.calc(b,w,'record',{'id':second['id']});self.assertEqual(code,200,opened)
+        updated=opened['record']
+        self.assertTrue(any(i.get('product')==out['product_id'] for e in updated['entries'] for i in e.get('items',[])))
+        self.assertEqual([(e['date'],e['debit'],e['credit']) for e in updated['entries']],[(e['date'],e['debit'],e['credit']) for e in before['entries']])
+        self.assertEqual(updated['allocations'],before['allocations'])
+        self.assertGreater(updated['revision'],before['revision'])
+
     def test_audit_and_year_link_use_canonical_owned_files(self):
         _,b=self.user_browser();_,w=self.setup_book(b);self.config(b,w)
         docs=[]

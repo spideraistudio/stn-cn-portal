@@ -5,11 +5,14 @@ umask 077
 [[ $EUID -eq 0 ]] || { echo 'Run as root on the target VPS'; exit 1; }
 release_sha=${1:?Pass the exact reviewed 40-character commit SHA}
 [[ $release_sha =~ ^[0-9a-f]{40}$ ]] || { echo 'Full commit SHA required'; exit 1; }
+release_ref=${2:-fix/combined-portal-production}
+[[ $release_ref == fix/combined-portal-production || $release_ref == release/* ]] || { echo 'Use the production or an explicit release/ branch'; exit 1; }
+git check-ref-format --branch "$release_ref" >/dev/null
 source_repo=/srv/stn-cn/repository
 release_dir=/srv/stn-cn/releases/$release_sha
 [[ ! -e $release_dir ]] || { echo 'Release already exists; refusing overwrite'; exit 1; }
-git -C "$source_repo" fetch origin fix/combined-portal-production
-git -C "$source_repo" merge-base --is-ancestor "$release_sha" origin/fix/combined-portal-production
+git -C "$source_repo" fetch origin "refs/heads/$release_ref:refs/remotes/origin/$release_ref"
+git -C "$source_repo" merge-base --is-ancestor "$release_sha" "refs/remotes/origin/$release_ref"
 install -d -m 0755 -o stnnode -g stnnode "$release_dir"
 git -C "$source_repo" archive "$release_sha" | tar -x -C "$release_dir"
 chown -R stnnode:stnnode "$release_dir"

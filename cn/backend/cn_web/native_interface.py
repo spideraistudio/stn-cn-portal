@@ -137,6 +137,69 @@ class NativeInterface:
 
     def execute(self,db,u,project,workbook,meta,s,st,action,b):
         need=lambda p:require_permission(u,p)
+        if action=='native-accounting-review':
+            need('edit_ledger');need('allocate_payments')
+            fields(b,{'id','revision','evidence','reason','same_day_order'})
+            r=Store.get(st,b['id'])
+            if r['status']!='draft' or r.get('deleted_at') or r['revision']!=b['revision']:raise AuthError('Reload the current draft',409)
+            projected=st.project(r);plan=projected['period_accounting']
+            if b['evidence']!=plan['review_evidence']:raise AuthError('Accounting evidence changed. Reopen review.',409)
+            reason=text(b['reason'],'review reason',2000).strip()
+            if len(reason)<12:raise AuthError('Explain the verified bill allocation/order (at least 12 characters)',400)
+            dates={i['date'] for i in plan['review_items'] if i['kind']=='same_day_order'}
+            if not isinstance(b['same_day_order'],dict) or set(b['same_day_order'])!=dates or any(v not in ('source','cn_first','receipt_first') for v in b['same_day_order'].values()):raise AuthError('Choose the verified order for every listed date',400)
+            source=self.ledger.ledger(s,r['web_source']['ledger_id'])
+            source.setdefault('accounting_reviews',{})[r['season']]={'evidence':b['evidence'],'reason':reason,'same_day_order':b['same_day_order'],'actor':u['id'],'reviewed_at':now()}
+            _,rev,_=self.ledger.load(db,u['id'],workbook)
+            self.ledger.save(db,u['id'],workbook,rev,s,'accounting_fallback_reviewed',source['id'])
+            saved=None
+            for draft in st.all():
+                if draft.get('status')=='draft' and not draft.get('deleted_at') and draft.get('web_source',{}).get('ledger_id')==source['id']:
+                    current=self.refresh(st,s,draft)
+                    if draft['id']==r['id']:saved=current
+            return saved
+        if action in ('native-given-cn','native-settlement-reference'):
+            need('edit_ledger');need('allocate_payments')
+            fields(b,{'id','revision','entry','value'})
+            r=Store.get(st,b['id'])
+            if r['status']!='draft' or r['revision']!=b['revision']:raise AuthError('Reload the current draft',409)
+            st.project(r)
+            source=self.ledger.ledger(s,r['web_source']['ledger_id'])
+            entry=next((e for e in source['document']['entries'] if e['id']==b['entry']),None)
+            if not entry:raise AuthError('Source transaction not found',404)
+            if action=='native-given-cn':
+                if entry['kind']!='posted_cn':raise AuthError('Choose a posted benefit CN, not freight or material return',400)
+                value=b['value'];key='posted_cn_assignments'
+                if value:
+                    fields(value,{'crop','season','amount'},{'history_relation'})
+                    if value.get('history_relation') not in (None,'','same_issued','separate'):raise AuthError('Choose same app-issued CN or separate CN',400)
+                    if value['crop'] not in {p['crop'] for p in st.settings()['products']} or value['season'] not in {p['name'] for p in s['periods']}:raise AuthError('Choose a saved crop and season',400)
+                    if not 0<=number(value['amount'])<=number(entry['credit']):raise AuthError('CN amount exceeds posted credit',400)
+            else:
+                if entry['kind']!='receipt':raise AuthError('Choose a receipt',400)
+                key='settlement_references';value=b['value']
+                matches=[e for e in source['document']['entries'] if e.get('reference')==value and e['kind']=='sale' and e['date']<=entry['date']]
+                if value and len(matches)!=1:raise AuthError('Choose one unambiguous invoice posted before the receipt',400)
+            source.setdefault(key,{})
+            if value:source[key][entry['id']]=copy.deepcopy(value)
+            else:source[key].pop(entry['id'],None)
+            _,rev,_=self.ledger.load(db,u['id'],workbook)
+            self.ledger.save(db,u['id'],workbook,rev,s,'workbook_posting_reviewed',source['id'])
+            # Refresh all affected drafts atomically; reject if existing splits no longer fit.
+            saved=None
+            for draft in st.all():
+                if draft.get('status')=='draft' and not draft.get('deleted_at') and draft.get('web_source',{}).get('ledger_id')==source['id']:
+                    current=self.refresh(st,s,draft)
+                    if draft['id']==r['id']:saved=current
+            return saved
+        if action=='native-workbook-period':
+            need('edit_ledger')
+            fields(b,{'season'})
+            if not any(p['name']==b['season'] for p in s['periods']):raise AuthError('Choose a saved calculation period',400)
+            s['selected_period']=b['season']
+            _,rev,_=self.ledger.load(db,u['id'],workbook)
+            self.ledger.save(db,u['id'],workbook,rev,s,'workbook_calculation_period_selected')
+            return {'season':b['season']}
         if action.startswith('native-payment-history-'):
             from prior_payments import party_match, analyse, attach
             need('allocate_payments')
@@ -156,7 +219,6 @@ class NativeInterface:
                 return {'previous':b['documents'][i],'match':party_match(previous,current),'plan':analyse(previous,current,start,end.isoformat())}
             if action=='native-payment-history-unlink':
                 need('edit_ledger')
-                import copy
                 candidate=copy.deepcopy(r)
                 ids={x['id'] for x in r.get('reserved_sources',[])}|{x['id'] for x in r.get('opening_sources',[]) if x.get('year_link_receipt')}
                 if any(a.get('source') in ids for a in r.get('allocations',[])):
@@ -257,7 +319,7 @@ class NativeInterface:
             for source in s['ledgers']:
                 if source['superseded_by'] or any(r.get('web_source',{}).get('ledger_id')==source['id'] for r in out['records']):continue
                 doc=self.ledger.effective(source,s)
-                out['records'].append({**doc,'id':'source:'+source['id'],'revision':0,'status':'draft','season':st.settings()['seasons'][0]['name'],'allocations':[],'cash_splits':[],'opening_sources':[],'native_saved_source':True})
+                out['records'].append({**doc,'id':'source:'+source['id'],'revision':0,'status':'draft','season':st.settings()['seasons'][0]['name'],'allocations':[],'cash_splits':[],'opening_sources':[],'native_saved_source':True,'web_source':self.bind(s,source)})
             return out
         if action=='native-bulk-register':
             need('import_statements');need('edit_ledger');fields(b,{'file_id','season'})
@@ -335,6 +397,26 @@ class NativeInterface:
             for e in r['entries']:
                 if e['id']==b['entry_id']:e['web_review']=copy.deepcopy(review);e['correction_reason']=b['reason']
             return st.save(r)
+        if action in ('native-workbook-map-context','native-workbook-map'):
+            need('edit_ledger')
+            required={'ledger_id','entry_id','item_index'}
+            fields(b,required if action.endswith('context') else required|{'evidence','crop','name','packing'})
+            source=self.ledger.ledger(s,b['ledger_id'])
+            entry=next((e for e in source['document']['entries'] if e['id']==b['entry_id']),None)
+            if not entry:raise AuthError('Original stock entry not found',404)
+            from .ledger_service import index
+            item=index(b['item_index'],entry.get('items',[]))
+            evidence=digest(source)
+            if action.endswith('context'):
+                effective=self.ledger.effective(source,s)
+                mapped=next(e for e in effective['entries'] if e['id']==entry['id'])['items'][b['item_index']]
+                return {'evidence':evidence,'item':mapped,'crops':list(dict.fromkeys(st.settings().get('crops',[])+[p['crop'] for p in s['catalogue']]))}
+            if b['evidence']!=evidence:raise AuthError('Mapping source changed. Reopen this product mapping.',409)
+            product=self.mapping_product(u,s,st,item,b)
+            affected=self.apply_workbook_mapping(db,u,workbook,s,st,item,product)
+            for draft in st.all():
+                if draft.get('status')=='draft' and not draft.get('deleted_at') and draft.get('web_source',{}).get('ledger_id') in affected:self.refresh(st,s,draft)
+            return {'product_id':product['id']}
         if action=='native-map':return self.mapping(db,u,workbook,s,st,b)
         if action in ('native-audit-product-context','native-audit-product-save'):
             fields(b,{'source','entry_id','item_index'},{'revision','evidence','crop','name','packing'})
@@ -487,10 +569,13 @@ class NativeInterface:
         from .product_mapping import identity as mapping_identity, compatible as packing_compatible
         item=index(b['item_index'],source['document']['entries'][ei].get('items',[]))
         product=self.mapping_product(u,s,st,item,b)
-        for i,e in enumerate(source['document']['entries']):
-            for j,other in enumerate(e.get('items',[])):
-                if mapping_identity(other)==mapping_identity(item):source['mappings'][f'{i}:{j}']=product['id']
-        _,rev,_=self.ledger.load(db,u['id'],workbook);self.ledger.save(db,u['id'],workbook,rev,s,'native_product_mapped',source['id'])
+        affected=self.apply_workbook_mapping(db,u,workbook,s,st,item,product)
+        # Refresh drafts only; finalised and issued records retain their frozen proof.
+        # Saved allocation rows stay intact. Stale open tabs are rejected by revision.
+        for draft in st.all():
+            if draft['id']==r['id'] or draft.get('deleted_at') or draft.get('status')!='draft':continue
+            if draft.get('web_source',{}).get('ledger_id') in affected:
+                self.refresh(st,s,draft)
         effective=self.ledger.effective(source,s);by_id={e['id']:e for e in effective['entries']}
         for e in r['entries']:
             if e['id'] not in by_id:continue
@@ -499,6 +584,22 @@ class NativeInterface:
                     if key in new:old[key]=new[key]
         r.update(web_source=self.bind(s,source),ledger_confirmed=False)
         return {'record':st.save(r),'product_id':product['id']}
+
+    def apply_workbook_mapping(self,db,u,workbook,s,st,item,product):
+        from .product_mapping import identity as mapping_identity
+        affected=[]
+        for candidate in s['ledgers']:
+            if candidate.get('superseded_by'):continue
+            changed=False
+            for i,e in enumerate(candidate['document']['entries']):
+                for j,other in enumerate(e.get('items',[])):
+                    if mapping_identity(other)==mapping_identity(item):
+                        key=f'{i}:{j}'
+                        if candidate['mappings'].get(key)!=product['id']:
+                            candidate['mappings'][key]=product['id'];changed=True
+            if changed:affected.append(candidate['id'])
+        _,rev,_=self.ledger.load(db,u['id'],workbook);self.ledger.save(db,u['id'],workbook,rev,s,'workbook_product_mapped')
+        return affected
 
     def refresh(self,st,s,r):
         original=self.ledger.ledger(s,r['web_source']['ledger_id'],False)

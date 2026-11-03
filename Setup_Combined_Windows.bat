@@ -9,12 +9,9 @@ node -e "const [m,n]=process.versions.node.split('.').map(Number);process.exit((
 if errorlevel 1 goto node_missing
 python -c "import sys; sys.exit(0 if sys.version_info >= (3,10) else 1)"
 if errorlevel 1 goto python_missing
-call npm ci --ignore-scripts
-if errorlevel 1 goto failed
 python -m pip install -r cn\offline_baseline\requirements.txt
 if errorlevel 1 goto failed
-set NEXT_PUBLIC_COMMON_PORTAL=1
-call npm run build
+python integration\setup_compact.py
 if errorlevel 1 goto failed
 echo.
 echo Setup complete. Read START_HERE_WINDOWS.md.

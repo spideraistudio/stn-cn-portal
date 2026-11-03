@@ -39,6 +39,11 @@ def main():
                 info[label]=out['id']
         else:
             case.config(browser, workbook)
+        if os.environ.get('CN_BROWSER_CASE')=='accounting-review':
+            from test_payment_guard_review import statement
+            code,out,_=case.calc(browser,workbook,'native-import',{'data':statement(),'filename':'same-day.pdf','season':'Rabi'})
+            assert code==200,out
+            info['recordId']=out['native_record']['id']
         child = subprocess.Popen(
             ['node', str(ROOT / 'tests' / os.environ.get('CN_BROWSER_TEST','browser_phase63_offline.cjs'))],
             env={**os.environ, 'CN_FLOW_INFO': json.dumps(info)},

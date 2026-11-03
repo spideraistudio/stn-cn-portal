@@ -97,3 +97,11 @@ cn/offline_baseline/fixtures/*.pdf
 *.zip
 *.bundle
 integration-data*/
+
+# Generated compact install/build trees
+runtime/
+runtime-stage-*/
+runtime-rollback-*/
+.compact-build-*/
+.compact-setup.lock
+integration/.compact-acceptance-*

@@ -8,3 +8,8 @@
 
 #billing-audit-panel .billing-source-option{display:flex;align-items:center;gap:10px;margin:14px 0}
 #billing-audit-panel #billing-include-saved{width:auto;margin:0;flex:none}
+
+/* Shared workflow dialogs must retain readable copy in Navy Studio. */
+html[data-cn-theme="studio"] .cn-workflow-dialog p:not(.warn){color:#b4c9dc}
+html[data-cn-theme="studio"] .cn-workflow-dialog #cn-scope-error{color:#ffc9ad}
+.cn-workflow-dialog .check{padding:5px 0}

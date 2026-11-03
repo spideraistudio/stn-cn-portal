@@ -1,3 +1,7 @@
+# Existing-site candidate update
+
+Read ../RELEASE_READINESS_2026_11_03.md before using historical fresh-server instructions below. Existing-site updates must preserve live keys/data/accounts and follow staging/backup/activation controls. prepare-release.sh accepts an explicit release/ branch as its second argument; preparation never activates a release.
+
 # Stage 2 — production configuration, not a live deployment
 
 This configuration targets a **fresh Ubuntu 24.04 LTS VPS** and an approved
