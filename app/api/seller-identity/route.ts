@@ -26,13 +26,13 @@ export async function POST(request: Request) {
     const [identity, totals] = await Promise.all([
       db
         .prepare(
-          "SELECT r.seller_id,r.firm_name,r.taluka,r.district,r.state,r.pincode,s.gst_last4 FROM seller_reports r JOIN sellers s ON s.id=r.seller_id JOIN members m ON m.id=r.member_id WHERE r.category=? AND s.gst_lookup=? AND r.status='approved' AND m.is_pilot=? ORDER BY COALESCE(r.reviewed_at,r.created_at) DESC LIMIT 1",
+          "SELECT r.seller_id,r.firm_name,r.taluka,r.district,r.state,r.pincode,s.gst_last4 FROM seller_reports r JOIN sellers s ON s.id=r.seller_id JOIN members m ON m.id=r.member_id WHERE r.category=? AND s.gst_lookup=? AND r.status='approved' AND COALESCE(m.is_pilot,0)=? ORDER BY COALESCE(r.reviewed_at,r.created_at) DESC LIMIT 1",
         )
         .bind(member.category, key, Number(member.isPilot))
         .first<Record<string, unknown>>(),
       db
         .prepare(
-          "SELECT count(*) report_count,avg(rating) average_rating FROM seller_reports r JOIN sellers s ON s.id=r.seller_id JOIN members m ON m.id=r.member_id WHERE r.category=? AND s.gst_lookup=? AND r.status='approved' AND m.is_pilot=?",
+          "SELECT count(*) report_count,avg(rating) average_rating FROM seller_reports r JOIN sellers s ON s.id=r.seller_id JOIN members m ON m.id=r.member_id WHERE r.category=? AND s.gst_lookup=? AND r.status='approved' AND COALESCE(m.is_pilot,0)=?",
         )
         .bind(member.category, key, Number(member.isPilot))
         .first<{ report_count: number; average_rating: number }>(),

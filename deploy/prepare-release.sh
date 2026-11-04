@@ -8,6 +8,7 @@ release_sha=${1:?Pass the exact reviewed 40-character commit SHA}
 release_ref=${2:-fix/combined-portal-production}
 [[ $release_ref == fix/combined-portal-production || $release_ref == release/* ]] || { echo 'Use the production or an explicit release/ branch'; exit 1; }
 git check-ref-format --branch "$release_ref" >/dev/null
+build_python=${STN_BUILD_PYTHON:-python3}
 source_repo=/srv/stn-cn/repository
 release_dir=/srv/stn-cn/releases/$release_sha
 [[ ! -e $release_dir ]] || { echo 'Release already exists; refusing overwrite'; exit 1; }
@@ -18,7 +19,7 @@ git -C "$source_repo" archive "$release_sha" | tar -x -C "$release_dir"
 chown -R stnnode:stnnode "$release_dir"
 cd "$release_dir"
 runuser -u stnnode -- npm ci --include=dev
-runuser -u stnnode -- python3 -m venv .venv
+runuser -u stnnode -- "$build_python" -m venv .venv
 runuser -u stnnode -- .venv/bin/pip install -r deploy/requirements.txt
 # Build needs combined-mode public flag, never production database credentials.
 runuser -u stnnode -- env NODE_ENV=production NEXT_PUBLIC_COMMON_PORTAL=1 NEXT_TELEMETRY_DISABLED=1 npm run build

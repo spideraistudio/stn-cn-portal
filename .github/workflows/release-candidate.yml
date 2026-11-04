@@ -40,6 +40,8 @@ jobs:
       - name: Compact installation controls
         run: python integration/test_compact_runtime.py
       - run: npm ci --ignore-scripts
+      - name: Registration and approved seller visibility
+        run: node --import tsx --test tests/seller-search-pilot.test.mjs tests/registration-errors.test.mjs
       - name: Combined production build and TypeScript
         run: npm run build
       - name: Allocation UI functions
