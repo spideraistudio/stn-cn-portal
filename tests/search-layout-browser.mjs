@@ -17,8 +17,8 @@ const bundle = (await require('esbuild').build({
     }));
   }}],
 })).outputFiles[0].text;
-const css = fs.readdirSync('.next/static/chunks').filter(n => n.endsWith('.css'))
-  .map(n => fs.readFileSync('.next/static/chunks/' + n, 'utf8')).join('\n')
+const css = fs.readdirSync('.next/static', {recursive:true}).filter(n => n.endsWith('.css'))
+  .map(n => fs.readFileSync('.next/static/' + n, 'utf8')).join('\n')
   + fs.readFileSync('cn/backend/cn_web/calculator_static/suite-theme.css', 'utf8');
 const browser = await chromium.launch({executablePath: process.env.STN_BROWSER_EXECUTABLE || undefined,
   args: ['--no-sandbox', '--single-process', '--no-zygote', '--disable-dev-shm-usage'], env: process.env});
@@ -68,7 +68,7 @@ try {
       const last = document.querySelector('.stn-dashboard .stn-action-card:last-child') || document.querySelector('.stn-search-results');
       const end = last.getBoundingClientRect(), box = scroll.getBoundingClientRect();
       return {owners:owners.map(e=>e.className), bodyHeight:document.documentElement.scrollHeight,
-        bodyWidth:document.documentElement.scrollWidth, atEnd:end.bottom <= box.bottom-50, atStart:end.top >= box.top,
+        bodyWidth:document.documentElement.scrollWidth, atEnd:end.bottom <= box.bottom-parseFloat(getComputedStyle(scroll).paddingBottom)+1, atStart:end.top >= box.top,
         owner: owners[0]?.hasAttribute('data-workspace-scroll')};
     });
     assert(result.owners.length <= 1 && (result.owners.length === 0 || result.owner), JSON.stringify(result));

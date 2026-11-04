@@ -52,3 +52,5 @@ jobs:
         run: |
           npx playwright install --with-deps chromium
           CN_BROWSER_TEST=browser_period_update.cjs python cn/tests/run_phase6_browser_flow.py
+          node tests/report-layout-browser.mjs
+          node tests/search-layout-browser.mjs

@@ -14,7 +14,7 @@ function shouldHide(path: string) {
   );
 }
 
-export function ThemeToggle() {
+export function ThemeToggle({ inline = false }: { inline?: boolean }) {
   const pathname = usePathname();
   const { theme, resolvedTheme, setTheme } = useTheme();
   const [ready, setReady] = useState(false);
@@ -30,7 +30,10 @@ export function ThemeToggle() {
     if (!combined && shouldHide(pathname)) setTheme("light");
   }, [pathname, setTheme]);
 
-  if (combined) return <label className="fixed bottom-4 right-4 z-40 flex items-center gap-2 rounded-xl border bg-card px-3 py-2 text-xs text-card-foreground shadow-lg">Appearance<select aria-label="Appearance" value={ready && theme === "classic" ? "classic" : "studio"} onChange={e=>setTheme(e.target.value)} className="rounded-md border px-2 py-1"><option value="classic">Classic Emerald</option><option value="studio">Navy Studio</option></select></label>;
+  const workspace = pathname === "/member" || pathname.startsWith("/member/") || pathname === "/admin" || pathname.startsWith("/admin/");
+  if (combined && workspace && !inline) return null;
+  if (!combined && inline) return null;
+  if (combined) return <label className={inline ? "stn-appearance flex shrink-0 items-center gap-2 rounded-xl border bg-card px-2 py-1 text-xs text-card-foreground" : "fixed bottom-4 right-4 z-40 flex items-center gap-2 rounded-xl border bg-card px-3 py-2 text-xs text-card-foreground shadow-lg"}>Appearance<select aria-label="Appearance" value={ready && theme === "classic" ? "classic" : "studio"} onChange={e=>setTheme(e.target.value)} className="rounded-md border px-2 py-1"><option value="classic">Classic Emerald</option><option value="studio">Navy Studio</option></select></label>;
   if (shouldHide(pathname)) return null;
 
   const dark = ready && resolvedTheme === "dark";
