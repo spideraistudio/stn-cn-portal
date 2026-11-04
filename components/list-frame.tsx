@@ -9,17 +9,20 @@ export function ListFrame({
   children,
   footer,
   tone = "list",
+  contained = false,
 }: {
   header?: ReactNode;
   children: ReactNode;
   footer?: ReactNode;
   /** list = white table canvas; detail = soft grey XPRO detail canvas */
   tone?: "list" | "detail";
+  /** Keep a form inside its parent instead of cancelling list padding. */
+  contained?: boolean;
 }) {
   const canvas = tone === "detail" ? "bg-[#f5f7fb]" : "bg-white";
   return (
     <div
-      className={`-m-4 flex h-[calc(100%+2rem)] min-h-0 flex-col overflow-hidden sm:-m-5 sm:h-[calc(100%+2.5rem)] lg:-m-6 lg:h-[calc(100%+3rem)] ${canvas}`}
+      className={`flex min-h-0 flex-col overflow-hidden ${contained ? "h-full" : "-m-4 h-[calc(100%+2rem)] sm:-m-5 sm:h-[calc(100%+2.5rem)] lg:-m-6 lg:h-[calc(100%+3rem)]"} ${canvas}`}
     >
       {header ? (
         <div className="shrink-0 border-b border-slate-100 bg-white">{header}</div>

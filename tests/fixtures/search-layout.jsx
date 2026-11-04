@@ -3,6 +3,7 @@ import {createRoot} from 'react-dom/client';
 import {WorkspaceShell} from '../../components/workspace-shell';
 import {MemberDashboard} from '../../components/member-dashboard';
 import {SellerSearch} from '../../components/seller-search';
+import {ReportForm} from '../../components/report-form';
 import {ReportShell} from '../../components/report-shell';
 import {ThemeProvider} from '../../components/theme-provider';
 import {ThemeToggle} from '../../components/theme-toggle';
@@ -35,7 +36,11 @@ const profile = {
   companyName: 'Sample Crop Science Company', responsiblePersonName: 'Sample member',
   categoryLabel: 'Agriculture', searchEnabled: !location.search.includes('disabled'), isPilot: true,
 };
-const page = location.pathname === '/member/sellers'
+const edit = location.pathname.includes('/reports/');
+const initialReport = edit ? {id:'layout-only-report',status:location.search.includes('approved')?'approved':'pending',gstin:'24ABCDE1234F1Z5',firm_name:'Synthetic Seller',taluka:'Himatnagar',district:'Sabarkantha',state:'Gujarat',pincode:'383001',rating:7,dispute:0,legal:0,summary:'Saved report text',documents:[]} : undefined;
+const page = location.pathname === '/member/submit-report' || edit
+  ? <ReportShell title={edit?'Edit report':'Submit report'} description="Provide factual business information. Admin approval is required before other members can find it."><ReportForm initial={initialReport}/></ReportShell>
+  : location.pathname === '/member/sellers'
   ? <ReportShell flow title="Search sellers" description="Search approved business experience reports within your assigned category."><SellerSearch categoryLabel="Agriculture"/></ReportShell>
   : <MemberDashboard profile={profile} preview={location.search.includes('preview')}/>;
 createRoot(document.getElementById('root')).render(

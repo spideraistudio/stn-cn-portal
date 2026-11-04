@@ -140,7 +140,7 @@ export function ReportForm({ initial }: { initial?: EditableReport }) {
 
   if (success) {
     return (
-      <ListFrame tone="detail">
+      <ListFrame tone="detail" contained>
         <div className="p-4 sm:p-5">
           <section className="rounded-[12px] border border-emerald-200 bg-white p-5">
             <h2 className="text-[15px] font-semibold text-slate-900">
@@ -172,7 +172,7 @@ export function ReportForm({ initial }: { initial?: EditableReport }) {
 
   return (
     <form
-      className="h-full min-h-0"
+      className="stn-report-form h-full min-h-0"
       onSubmit={async event => {
         event.preventDefault();
         const form = new FormData(event.currentTarget);
@@ -305,8 +305,9 @@ export function ReportForm({ initial }: { initial?: EditableReport }) {
     >
       <ListFrame
         tone="detail"
+        contained
         footer={
-          <div className="space-y-2 px-4 py-3 sm:px-5">
+          <div className="stn-report-actions space-y-2 px-4 py-2 sm:px-5">
             {error && (
               <p
                 role="alert"
@@ -350,7 +351,7 @@ export function ReportForm({ initial }: { initial?: EditableReport }) {
           )}
 
           <DetailSection title="Seller identity">
-            <div className="space-y-3">
+            <div className="stn-seller-identity grid gap-3 sm:grid-cols-2">
               <label className="block">
                 <span className={labelClass}>Seller GSTIN *</span>
                 <input
@@ -413,7 +414,14 @@ export function ReportForm({ initial }: { initial?: EditableReport }) {
                   }
                 />
               </label>
-              <p className="text-[12px] text-slate-500">
+              <Field
+                key={`${identityFieldsKey}-firm`}
+                name="firmName"
+                label="Firm name"
+                readOnly={identityLocked}
+                defaultValue={seller?.firm_name || initial?.firm_name}
+              />
+              <p className="sm:col-span-2 text-[12px] text-slate-500">
                 {initial
                   ? `GSTIN is locked after submission and ends in ${initial.gstin.slice(-4)}.`
                   : checkingSeller
@@ -423,7 +431,7 @@ export function ReportForm({ initial }: { initial?: EditableReport }) {
                       : "Enter the complete GSTIN. Matching sellers autofill firm name and location."}
               </p>
               {seller && (
-                <div className="rounded-[12px] border border-emerald-200 bg-emerald-50 px-3.5 py-3">
+                <div className="sm:col-span-2 rounded-[12px] border border-emerald-200 bg-emerald-50 px-3.5 py-3">
                   <p className="text-[13px] font-semibold text-emerald-950">
                     {seller.firm_name} · {seller.report_count} report(s) · avg{" "}
                     {seller.average_rating}/10
@@ -434,13 +442,6 @@ export function ReportForm({ initial }: { initial?: EditableReport }) {
                   </p>
                 </div>
               )}
-              <Field
-                key={`${identityFieldsKey}-firm`}
-                name="firmName"
-                label="Firm name"
-                readOnly={identityLocked}
-                defaultValue={seller?.firm_name || initial?.firm_name}
-              />
             </div>
           </DetailSection>
 

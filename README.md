@@ -1,3 +1,7 @@
+# Current release candidate
+
+See [RELEASE_READINESS_2026_11_03.md](RELEASE_READINESS_2026_11_03.md). The release branch adds the reviewed CN/workbook updates while retaining production security/deployment entry points. No live deployment or data replacement occurs in this preparation.
+
 # STN + All Crop CN Portal
 
 Independent combined application source in `spideraistudio/stn-cn-portal`, branch `fix/combined-portal-production`. Original Meet-Dev and sellers-trust-buy-sell repositories are not modified. The complete combined VPS deployment remains pending.

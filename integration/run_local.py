@@ -39,6 +39,35 @@ def frontend_fingerprint():
         digest.update(str(p.relative_to(ROOT)).encode());digest.update(p.read_bytes())
     return digest.hexdigest()
 
+def compact_frontend():
+    runtime=ROOT/'runtime'/'frontend'
+    manifest=ROOT/'runtime'/'compact-manifest.json'
+    if not runtime.exists() and not manifest.exists():return None
+    try:
+        info=json.loads(manifest.read_text())
+        if info['frontend_fingerprint']!=frontend_fingerprint():
+            raise ValueError('Frontend source changed')
+        if not (runtime/'server.js').is_file() or not (runtime/'.next/BUILD_ID').is_file():
+            raise ValueError('Incomplete frontend runtime')
+        if info['platform']!=sys.platform:
+            raise ValueError('Runtime belongs to a different operating system')
+    except (OSError,KeyError,ValueError) as exc:
+        raise SystemExit('Compact runtime needs setup: '+str(exc)+'. Run Setup_Combined_Windows.bat again. Saved data is unchanged.')
+    return runtime
+
+def frontend_command(args,env):
+    if args.node_mode=='start':
+        runtime=compact_frontend()
+        if runtime:
+            env.update(NODE_ENV='production',HOSTNAME='127.0.0.1',PORT=str(args.node_port))
+            # Preserve optional original-folder configuration. Explicit gateway
+            # environment values retain precedence over env-file values.
+            files=[ROOT/name for name in ('.env','.env.production','.env.local','.env.production.local')]
+            return ['node',*[('--env-file='+str(p)) for p in files if p.is_file()],str(runtime/'server.js')]
+        env['NODE_ENV']='production'
+        ensure_frontend_build(env)
+    return ['node',str(ROOT/'node_modules/next/dist/bin/next'),args.node_mode,'--hostname','127.0.0.1','--port',str(args.node_port)]
+
 def ensure_frontend_build(env):
     stamp=ROOT/'.next/portal-source-fingerprint'
     fingerprint=frontend_fingerprint()
@@ -102,10 +131,7 @@ def main():
     child=None
     if not args.no_node:
         env={**os.environ,'PORTAL_MODE':'combined','PORTAL_COOKIE_NAME':'cn_dev_session','NEXT_PUBLIC_COMMON_PORTAL':'1','PORTAL_BRIDGE_KEY':config['bridge'],'PORTAL_ORIGIN':origin,'PORTAL_IDENTITY_URL':f'http://127.0.0.1:{args.identity_port}/internal/portal/introspect','MONGODB_URI':mongo,'STN_MONGO_TLS':'0','ADMIN_EMAILS':os.environ.get('ADMIN_EMAILS','platform@integration.local'),'IDENTIFIER_LOOKUP_KEY':config['lookup']}
-        if args.node_mode=='start':
-            env['NODE_ENV']='production'
-            ensure_frontend_build(env)
-        child=subprocess.Popen(['node',str(ROOT/'node_modules/next/dist/bin/next'),args.node_mode,'--hostname','127.0.0.1','--port',str(args.node_port)],cwd=ROOT,env=env)
+        child=subprocess.Popen(frontend_command(args,env),cwd=ROOT,env=env)
     print(f'Combined local application: {origin}/portal',flush=True)
     print('Independent test data only. No live migration or deployment.',flush=True)
     try:

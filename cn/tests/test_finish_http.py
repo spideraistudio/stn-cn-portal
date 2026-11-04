@@ -143,8 +143,11 @@ class FinishHTTPTests(unittest.TestCase):
                     if key in item:
                         value=format(Decimal(item[key]),'f');item[key]=value+'0000' if '.' in value else value+'.0000'
         self.assertEqual(selected_stock(reformatted),selected_stock(issued))
-        p2,w2=self.setup_book(b);r2,_,_=self.case(b,w2);f2=self.finish(b,w2,r2)
-        self.assertEqual(self.calc(b,w2,'issue',{'id':f2['id'],'revision':f2['revision']})[0],409)
+        p2,w2=self.setup_book(b)
+        # Duplicate physical receipts are now blocked at save, before issue.
+        duplicate=copy.deepcopy(r);duplicate.pop('id',None);duplicate.pop('lineage',None);duplicate.pop('prior_issued',None);duplicate.update(status='draft',revision=0,workbook_id=w2['id'])
+        code,blocked,_=self.calc(b,w2,'save',duplicate)
+        self.assertEqual(code,400,blocked);self.assertIn('already reserved/allocated',blocked['error'])
         backup=b.request('/api/projects/'+p['id']+'/export')[1]
         other,c=self.user_browser('receiver')
         code,imported,_=c.request('/api/projects/import',{'backup':backup});self.assertEqual(code,201,imported)

@@ -411,10 +411,9 @@ html[data-suite-surface=stn] .stn-workspace aside[style]{background:#08263a!impo
 @media(max-width:1200px){.market-layout{grid-template-columns:minmax(0,1fr)}.market-side{grid-template-columns:repeat(2,minmax(0,1fr))}.market-side .market-link{grid-column:1/-1}.market-metric{padding:16px 12px;gap:9px}.market-metric-icon{min-width:36px;height:44px}.market-top-search{max-width:300px}}
 @media(max-width:650px){.market-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.market-hero{flex-wrap:wrap}.market-side{grid-template-columns:1fr}.market-request{flex-wrap:wrap}.market-crop-art{width:55px;height:55px}.market-request-action{flex-direction:row;flex-wrap:wrap;align-items:center;width:100%;justify-content:space-between}.market-filters{flex-wrap:wrap}.market-filters>svg{display:none}.market-filters label{flex-basis:40%}.market-panel{padding:16px}.market-top-search{display:none}.market-metric>svg{display:none}.market-tabs button{padding:7px 8px}}
 
-/* One dashboard scroll owner; leave space below content for Appearance. */
+/* Workspace appearance lives in the top bar; content needs no reserved footer. */
 html[data-suite-surface=stn] .stn-page-scroll {
-  padding-bottom: 5rem;
-  scroll-padding-block: 1rem 5rem;
+  scroll-padding-block: 1rem;
   scrollbar-gutter: stable;
 }
 html[data-suite-surface=stn] { --suite-nav-accent: #a4f0cf; }
@@ -538,3 +537,13 @@ html .public-site.public-legacy [class*="shadow-slate"],html .public-site.public
 html .public-site.public-legacy a:focus-visible,html .public-site.public-legacy button:focus-visible{outline:2px solid var(--pub-accent);outline-offset:4px}
 
 html .public-site.public-legacy.public-auth h1{font-size:30px;line-height:1.2;overflow-wrap:anywhere}
+
+/* Report entry: one field scroller, full available height, compact actions. */
+html[data-suite-surface=stn] .stn-report-workspace .stn-page-scroll {padding:0;overflow:hidden}
+html[data-suite-surface=stn] .stn-report-workspace .stn-page-heading {padding:0 4px}
+html[data-suite-surface=stn] .stn-report-workspace .stn-page-heading h1 {font-size:20px}
+html[data-suite-surface=stn] .stn-report-workspace .stn-page-heading p {font-size:12px;line-height:1.4}
+.stn-report-form fieldset > section > div:first-child {padding-top:8px;padding-bottom:8px}
+.stn-report-form fieldset > section > div:last-child {padding:12px 16px}
+.stn-report-form .stn-report-actions :is(button,a) {height:34px}
+.stn-report-form .stn-report-actions p {margin:0}

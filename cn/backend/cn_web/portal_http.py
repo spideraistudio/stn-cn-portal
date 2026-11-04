@@ -45,8 +45,12 @@ class PortalApp(AccountApp):
             if method!='POST': raise AuthError('Not found',404)
             if env.get('HTTP_ORIGIN')!=self.origin or not hmac.compare_digest(env.get('HTTP_X_CSRF_TOKEN',''),csrf_token(token)): raise AuthError('Security token is missing or expired',403)
             body=self.body(env)
+            if path=='/api/portal/username-availability':
+                self.fields(body,{'username'},{'member_id'})
+                return 200,self.accounts.username_availability(token,body['username'],body.get('member_id')),[]
             if path=='/api/portal/start-workbook':
-                self.fields(body,{'name','state','period','start','end','cutoff'},{'project'})
+                self.fields(body,{'name','state'},{'project','period','start','end','cutoff'})
+                body={**body,'period':'Working season'}
                 # Atomic first-workbook setup with the existing ownership/quota checks.
                 with self.accounts._tx() as db:
                     user=self.store.user(db,token,'edit_ledger')
@@ -60,7 +64,7 @@ class PortalApp(AccountApp):
                     else:project=self.store.request(token,'POST','projects',data={'data':{'name':'My CN Work'}})['id']
                     book=self.store.request(token,'POST','workbooks',data={'project':project,'data':{'name':body['name'].strip(),'state':body['state'].strip(),'season':body['period'].strip()}})
                     _,revision,_=self.ledger.load(db,user['id'],book['id'])
-                    self.ledger.config(token,book['id'],{'revision':revision,'periods':[{'name':body['period'].strip(),'start':body['start'],'end':body['end'],'cutoff':body['cutoff']}]})
+                    # Calculation dates are chosen later on Parties.
                     return 201,{'project':project,'workbook':book['id']},[]
             if path=='/api/portal/update-user':
                 self.fields(body,{'user_id','cn','stn','changes'},{'temporary_password'})

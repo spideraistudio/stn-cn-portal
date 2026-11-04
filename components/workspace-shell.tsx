@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { PortalSwitch } from "@/components/portal-switch";
 import {
   createContext,
@@ -287,11 +288,11 @@ export function WorkspaceShell({
 
   return (
     <WorkspaceMetaContext.Provider value={ctx}>
-      <div className="stn-workspace h-dvh overflow-hidden bg-[#f5f7fb]">
+      <div className={`stn-workspace h-dvh overflow-hidden bg-[#f5f7fb] ${path === "/member/submit-report" || /^\/member\/reports\/[^/]+\/edit$/.test(path) ? "stn-report-workspace" : ""}`}>
         <AppSidebar admin={admin} />
         <div className="flex h-dvh flex-col gap-3 p-3 lg:pl-[var(--stn-sidebar-offset,calc(244px+1.5rem))]">
           {/* 1) Main chrome header */}
-          <header className="stn-topbar z-20 flex h-14 shrink-0 items-center justify-between gap-4 rounded-[12px] border border-slate-200/80 bg-white px-4 shadow-sm sm:px-5">
+          <header className="stn-topbar z-20 flex min-h-14 shrink-0 flex-wrap py-2 items-center justify-between gap-4 rounded-[12px] border border-slate-200/80 bg-white px-4 shadow-sm sm:px-5">
             <div className="min-w-0 pl-14 lg:pl-0">
               <p className="truncate text-[13px] font-semibold text-[#15388c]">
                 Sellers Trust Network
@@ -300,7 +301,7 @@ export function WorkspaceShell({
                 {admin ? "Administrator workspace" : "Member workspace"}
               </p>
             </div>
-            <div className="flex items-center gap-4"><PortalSwitch admin={admin}/><NotificationMenu initialCount={notificationCount} admin={admin} /></div>
+            <div className="flex flex-wrap items-center gap-3"><ThemeToggle inline/><PortalSwitch admin={admin}/><NotificationMenu initialCount={notificationCount} admin={admin} /></div>
           </header>
 
           {/* 2) Page header — compact title + XPRO search/filter toolbar */}

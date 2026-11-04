@@ -124,7 +124,9 @@ class FinishService:
         # A frozen result remains viewable; changed source must be reviewed before
         # posting a formerly finalised draft as issued.
         if record.get('web_source'):
-            check = copy.deepcopy(record); check['status'] = 'draft'; st.project(check)
+            check = copy.deepcopy(record); check['status'] = 'draft'; checked=st.project(check)
+            if checked.get('period_accounting',{}).get('review_required'):
+                raise AuthError('Review unclear accounting evidence in a draft revision before issuing. Frozen history is unchanged.',409)
         all_rows = self.all_records(db, user['id'])
         from prior_payments import conflicts
         conflicts(record,[r for _,r in all_rows])

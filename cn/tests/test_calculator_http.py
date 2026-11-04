@@ -34,9 +34,9 @@ class CalculatorHTTPTests(unittest.TestCase):
         code,new,_=self.calc(b,w,'workbooks',body);self.assertEqual(code,200,new)
         new['project']=p['id']
         periods=self.state(b,new)['periods']
-        self.assertEqual(periods,[{'name':body['period'],**{k:body[k] for k in ('start','end','cutoff')}}])
+        self.assertEqual(periods,[]) # Dates are chosen later, never at workbook creation.
         self.assertEqual(self.state(b,w)['periods'],[])
-        self.assertEqual(self.saved(b,new)['settings']['seasons'][0]['name'],body['period'])
+        self.assertFalse(self.saved(b,new)['settings']['seasons'][0]['confirmed'])
         _,other=self.user_browser('other-user')
         self.assertEqual(other.request(self.url(new))[0],404)
         self.admin.request('/api/admin/users/'+u['id'],{'permissions':list(PERMISSIONS-{'edit_schemes'})},'PATCH')

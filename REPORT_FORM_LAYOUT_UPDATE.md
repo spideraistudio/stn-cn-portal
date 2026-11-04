@@ -1,0 +1,9 @@
+# Report entry layout — 4 November 2026
+
+Combined STN workspaces now place Appearance in the top toolbar and no longer reserve an 80px bottom strip for a floating control. Submit report and edit report pages use the remaining workspace height with one form scroller above a compact action bar. Seller GSTIN and firm name share a desktop row. Section spacing and report-page heading are reduced; controls retain their normal readable sizes. The success view also uses the contained form frame.
+
+Existing fields, optional business summary, lookup/identity locking, document limits, validation, submission APIs, approval/revision behavior and CN calculations are unchanged. This is cumulative over the approved-seller-search fix e0fc0f95aba89368f5605372fa1ec6d57e906c67.
+
+Validation: production Next build and TypeScript passed. Browser component tests passed 18 combinations: Classic Emerald/Navy Studio, new/pending/approved edit, and viewports 1366x768, 1280x600 and 1024x640. Checked a single scroller, visible actions, document reachability, validation alert visibility, locked edit identity and draft text persistence across theme changes. Existing dashboard/seller-search checks passed in both themes, including contrast and five viewport/zoom-equivalent sizes. Browser tests use real React components and production CSS with synthetic data and mocked APIs/navigation; they do not constitute hosted real-account submission acceptance. Local Chromium is the installed Sparticuz executable; CI uses Playwright Chromium.
+
+Browser CSS loading now finds both webpack static/css and static/chunks outputs. Report and seller-search layout checks are included in release CI. No deployment has been performed by this source update. Prepare a new release, activate with the existing operator process, then test actual laptop form entry and submission/approval. Keep prior release and backup for rollback.

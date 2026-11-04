@@ -60,7 +60,7 @@ class CleanProfileHTTPTests(unittest.TestCase):
         headers=self.start(a)
         code,data,_=a.request('/api/calculator/native-state',headers=headers);self.assertEqual(code,200,data)
         for key in ('products','schemes'):self.assertEqual(data['settings'][key],[])
-        self.assertEqual(data['settings']['seasons'][0]['name'],'Own season');self.assertEqual(data['records'],[]);self.assertEqual(data['bulk_history'],[])
+        self.assertEqual(data['settings']['seasons'][0]['name'],'Working season');self.assertEqual(data['records'],[]);self.assertEqual(data['bulk_history'],[])
         self.assertEqual(b.request('/api/calculator/native-state',headers=headers)[0],404)
         own=self.start(b);self.assertEqual(b.request('/api/calculator/native-state',headers=own)[1]['settings']['products'],[])
     def test_blank_workbook_does_not_copy_own_saved_catalogue(self):

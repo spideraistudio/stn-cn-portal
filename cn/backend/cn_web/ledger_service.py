@@ -101,9 +101,7 @@ def validate_config(catalogue, periods, old=None):
         if p['name'] in seen or not day(p['start']) <= day(p['end']) <= day(p['cutoff']):
             raise AuthError('Invalid or duplicate period', 400)
         seen.add(p['name'])
-    for i,p in enumerate(periods):
-        if any(max(q['start'], p['start']) <= min(q['end'], p['end']) for q in periods[i+1:]):
-            raise AuthError('Working periods cannot overlap', 400)
+    # Named calculation views may overlap; shared receipt budgets prevent reuse.
     if old and old['ledgers']:
         # Never silently reinterpret saved mappings or season reviews.
         products = {p['id']: p for p in catalogue}
@@ -368,6 +366,9 @@ class LedgerService:
                         matches = old_by.get(digest(source_content(e)), [])
                         if len(matches) == 1:
                             oi = matches[0]
+                            previous_id=prior['document']['entries'][oi]['id']
+                            for field in ('posted_cn_assignments','settlement_references'):
+                                if previous_id in prior.get(field,{}):ledger.setdefault(field,{})[e['id']]=copy.deepcopy(prior[field][previous_id])
                             if str(oi) in prior['reviews']: ledger['reviews'][str(i)] = copy.deepcopy(prior['reviews'][str(oi)])
                             for j in range(len(e.get('items', []))):
                                 if f'{oi}:{j}' in prior['mappings']: ledger['mappings'][f'{i}:{j}'] = prior['mappings'][f'{oi}:{j}']
@@ -654,15 +655,16 @@ class LedgerService:
             w=documents.get(part['workbook']) if isinstance(part['workbook'],str) else None
             if not w or w['kind']!='workbooks' or part['workbook'] in seen: raise AuthError('Invalid ledger workbook reference',400)
             seen.add(part['workbook']); s=copy.deepcopy(part['state'])
-            fields(s,set(empty_state()),{'billing_audit'})
+            fields(s,set(empty_state()),{'billing_audit','selected_period'})
             if 'billing_audit' in s:
                 from .billing_audit import validate as validate_billing
                 validate_billing(s['billing_audit'],s['catalogue'])
             validate_config(s['catalogue'],s['periods'])
+            if s.get('selected_period') and s['selected_period'] not in {p['name'] for p in s['periods']}:raise AuthError('Invalid selected calculation period',400)
             if not isinstance(s['ledgers'],list) or len(s['ledgers'])>10000 or not isinstance(s['year_links'],dict) or not isinstance(s['audit_reviews'],dict): raise AuthError('Invalid ledger backup state',400)
             lids=set(); parsed={}
             for r in s['ledgers']:
-                fields(r,{'id','file_id','file_sha256','source_index','party_id','document','reviews','mappings','superseded_by','replacement_reason'})
+                fields(r,{'id','file_id','file_sha256','source_index','party_id','document','reviews','mappings','superseded_by','replacement_reason'},{'posted_cn_assignments','settlement_references','accounting_reviews'})
                 identifier(r['id']); text(r['replacement_reason'],'replacement reason',500,True)
                 if r['id'] in lids or r['id'] in all_lids or r['id'] in documents: raise AuthError('Duplicate ledger identity',400)
                 lids.add(r['id']); all_lids.add(r['id'])
@@ -676,6 +678,30 @@ class LedgerService:
                 # Do not trust backup-supplied source originals, balances or dates.
                 if signature(original)!=signature(r['document']): raise AuthError('Ledger source differs from saved PDF; import the PDF for review',400)
                 r['document']=original
+                by_id={e['id']:e for e in original['entries']}
+                for field in ('posted_cn_assignments','settlement_references'):
+                    if not isinstance(r.get(field,{}),dict):raise AuthError('Invalid posting review',400)
+                    for eid,value in r.get(field,{}).items():
+                        entry=by_id.get(eid)
+                        if not entry:raise AuthError('Posting review has no source voucher',400)
+                        if field=='posted_cn_assignments':
+                            fields(value,{'crop','season','amount'},{'history_relation'})
+                            if value.get('history_relation') not in (None,'','same_issued','separate'):raise AuthError('Invalid CN history relation',400)
+                            if entry['kind']!='posted_cn' or value['crop'] not in {p['crop'] for p in s['catalogue']} or value['season'] not in {p['name'] for p in s['periods']} or not 0<=number(value['amount'])<=number(entry['credit']):raise AuthError('Invalid posted CN evidence',400)
+                        else:
+                            matches=[e for e in original['entries'] if e['kind']=='sale' and e.get('reference')==value and e['date']<=entry['date']]
+                            if entry['kind']!='receipt' or len(matches)!=1:raise AuthError('Invalid settlement reference',400)
+                if not isinstance(r.get('accounting_reviews',{}),dict):raise AuthError('Invalid accounting reviews',400)
+                for season,review in r.get('accounting_reviews',{}).items():
+                    if season not in {p['name'] for p in s['periods']}:raise AuthError('Invalid accounting review period',400)
+                    fields(review,{'evidence','reason','same_day_order','actor','reviewed_at'})
+                    if not isinstance(review['evidence'],str) or len(review['evidence'])!=64 or any(c not in '0123456789abcdef' for c in review['evidence']):raise AuthError('Invalid accounting evidence',400)
+                    if len(text(review['reason'],'review reason',2000).strip())<12:raise AuthError('Invalid accounting reason',400)
+                    text(review['actor'],'review actor',200);text(review['reviewed_at'],'review time',200)
+                    if not isinstance(review['same_day_order'],dict):raise AuthError('Invalid accounting order',400)
+                    for dt,mode in review['same_day_order'].items():
+                        day(dt)
+                        if mode not in ('source','cn_first','receipt_first'):raise AuthError('Invalid accounting order',400)
                 if not isinstance(r['reviews'],dict) or not isinstance(r['mappings'],dict): raise AuthError('Invalid ledger reviews',400)
                 for k,review in r['reviews'].items():
                     if not k.isdigit() or str(int(k))!=k: raise AuthError('Invalid review index',400)

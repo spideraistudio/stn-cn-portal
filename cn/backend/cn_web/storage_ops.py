@@ -21,21 +21,32 @@ def initialize(db):
 
 
 def usage(db):
-    """UTF-8 payload bytes, including base64 and archived/deleted documents.
+    """Exact retained bytes, maintained transactionally without rereading PDF blobs.
 
-    Shared SQLite page/index/WAL overhead and security audit are operator costs,
-    not attributed arbitrarily to one user. Temporary bytes are included once.
+    Bootstrap each existing table once; INSERT/UPDATE/DELETE triggers keep the
+    small index current, including replacement writes and rollback. No data is
+    removed and quota limits use the same UTF-8 byte definition as before.
     """
-    result = {}
-    tables = {r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-    for table in TABLES:
-        if table in tables:
-            for r in db.execute('SELECT owner, SUM(length(CAST(payload AS BLOB))) FROM '+table+' GROUP BY owner'):
-                result[r[0]] = result.get(r[0], 0) + r[1]
-    if 'storage_temporary' in tables:
-        for r in db.execute('SELECT owner, SUM(length(payload)+length(CAST(links AS BLOB))) FROM storage_temporary GROUP BY owner'):
-            result[r[0]] = result.get(r[0], 0) + r[1]
-    return result
+    db.execute('CREATE TABLE IF NOT EXISTS storage_byte_index (bucket TEXT NOT NULL, owner TEXT NOT NULL, object_id TEXT NOT NULL, size INTEGER NOT NULL, PRIMARY KEY(bucket,owner,object_id))')
+    db.execute('CREATE TABLE IF NOT EXISTS storage_byte_sources (bucket TEXT PRIMARY KEY)')
+    tables={r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    initialized={r[0] for r in db.execute('SELECT bucket FROM storage_byte_sources')}
+    for table in (*TABLES,'storage_temporary'):
+        if table not in tables or table in initialized:continue
+        key='id' if table in ('workspace_documents','storage_temporary') else 'workbook'
+        value='length(payload)+length(CAST(links AS BLOB))' if table=='storage_temporary' else 'length(CAST(payload AS BLOB))'
+        db.execute("INSERT OR REPLACE INTO storage_byte_index SELECT ?,owner,"+key+","+value+" FROM "+table,(table,))
+        def expression(prefix):
+            return ('length('+prefix+'.payload)+length(CAST('+prefix+'.links AS BLOB))' if table=='storage_temporary' else 'length(CAST('+prefix+'.payload AS BLOB))')
+        for operation in ('INSERT','UPDATE','DELETE'):
+            statements=[]
+            if operation in ('UPDATE','DELETE'):
+                statements.append("DELETE FROM storage_byte_index WHERE bucket='"+table+"' AND owner=OLD.owner AND object_id=OLD."+key+";")
+            if operation in ('INSERT','UPDATE'):
+                statements.append("INSERT OR REPLACE INTO storage_byte_index VALUES('"+table+"',NEW.owner,NEW."+key+","+expression('NEW')+");")
+            db.execute('CREATE TRIGGER IF NOT EXISTS byte_index_'+table+'_'+operation.lower()+' AFTER '+operation+' ON '+table+' BEGIN '+''.join(statements)+' END')
+        db.execute('INSERT INTO storage_byte_sources VALUES(?)',(table,))
+    return {r[0]:r[1] for r in db.execute('SELECT owner,SUM(size) FROM storage_byte_index GROUP BY owner')}
 
 
 def enforce(db, before):
